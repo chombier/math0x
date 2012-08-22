@@ -1,7 +1,8 @@
 #ifndef GROUP_REAL_H
 #define GROUP_REAL_H
 
-#include <group/euclid.h>
+#include <group/types.h>
+#include <group/func/id.h>
 
 #include <cassert>
 
@@ -44,6 +45,28 @@ namespace lie {
     
     typedef RR algebra;
     
+    struct adjoint : func::id< RR > {
+      adjoint(const RR& ) { }
+    };
+
+    struct coadjoint : func::id< RR > {
+      coadjoint(const RR& ) { }
+    };
+    
+    struct exponential : func::id<RR> {
+      exponential(const group<RR>& ) { }
+    };
+
+    struct logarithm : func::id<RR> {
+      logarithm(const group<RR>& ) { }
+    };
+    
+    RR id() const { return 0; }
+    RR inv(const RR& x) const { return -x; }
+    RR prod(const RR& x, const RR& y) const { return x + y; }
+    
+    traits() { }
+    traits(const RR& ) { }
     
   };
 

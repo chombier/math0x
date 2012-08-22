@@ -17,13 +17,13 @@ namespace euclid {
       E x = zero();
       space euclid(x);
 
-      noop(x, euclid);
+      meta::noop(x, euclid);
     }    
     
   public:
 
     ~space() {
-      noop( &space::constraints );
+      meta::noop( &space::constraints );
     }
       
     template<class...Args>

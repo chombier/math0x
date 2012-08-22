@@ -25,6 +25,14 @@ template<class U = real, int M = dynamic_size> class linear_form;
 
 template<class U = real, int M = dynamic_size, int N = dynamic_size> class matrix;
 
+// some functions
+namespace func {
+  
+  template<class G> struct id;
+  
+}
+
+
 // matrix groups
 template<class U = real> struct quaternion;
 template<class U = real> struct dual_quaternion;

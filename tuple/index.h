@@ -23,7 +23,7 @@ namespace tuple {
     // calls fun successively for all values of I
     template<class F>
     static void apply(const F& fun) {
-      noop( (fun.template operator()<N - 1 - I>(), 0)... );
+      meta::noop( (fun.template operator()<N - 1 - I>(), 0)... );
     }
 
 

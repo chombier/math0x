@@ -38,7 +38,7 @@ namespace lie {
 }
 
 namespace func {
-  template<class F> struct traits;
+  template<class F, class = void> struct traits;
 }
 
 
