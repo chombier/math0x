@@ -7,6 +7,8 @@
 #include <group/tuple/element.h>
 #include <group/tuple/find.h>
 
+#include <cassert>
+
 namespace euclid {
   
   template<class ... Args>
@@ -115,7 +117,7 @@ namespace euclid {
     
     // coordinate access
     const field& coord(NN i, const E& x) const {
-      assert( i < dimension );
+      assert( i < dim() );
 
       const field* res = 0;
       tuple::find(offset, i, typename helper::coord{x, impl, offset, res, i} );
@@ -124,7 +126,7 @@ namespace euclid {
     }
 
     field& coord(NN i, E& x) const {
-      assert( i < dimension );
+      assert( i < dim() );
 
       const field* res = 0;
       tuple::find(offset, i, typename helper::coord{x, impl, offset, res, i} );

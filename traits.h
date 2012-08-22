@@ -21,7 +21,7 @@ namespace lie {
   using algebra = typename traits<G>::algebra;
   
   template<class G>
-  using coalgebra = typename traits<G>::coalgebra;
+  using coalgebra = euclid::dual< algebra<G> >;
   
   template<class G>
   using exponential = typename traits<G>::exponential;

@@ -2,12 +2,17 @@
 #define GROUP_REAL_H
 
 #include <group/euclid.h>
+
 #include <cassert>
 
+// real numbers, as defined in types.h
+
+// euclidean structure
 namespace euclid {
 
   template<>
   struct traits<RR> {
+    
     typedef RR field;
     typedef RR dual;
 
@@ -29,8 +34,21 @@ namespace euclid {
     
   };
 
+}
+
+// (flat) lie group structure
+namespace lie {
+  
+  template<> 
+  struct traits<RR> {
+    
+    typedef RR algebra;
+    
+    
+  };
 
 }
+
 
 
 #endif

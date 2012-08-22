@@ -8,10 +8,16 @@ namespace euclid {
   
   template<class E>
   class space {
+    typedef traits<E> impl_type;
     traits<E> impl;
 
     void constraints() {
-      // TODO
+      // TODO more
+      
+      E x = zero();
+      space euclid(x);
+
+      noop(x, euclid);
     }    
     
   public:
