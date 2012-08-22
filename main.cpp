@@ -38,7 +38,10 @@ int main(int, char** ) {
   double_pair_type dpair = DPair.zero();
   
   DPair.coord(2, dpair) = 1;
+  dpair = DPair.sum(dpair, dpair);
+
   log( dpair );
 
+  
   return z == E.zero();
 }

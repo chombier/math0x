@@ -29,8 +29,10 @@ namespace euclid {
     typedef euclid::field< tuple::element<0, E> > field;
     typedef std::tuple< euclid::dual<Args>... > dual;
 
+    // some helper functors for implementing operations
     struct helper {
 
+      // term-wise euclidean structure
       struct impl {
 	
 	const E& value;
@@ -42,6 +44,7 @@ namespace euclid {
 	
       };
 
+      // term-wise dual-space
       struct dual {
   	const impl_type& impl;
 
@@ -51,6 +54,7 @@ namespace euclid {
   	}
       };
 
+      // computes successive offsets
       struct offset {
   	NN& last;
 
@@ -65,6 +69,7 @@ namespace euclid {
 
       };
 
+      // coordinate access
       struct coord {
   	const E& value;
   	const impl_type& impl;
@@ -82,6 +87,7 @@ namespace euclid {
 	
       };
 
+      // term-wise zero element
       struct zero {
 	
 	const impl_type& impl;
@@ -95,16 +101,19 @@ namespace euclid {
       
     };
     
+    // builds offset tuple and returns total dimension
     NN make_offset() {
       NN last = 0;
       each::apply( typename helper::offset{last, offset, impl} );
       return last;
     }
     
+    // dual geometry
     space< dual > operator*() const {
       return { each::map( typename helper::dual{impl} ) };
     }
     
+    // coordinate access
     const field& coord(NN i, const E& x) const {
       assert( i < dimension );
 
@@ -124,7 +133,7 @@ namespace euclid {
       return *const_cast<field*>(res);
     }
     
-
+    
     E zero() const {
       return each::map( typename helper::zero{impl} );
     }
@@ -141,7 +150,7 @@ namespace euclid {
     : impl( each::map( typename helper::impl{value} ) ) {
       dimension = make_offset();
     }
-
+    
   };
 
 }
