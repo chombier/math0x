@@ -8,6 +8,9 @@
 #include <group/log.h>
 #include <group/lie.h>
 
+#include <group/vector.h>
+#include <group/eigen.h>
+
 struct taiste {
   
   template<int I>
@@ -22,7 +25,7 @@ struct taiste {
 int main(int, char** ) {
 
   euclid::space<RR> E;
-
+  
   RR x = E.zero();
   RR z = E.sum(E.minus(x), x);
 
@@ -42,6 +45,9 @@ int main(int, char** ) {
 
   log( dpair );
 
+  Eigen::Vector2d v;
+  euclid::space< Eigen::Vector2d > RR2;
   
+
   return z == E.zero();
 }

@@ -29,7 +29,7 @@ template<class U = real, int M = dynamic_size, int N = dynamic_size> class matri
 namespace func {
   
   template<class G> struct id;
-  
+
 }
 
 
