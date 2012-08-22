@@ -3,7 +3,7 @@ TEMPLATE = app
 TARGET = bin/test
 
 INCLUDEPATH += .. 
-DEPENDPATH += .
+DEPENDPATH += . .. 
 
 QMAKE_CXXFLAGS += -std=c++11
 
