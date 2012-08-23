@@ -11,7 +11,7 @@
 
 namespace func {
 
-
+  // dot product, given metric M: (x, y) -> x^T M y
   template<class E, class Metric = id<E> > 
   struct dot {
     typedef dot self;
@@ -46,7 +46,7 @@ namespace func {
       
     };
     
-    
+    // TODO pull
   
   };
 

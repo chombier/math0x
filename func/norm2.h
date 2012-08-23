@@ -10,6 +10,7 @@
 
 namespace func {
 
+  // squared norm, given a metric M: x -> x^T M x
   template<class E, class Metric = id<E> >
   struct norm2 {
     typedef norm2 self;
@@ -29,12 +30,12 @@ namespace func {
       
     };
 
-    struct pull : line< dual<E> > {
+    struct pull : line< euclid::dual<E> > {
       pull(const norm2& of, const E& at) 
 	: pull::self( of.impl.dual.scal( 2.0, of.impl(at) ) ) {
 	
       }
-    }
+    };
     
   };
 }

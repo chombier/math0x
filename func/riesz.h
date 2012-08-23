@@ -5,7 +5,7 @@
 
 namespace func {
 
-  // returns dual vector given a metric (Riesz representation) (Mx)^T
+  // Riesz representation, given metric M: x -> (Mx)^T
   template<class E, class Metric = id<E> > 
   struct riesz {
     
@@ -39,11 +39,10 @@ namespace func {
     
 
     // TODO push/pull ?
-
-
   };
 
 
+  // TODO add transpose function for canonical dual vector ?
 
 }
 
