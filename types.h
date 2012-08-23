@@ -30,6 +30,9 @@ namespace func {
   
   template<class G> struct id;
 
+  template<class E> struct line;
+  template<class E> struct form;
+
 }
 
 

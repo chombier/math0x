@@ -11,7 +11,7 @@ namespace func {
     F of;
       
     pull<F> operator()(const domain<F>& x) const {
-      return {of, x};
+      return pull<F>(of, x);
     }
       
   };

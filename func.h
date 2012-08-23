@@ -2,6 +2,7 @@
 #define GROUP_FUNC_H
 
 #include <group/types.h>
+#include <group/meta.h>
 
 namespace func {
 
@@ -43,10 +44,10 @@ namespace func {
   namespace impl {
           
     template<class Range, class G, class Domain>
-    core::decay<Range> range(Range (G::*)(const Domain&) const );
+    meta::decay<Range> range(Range (G::*)(const Domain&) const );
       
     template<class Range, class G, class Domain>
-    core::decay<Range> range(Range (G::*)(Domain&&) const );
+    meta::decay<Range> range(Range (G::*)(Domain&&) const );
       
     template<class Range, class G, class Domain>
     Domain domain(Range (G::*)(const Domain&) const );

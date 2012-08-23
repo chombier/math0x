@@ -11,6 +11,11 @@
 #include <group/vector.h>
 #include <group/eigen.h>
 
+#include <group/func/push.h>
+#include <group/func/pull.h>
+#include <group/func/line.h>
+#include <group/func/form.h>
+
 struct taiste {
   
   template<int I>
@@ -45,8 +50,15 @@ int main(int, char** ) {
 
   log( dpair );
 
-  Eigen::Vector2d v;
-  euclid::space< Eigen::Vector2d > RR2;
+ 
+  
+  typedef Eigen::Vector3d vec3;
+
+  vec3 u, v;
+
+  func::line<vec3> lu(u);
+  
+  v = func::d(lu)(1.0)(1.0);
   
 
   return z == E.zero();

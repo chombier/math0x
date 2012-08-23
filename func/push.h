@@ -13,7 +13,7 @@ namespace func {
     F of;
       
     push<F> operator()(const domain<F>& x) const {
-      return {of, x};
+      return push<F>(of, x);
     }
     
   };

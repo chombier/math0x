@@ -85,13 +85,13 @@ namespace euclid {
 
     E scal(field<E> lambda, E&& x) const {
       each(x, [&](field<E>& xi) {
-	  xi = scal * xi;
+	  xi = lambda * xi;
 	});
       return std::move(x);
     }
     
-    E scal(field<E> lambda, E res) const {
-      return scal(lambda, std::move(res) );
+    E scal(field<E> lambda, const E& res) const {
+      return scal(lambda, E(res) );
     }
     
 
