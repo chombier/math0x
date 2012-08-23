@@ -15,6 +15,7 @@
 #include <group/func/pull.h>
 #include <group/func/line.h>
 #include <group/func/form.h>
+#include <group/func/comp.h>
 
 struct taiste {
   
@@ -38,8 +39,6 @@ int main(int, char** ) {
   
   euclid::space<pair_type> Pair;
 
-  pair_type pair = Pair.zero();
-  
   typedef std::tuple< pair_type, pair_type > double_pair_type;
   euclid::space<double_pair_type> DPair;
 
@@ -60,6 +59,11 @@ int main(int, char** ) {
   
   v = func::d(lu)(1.0)(1.0);
   
+  func::id<vec3> id;
+
+  auto g = id << id << lu;
+
+  auto dg = func::d(g)(1.0);
 
   return z == E.zero();
 }

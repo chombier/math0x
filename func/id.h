@@ -8,7 +8,8 @@ namespace func {
   // identity over a group G
   template<class G>
   struct id {
-
+    typedef id self;
+    
     G operator()(const G& x) const { return x; }
     G operator()(G&& x) const { return std::move(x); }
     

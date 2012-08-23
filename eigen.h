@@ -93,6 +93,8 @@ namespace lie {
       assert( n );
     }
 
+    typedef Eigen::Matrix< lie::algebra<U>, M, N > algebra;
+    
     typedef Eigen::Matrix<U, M, N> G;
     
     traits( const G& x ) 
