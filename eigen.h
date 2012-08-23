@@ -6,15 +6,15 @@
 #include <Eigen/Core>
 
 // adapts eigen vectors for use with this library.
-namespace euclid {
 
-  namespace impl {
-    template<int K>
-    NN static_size() {
-      static_assert( K != Eigen::Dynamic, "should not be called for dynamic size" );
-      return K;
-    }
+namespace impl {
+  template<int K>
+  NN static_size() {
+    static_assert( K != Eigen::Dynamic, "should not be called for dynamic size" );
+    return K;
   }
+}
+namespace euclid {
 
   template<class U, int M, int N>
   struct traits< Eigen::Matrix<U, M, N> > {
@@ -114,7 +114,7 @@ namespace lie {
       // TODO lol
     }
 
+  };
+
 }
-
-
 #endif

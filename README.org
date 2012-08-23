@@ -1,18 +1,20 @@
 Group
 
-~group~ is a small c++11 template library for doing differential
+*group* is a small c++11 template library for doing differential
 geometry in Lie groups. It can be used to automatically compute
 complicated derivatives/pullbacks, for instance when dealing with
 robot kinematics.
 
 ~group~ tries to provide a high degree of flexibility by providing a
 collection of small, atomic functions that can be chained together to
-form more complex functions, at compile time.
+form more complex functions. This composition happens at compile time,
+so that the compiler will +die+ do its best to produce efficient code.
 
 You can use your custom data types with ~group~ by implementing a few
-trait classes describing /Euclidean/ and /Lie group/ operations. Since
+trait classes describing Euclidean and Lie group operations. Since
 most of the functions in ~group~ only use these interfaces, you will
-be able to use them right away in your code.
+be able to use them right away in your code. For instance, you can use
+~Eigen~ vectors with ~group~.
 
 * TODO Examples
 
