@@ -1,0 +1,22 @@
+Group
+
+=group= is a small c++11 template library for doing differential
+geometry in Lie groups. It can be used to automatically compute
+complicated derivatives/pullbacks, for instance when dealing with
+robot kinematics.
+
+=group= tries to provide a high degree of flexibility by providing a
+collection of small, atomic functions that can be chained together to
+form more complex functions, at compile time.
+
+You can use your custom data types with =group= by implementing a few
+trait classes describing Euclidean and Lie group operations. Since
+most 
+
+* TODO Examples
+
+* TODO Usage
+
+* TODO Documentation
+
+
