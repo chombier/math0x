@@ -17,6 +17,9 @@
 #include <group/func/form.h>
 #include <group/func/comp.h>
 
+#include <group/func/norm2.h>
+#include <group/func/dot.h>
+
 struct taiste {
   
   template<int I>

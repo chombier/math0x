@@ -21,6 +21,13 @@ namespace func {
 	primal( *dual ) {
       
     }
+
+    form(euclid::dual<E>&& value)
+      : value( std::move(value) ),
+	dual( value ),
+	primal( *dual ) {
+      
+    }
     
     euclid::field<E> operator()(const E& x) const {
       euclid::field<E> res = 0;

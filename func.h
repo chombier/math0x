@@ -74,6 +74,7 @@ namespace func {
   template<class F>
   struct traits<F, decltype( requires<F>() ) >  {
       
+
     typedef decltype( impl::range(&F::operator()) ) range;
     typedef decltype( impl::domain(&F::operator()) ) domain;
       

@@ -10,7 +10,6 @@
 * tuple Lie group structure 
 
 
-
 * quaternions, rotations
 * dual quaternions, rigid transforms
 

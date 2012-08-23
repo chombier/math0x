@@ -49,12 +49,16 @@ namespace euclid {
 
     NN dim() const { return n * sub.dim(); }
     
-    E zero() const;
-    //  { 
-    //   E res;
-    //   // TODO use coordinates ?
-    //   return res;
-    // }
+    E zero() const {
+      E res;
+      res.resize( n );
+
+      for( NN i = 0; i < n; ++i) {
+	res(i) = sub.zero();
+      }
+      
+      return res;
+    }
     
     field& coord(NN i, E& x) const {
       return sub.coord(i % sub.dim(), x( i / sub.dim() ) );
@@ -94,7 +98,7 @@ namespace lie {
     }
 
     typedef Eigen::Matrix< lie::algebra<U>, M, N > algebra;
-    
+
     typedef Eigen::Matrix<U, M, N> G;
     
     traits( const G& x ) 

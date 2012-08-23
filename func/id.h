@@ -10,7 +10,9 @@ namespace func {
   struct id {
     typedef id self;
     
-    G operator()(const G& x) const { return x; }
+    // TODO this should be safe since rvalue references bind below ?
+    const G& operator()(const G& x) const { return x; }
+    
     G operator()(G&& x) const { return std::move(x); }
     
     struct push : id< lie::algebra<G> > { 
