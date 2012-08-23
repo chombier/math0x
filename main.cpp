@@ -58,6 +58,8 @@ int main(int, char** ) {
 
   vec3 u, v;
 
+  u = vec3::Ones();
+  
   func::line<vec3> lu(u);
   
   v = func::d(lu)(1.0)(1.0);
@@ -68,5 +70,8 @@ int main(int, char** ) {
 
   auto dg = func::d(g)(1.0);
 
+  RR n = func::norm2<vec3>()( u );
+  log( "bob", n );
+  
   return z == E.zero();
 }

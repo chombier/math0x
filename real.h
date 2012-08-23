@@ -24,6 +24,8 @@ namespace euclid {
 
     RR zero() const { return 0; }
 
+    space<dual> operator*() const { return {}; } 
+
     field& coord(NN i, RR& x) const { 
       assert( i == 0 );
       return x; 
