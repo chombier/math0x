@@ -22,15 +22,16 @@ be able to use them right away in your code. For instance, you can use
 
 Here is a small example:
 
-: // alias Eigen vectors
+: // alias Eigen type
 : typedef Eigen::Vector3d vec3;
 :  
+: // some 3-vector, equals (1, 1, 1)
 : vec3 u = vec3::Ones();
 :
-: // vector line with direction u
+: // vector line with direction u: RR -> vec3
 : func::line<vec3> line(u);
 :
-: // v == (0.5, 0.5, 0.5)
+: // declare v == (0.5, 0.5, 0.5)
 : vec3 v = line(0.5);
 :
 : // construct a more complex function by composing line and
@@ -41,7 +42,7 @@ Here is a small example:
 : RR alpha = f(1.0);
 :
 : // derivative of f at 1.0
-: auto df = func::d(f)(1.0)
+: auto df = func::d(f)(1.0);
 :
 : // derive f at 1.0, along tangent vector 2.0
 : RR beta = df(2.0);
