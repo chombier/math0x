@@ -20,6 +20,30 @@ be able to use them right away in your code. For instance, you can use
 
 * TODO Examples
 
+Here is a small example:
+
+#+begin_src cpp
+
+ // alias Eigen vectors
+ typedef Eigen::Vector3d vec3;
+  
+ vec3 u = vec3::Ones();
+
+ // vector line with direction u
+ func::line<vec3> line(u);
+
+ // v == (0.5, 0.5, 0.5)
+ vec3 v = line(0.5);
+
+ // construct a more complex function by composing line and
+ // squared_norm
+ auto f = func::norm2<vec3>() << line;
+
+ // real variable alpha, equals 3
+ RR alpha = f(1.0);
+
+#+end_src
+
 * TODO Usage
 
 * TODO Documentation
