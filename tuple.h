@@ -148,6 +148,11 @@ namespace euclid {
       dimension = make_offset();
     }
 
+    traits( const space<Args>...& args ) 
+      : impl(args...) {
+      dimension = make_offset();
+    }
+
     traits( const E& value )
     : impl( each::map( typename helper::impl{value} ) ) {
       dimension = make_offset();
