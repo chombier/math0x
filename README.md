@@ -22,11 +22,12 @@ be able to use them right away in your code. For instance, you can use
 
 ** Basic Types
 
-: // basic mathematical types
-: NN n = 1;   // natural numbers
-: ZZ p = -1;  // integers
-: RR x = 0.1; // real numbers
-
+```c++
+// basic mathematical types
+NN n = 1;   // natural numbers
+ZZ p = -1;  // integers
+RR x = 0.1; // real numbers
+```
 ** Vector Types (from the Eigen library)
 
 : // alias Eigen type
