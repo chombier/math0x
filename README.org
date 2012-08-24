@@ -1,4 +1,4 @@
-*Warning:* This is completely work in progress, and nowhere near a
+_*Warning:*_ This is completely work in progress, and nowhere near a
 releasable state.
 
 *group* is a small c++11 template library for doing differential
@@ -22,7 +22,7 @@ be able to use them right away in your code. For instance, you can use
 
 Here is a small example:
 
-: // basic mathematical types:
+: // basic mathematical types
 : NN n = 1;   // natural numbers
 : ZZ p = -1;  // integers
 : RR x = 0.1; // real numbers
