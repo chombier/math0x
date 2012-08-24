@@ -1,5 +1,5 @@
 
-#+BEGIN_SRC c++
+#+BEGIN_SRC :c++
 // direct product type
 typedef std::tuple<vec3, vec> my_type;
  
@@ -11,7 +11,7 @@ euclid::space<my_type> my_info( vec3_info, vec_info );
 auto g = func::norm2<my_type>(info);
 #+END_SRC
 
-#+BEGIN_SRC cpp
+#+BEGIN_SRC :cpp
 // direct product type
 typedef std::tuple<vec3, vec> my_type;
  
