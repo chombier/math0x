@@ -139,14 +139,17 @@ struct my_algo {
 This might seems a little overkill for now, but the same mechanism
 applies for Lie groups as well, and enables us to write *one* single
 spline interpolation algorithm that works for *any* classical Lie
-group. Yes, even for that funny Lie group \(G = SE(3) \times SO(3)
-\times SL(2) \times \mathbb{R}^10\) should you want to do it.
+group. Yes, even for that funny Lie group 
+	
+	\[ G = SE(3) \times SO(3) \times SL(2) \times \mathbb{R}^10 \]
+	
+should you want to do it.
 
-* TODO Usage
+# TODO Usage
 
 
 
-* TODO Documentation
+# TODO Documentation
 
 hahaha wat
 
