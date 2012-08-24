@@ -84,7 +84,7 @@ u0 = 5;
 
 For dynamic-sized types:
 
-#+END_EXAMPLE c++
+#+BEGIN_EXAMPLE
 // dynamic-sized vectors
 typedef Eigen::VectorXd vec;
  
