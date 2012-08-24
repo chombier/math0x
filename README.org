@@ -1,4 +1,4 @@
-_*Warning:*_ This is completely work in progress, and nowhere near a
+*Warning:* This is a complete work in progress, nowhere near a
 releasable state.
 
 *group* is a small c++11 template library for doing differential
