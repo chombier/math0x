@@ -1,3 +1,15 @@
+
+#+BEGIN_EXAMPLE
+taiste
+#+END_EXAMPLE
+
+#+BEGIN_SRC c++
+taiste
+#+END_SRC
+
+
+
+
 **Warning:** This is a complete work in progress, nowhere near a
 releasable state.
 
