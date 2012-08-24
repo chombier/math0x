@@ -22,7 +22,7 @@ be able to use them right away in your code. For instance, you can use
 
 ** Basic Types
 
-#+BEGIN_SRC: cpp
+#+BEGIN_SRC :c++
 // basic mathematical types
 NN n = 1;   // natural numbers
 ZZ p = -1;  // integers
@@ -142,7 +142,7 @@ applies for Lie groups as well, and enables us to write *one* single
 spline interpolation algorithm that works for *any* classical Lie
 group. Yes, even for that funny Lie group 
 
-	\[ G = SE(3) \times SO(3) \times SL(2) \times \mathbb{R}^10 \]
+: \[ G = SE(3) \times SO(3) \times SL(2) \times \mathbb{R}^10 \]
 	
 should you want to do it.
 
