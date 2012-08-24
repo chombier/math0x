@@ -22,7 +22,7 @@ be able to use them right away in your code. For instance, you can use
 
 Here is a small example:
 
-```c++
+#+begin_src c++
  // alias Eigen vectors
  typedef Eigen::Vector3d vec3;
   
@@ -40,7 +40,7 @@ Here is a small example:
 
  // real variable alpha, equals 3
  RR alpha = f(1.0);
-```
+#+end_src
 
 * TODO Usage
 
