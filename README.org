@@ -1,4 +1,4 @@
-*Warning:* This is completely work in progress and nowhere near a
+*Warning:* This is completely work in progress, and nowhere near a
 releasable state.
 
 *group* is a small c++11 template library for doing differential
@@ -22,7 +22,7 @@ be able to use them right away in your code. For instance, you can use
 
 Here is a small example:
 
-#+begin_src cpp
+#+begin_src :cpp
 
  // alias Eigen vectors
  typedef Eigen::Vector3d vec3;
