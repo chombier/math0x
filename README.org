@@ -34,12 +34,19 @@ Here is a small example:
 : vec3 v = line(0.5);
 :
 : // construct a more complex function by composing line and
-: // squared_norm
+: // squared norm functions
 : auto f = func::norm2<vec3>() << line;
 :
 : // real variable alpha, equals 3
 : RR alpha = f(1.0);
-
+:
+: // derivative of f at 1.0
+: auto df = func::d(f)(1.0)
+:
+: // derive f at 1.0, along tangent vector 2.0
+: RR beta = df(2.0);
+: 
+: // TODO more...
 
 * TODO Usage
 
