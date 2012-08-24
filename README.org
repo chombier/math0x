@@ -22,6 +22,11 @@ be able to use them right away in your code. For instance, you can use
 
 Here is a small example:
 
+: // basic mathematical types:
+: NN n = 1;   // natural numbers
+: ZZ p = -1;  // integers
+: RR x = 0.1; // real numbers
+:
 : // alias Eigen type
 : typedef Eigen::Vector3d vec3;
 :  
@@ -38,7 +43,7 @@ Here is a small example:
 : // squared norm functions
 : auto f = func::norm2<vec3>() << line;
 :
-: // real variable alpha, equals 3
+: // real variable, equals 3
 : RR alpha = f(1.0);
 :
 : // derivative of f at 1.0
