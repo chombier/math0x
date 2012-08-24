@@ -1,35 +1,7 @@
-
-#+BEGIN_SRC :c++
-// direct product type
-typedef std::tuple<vec3, vec> my_type;
- 
-// Euclidean space structure for my_type: we indicate that dynamic-sized
-// vectors should be 10-dimensional				
-euclid::space<my_type> my_info( vec3_info, vec_info );
-
-// squared norm: my_type -> RR
-auto g = func::norm2<my_type>(info);
-#+END_SRC
-
-#+BEGIN_SRC :cpp
-// direct product type
-typedef std::tuple<vec3, vec> my_type;
- 
-// Euclidean space structure for my_type: we indicate that dynamic-sized
-// vectors should be 10-dimensional				
-euclid::space<my_type> my_info( vec3_info, vec_info );
-
-// squared norm: my_type -> RR
-auto g = func::norm2<my_type>(info);
-#+END_SRC
-
-
-
-
-**Warning:** This is a complete work in progress, nowhere near a
+*Warning:* This is a complete work in progress, nowhere near a
 releasable state.
 
-**group** is a small c++11 template library for doing differential
+*group* is a small c++11 template library for doing differential
 geometry in Lie groups. It can be used to automatically compute
 complicated derivatives/pullbacks, for instance when dealing with
 robot kinematics.
@@ -41,7 +13,7 @@ thus the compiler will +beg for mercy+ do its best to produce
 efficient code.
 
 You can use your custom data types with *group* by implementing a few
-/trait classes/ describing Euclidean and Lie group operations. Since
+/trait/ classes describing Euclidean and Lie group operations. Since
 most of the functions in ~group~ only use these interfaces, you will
 be able to use them right away in your code. For instance, you can use
 *Eigen* vectors with *group*.
@@ -50,25 +22,26 @@ be able to use them right away in your code. For instance, you can use
 
 ** Basic Types
 
-```c++
+#+BEGIN_SRC: cpp
 // basic mathematical types
 NN n = 1;   // natural numbers
 ZZ p = -1;  // integers
 RR x = 0.1; // real numbers
-```
+#+END_SRC
+   
 ** Vector Types (from the Eigen library)
 
-```c++
+#+BEGIN_EXAMPLE
  // alias Eigen type
  typedef Eigen::Vector3d vec3;
   
  // some 3-vector, equals (1, 1, 1)
  vec3 u = vec3::Ones();
-```
+#+END_EXAMPLE
 
 ** Functions, Derivatives
 
-```c++
+#+BEGIN_EXAMPLE
 // vector line with direction u: RR -> vec3
 func::line<vec3> line(u);
 
@@ -87,14 +60,14 @@ auto df = func::d(f)(1.0);
 
 // derive f at 1.0, along tangent vector 2.0
 RR beta = df(2.0);
-```
+#+END_EXAMPLE
 
 ** Euclidean Structure
 
 Data types representing Euclidean spaces must provide a class
 describing the Euclidean structure:
 
-```c++
+#+BEGIN_EXAMPLE
 euclid::space<vec3> vec3_info;
 
 u = vec3_info.zero();        // zero element
@@ -107,11 +80,11 @@ euclid::field<vec3>& u0 = vec3_info.coord(0, u);
 
 u0 = 5;
 // u is now (5, 1, 1)
-```
+#+END_EXAMPLE
 
 For dynamic-sized types:
 
-``` c++
+#+END_EXAMPLE c++
 // dynamic-sized vectors
 typedef Eigen::VectorXd vec;
  
@@ -120,7 +93,7 @@ euclid::space<vec> vec_info(10);
 
 // now we know that zero should be a 10-vector
 vec w = vec_info.zero(); 
-```
+#+END_EXAMPLE
 
 ** Tuple Types
 
@@ -128,15 +101,15 @@ vec w = vec_info.zero();
 products. When possible, the Euclidean structure is automatically
 infered:
 
-```c++
+#+BEGIN_EXAMPLE
 typdedef std::tuple< vec3, vec3 > my_tuple_type;
 euclid::space<my_tuple_type> my_tuple_info;
-```
+#+END_EXAMPLE
 
 When using dynamic-sized types, we need to provide structure for each
 of the types in the tuple:
 
-```c++
+#+BEGIN_EXAMPLE
 // direct product type
 typedef std::tuple<vec3, vec> my_type;
  
@@ -146,14 +119,14 @@ euclid::space<my_type> my_info( vec3_info, vec_info );
 
 // squared norm: my_type -> RR
 auto g = func::norm2<my_type>(info);
-```
+#+END_EXAMPLE
 
 ** Algorithms
 
 The above Euclidean space abstraction can be used to build generic
 algorithms that work for /any/ Euclidean space:
 
-```c++
+#+BEGIN_EXAMPLE
 template<class E>
 struct my_algo {
   euclid::space<E> info;
@@ -162,7 +135,7 @@ struct my_algo {
   // ... fancy algorithm here, using only operations provided by info
 
 };
-```
+#+END_EXAMPLE
 
 This might seems a little overkill for now, but the same mechanism
 applies for Lie groups as well, and enables us to write *one* single
