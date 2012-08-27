@@ -3,12 +3,12 @@
 
 #include <iostream>
 
-void log() { std::cout << std::endl; }
+void debug() { std::cout << std::endl; }
 
 template<class A, class ... Args>
-void log(const A& a, const Args&... args) {
+void debug(const A& a, const Args&... args) {
   std::cout << a << " ";
-  log( args... );
+  debug( args... );
 }
 
 #endif

@@ -16,6 +16,8 @@ namespace lie {
       G x = id();
       group lie( x );
       
+      // TODO check exp/log domain/range
+
       noop(x, lie);
     }
     

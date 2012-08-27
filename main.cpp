@@ -5,7 +5,7 @@
 #include <group/tuple.h>
 #include <group/tuple/stream.h>
 
-#include <group/log.h>
+#include <group/debug.h>
 #include <group/lie.h>
 
 #include <group/vector.h>
@@ -20,14 +20,8 @@
 #include <group/func/norm2.h>
 #include <group/func/dot.h>
 
-struct taiste {
-  
-  template<int I>
-  void operator()() const {
-    log(I);
-  };
-  
-};
+#include <group/func/tie.h>
+#include <group/func/sum.h>
 
 
 
@@ -50,7 +44,7 @@ int main(int, char** ) {
   DPair.coord(2, dpair) = 1;
   dpair = DPair.sum(dpair, dpair);
 
-  log( dpair );
+  debug( dpair );
 
  
   
@@ -71,7 +65,15 @@ int main(int, char** ) {
   auto dg = func::d(g)(1.0);
 
   RR n = func::norm2<vec3>()( u );
-  log( "bob", n );
+  debug( "bob", n );
+
+  // func::tuple_tie< func::id<RR>, func::id<RR> > h = { std::make_tuple(lu, lu) };
+
+  auto bob = func::tie( lu, lu );
+
+  debug( "bob", bob(2.0) );
+  
+  // auto dTbob = func::dT( bob )( 1.0 );
   
   return z == E.zero();
 }

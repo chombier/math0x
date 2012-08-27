@@ -148,7 +148,7 @@ namespace euclid {
       dimension = make_offset();
     }
 
-    traits( const space<Args>...& args ) 
+    traits( const space<Args>&... args ) 
       : impl(args...) {
       dimension = make_offset();
     }
@@ -160,6 +160,43 @@ namespace euclid {
     
   };
 
+}
+
+
+// TODO finish lie traits
+
+namespace lie {
+
+  template<class ... Args>
+  struct traits< std::tuple<Args...> > {
+    
+    // iterator type
+    typedef tuple::range<Args...> each;
+    
+    typedef std::tuple< group<Args>... > impl_type;
+    impl_type impl;
+  
+    typedef std::tuple< lie::algebra<Args>... > algebra;
+    
+    
+    struct adjoint {
+      // TODO 
+    };
+
+    struct coadjoint {
+      // TODO 
+    };
+
+    struct exponential  {
+      // TODO 
+    };
+
+    struct logarithm  {
+      // TODO 
+    };
+
+
+  };
 }
 
 

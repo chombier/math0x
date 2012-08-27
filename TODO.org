@@ -2,8 +2,10 @@
 * Lie group structure for Eigen types
 ** is it possible to have a vector of functions ?
 
+
 * euclid functions
 * Lie group functions
+
 
 * tuple functions (tuple, join, partial )
 
