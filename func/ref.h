@@ -12,9 +12,9 @@ namespace func {
     
     const F& to;
 
-    range<F> operator()(const domain<F>& x) const { return to(x); }
-    range<F> operator()(domain<F>&& x) const { return to( std::move(x) ); }
-
+    auto operator()(const domain<F>& x) const -> decltype( to(x) ) { return to(x); }
+    auto operator()(domain<F>&& x) const -> decltype( to( std::move(x) ) ) { return to( std::move(x) ); }
+    
     struct push : func::push<F> {
 
       push(const reference& of, const domain<F>& at) 

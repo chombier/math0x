@@ -5,9 +5,11 @@ namespace euclid {
 
   template<class E> struct traits;
 
+  // field of the vector space
   template<class E>
   using field = typename traits<E>::field;
 
+  // vector dual space
   template<class E>
   using dual = typename traits<E>::dual;
   

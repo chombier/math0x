@@ -16,8 +16,12 @@ namespace func {
     static_assert( std::is_same< domain<Outer>, range<Inner> >::value,
 		   "function domains must agree" );
 
-    range<Outer> operator()(const domain<Inner>& x) const {
+    auto operator()(const domain<Inner>& x) const -> decltype( outer(inner( x ) ) ) {
       return outer( inner( x ) );
+    }
+
+    auto operator()(domain<Inner>&& x) const -> decltype( outer(inner( std::move(x)))) {
+      return outer( inner( std::move(x) ) );
     }
     
     struct push : comp< func::push<Outer>, 

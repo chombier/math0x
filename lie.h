@@ -28,7 +28,7 @@ namespace lie {
       static_assert( std::is_same< lie::coalg<G>, func::range< lie::adT<G> > >::value, "adT range error" );
       static_assert( std::is_same< lie::coalg<G>, func::domain< lie::adT<G> > >::value, "adT domain error" );
       
-      noop(x, lie);
+      // noop(x, lie);
     }
     
   public:

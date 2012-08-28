@@ -28,6 +28,8 @@
 #include <group/func/val.h>
 #include <group/func/ref.h>
 
+#include <group/func/scal.h>
+
 int main(int, char** ) {
 
   euclid::space<RR> E;
