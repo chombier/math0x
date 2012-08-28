@@ -41,7 +41,7 @@ namespace func {
       return res;      
     }
     
-
+    
     struct push : form {
       
       push(const form& of, const E& ) : form(of) { }

@@ -24,6 +24,7 @@
 #include <group/func/sum.h>
 #include <group/func/minus.h>
 
+#include <group/func/any.h>
 
 
 int main(int, char** ) {
@@ -75,6 +76,12 @@ int main(int, char** ) {
   debug( "bob", bob(2.0) );
   
   // auto dTbob = func::dT( bob )( 1.0 );
+  
+
+  func::any<RR, vec3> michel = lu;
+  func::any< euclid::dual<vec3>, RR> dTmichel = func::dT( std::move(michel) )(1.0);
+  
+  debug("michel", dTmichel( u.transpose() ));
   
   return z == E.zero();
 }
