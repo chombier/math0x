@@ -25,7 +25,7 @@
 #include <group/func/minus.h>
 
 #include <group/func/any.h>
-
+#include <group/func/val.h>
 
 int main(int, char** ) {
 
@@ -76,7 +76,6 @@ int main(int, char** ) {
   debug( "bob", bob(2.0) );
   
   // auto dTbob = func::dT( bob )( 1.0 );
-  
 
   func::any<RR, vec3> michel = lu;
   func::any< euclid::dual<vec3>, RR> dTmichel = func::dT( michel )(1.0);
@@ -84,6 +83,8 @@ int main(int, char** ) {
   debug("michel", dTmichel( u.transpose() ));
   
   if( michel ) michel.reset();
+  
+  auto gg = func::val<vec3, RR>(10.0);
 
   return z == E.zero();
 }
