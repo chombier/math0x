@@ -17,6 +17,9 @@ namespace func {
     
     riesz<E, Metric> impl;
     
+    norm2(const euclid::space<E>& space = euclid::space<E>(),
+	  const Metric& metric = Metric() ) : impl(space, metric) { }
+    
     euclid::field<E> operator()(const E& x) const {
       return form<E>( impl(x) )(x);
     }

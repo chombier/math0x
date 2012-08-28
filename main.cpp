@@ -22,6 +22,7 @@
 
 #include <group/func/tie.h>
 #include <group/func/sum.h>
+#include <group/func/minus.h>
 
 
 

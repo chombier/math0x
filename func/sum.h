@@ -14,8 +14,6 @@ namespace func {
     
     euclid::space<E> space;
 
-    sum(const euclid::space<E>& space = euclid::space<E>() ) : space(space) { }
-
     E operator()(const std::tuple<E, E>& x) const {
       return space.sum( std::get<0>(x), std::get<1>(x) );
     }

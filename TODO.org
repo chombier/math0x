@@ -4,6 +4,7 @@
 
 
 * euclid functions
+* operators
 * Lie group functions
 
 
