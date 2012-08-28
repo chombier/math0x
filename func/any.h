@@ -74,6 +74,10 @@ namespace func {
       return get()(x);
     }
 
+    Range operator()(Domain&& x) const { 
+      return get()( std::move(x) );
+    }
+
     
     any() { }
 

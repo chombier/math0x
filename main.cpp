@@ -26,6 +26,7 @@
 
 #include <group/func/any.h>
 #include <group/func/val.h>
+#include <group/func/ref.h>
 
 int main(int, char** ) {
 
@@ -86,5 +87,7 @@ int main(int, char** ) {
   
   auto gg = func::val<vec3, RR>(10.0);
 
+  auto ff = func::ref( michel );
+  
   return z == E.zero();
 }
