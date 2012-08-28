@@ -5,7 +5,7 @@
 
 namespace func {
 
-  // reference wrapper (use to avoid spurious copies)
+  // reference wrapper (use it to avoid costly copies)
   template<class F>
   struct reference {
     typedef reference self;

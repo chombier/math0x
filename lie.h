@@ -37,8 +37,14 @@ namespace lie {
     G prod(const G& x, const G& y) const { 
       return impl.prod(x, y); 
     }
+
+    // TODO rvalue overloads for efficiency ?
     
-    // TODO rvalue overloads for efficiency
+    // algebra euclidean structure
+    euclid::space< algebra > alg() const { 
+      return impl.alg();
+    }
+
 
     adjoint<G> ad(const G& g) const { return {g}; }
     coadjoint<G> adT(const G& g) const { return {g}; }

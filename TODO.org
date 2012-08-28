@@ -1,9 +1,11 @@
 
+* get rid of the nasty ::self member type
+** used to get nested push::push types right
+
 * Lie group structure for Eigen types
 ** is it possible to have a vector of functions ?
 
 
-* constants
 * operators
 * Lie group functions
 
