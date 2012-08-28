@@ -12,8 +12,8 @@ namespace func {
   template<class Domain, class Range>
   class any {
 
-    typedef any< lie::algebra<Domain>, lie::algebra<Range> > push_type;
-    typedef any< lie::coalgebra<Range>, lie::coalgebra<Domain> > pull_type;
+    typedef any< lie::alg<Domain>, lie::alg<Range> > push_type;
+    typedef any< lie::coalg<Range>, lie::coalg<Domain> > pull_type;
     
     
     struct base {

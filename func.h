@@ -24,22 +24,6 @@ namespace func {
   template<class ... F>
   auto requires() -> decltype( impl::_void( impl::requires(&F::operator())...)  );
   
-  // the domain over which the function is defined
-  template<class F>
-  using domain = typename traits<F>::domain;
-  
-  // the range of the function
-  template<class F>
-  using range = typename traits<F>::range;
-  
-  // pushforward (derivative) type
-  template<class F>
-  using push = typename traits<F>::push;
-  
-  // pullback (derivative transpose) type
-  template<class F>
-  using pull = typename traits<F>::pull;
-  
   // default automatic function traits
   namespace impl {
           

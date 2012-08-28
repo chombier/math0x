@@ -47,20 +47,20 @@ namespace lie {
     
     typedef RR algebra;
     
-    struct adjoint : func::id< RR > {
-      adjoint(const RR& ) { }
+    struct ad : func::id< RR > {
+      ad(const RR& ) { }
     };
 
-    struct coadjoint : func::id< RR > {
-      coadjoint(const RR& ) { }
+    struct adT : func::id< RR > {
+      adT(const RR& ) { }
     };
     
-    struct exponential : func::id<RR> {
-      exponential(const group<RR>& ) { }
+    struct exp : func::id<RR> {
+      exp(const group<RR>& ) { }
     };
 
-    struct logarithm : func::id<RR> {
-      logarithm(const group<RR>& ) { }
+    struct log : func::id<RR> {
+      log(const group<RR>& ) { }
     };
     
     RR id() const { return 0; }
@@ -69,6 +69,8 @@ namespace lie {
     
     traits() { }
     traits(const RR& ) { }
+    
+    euclid::space< algebra > alg() const { return {}; }
     
   };
 

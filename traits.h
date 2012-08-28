@@ -16,29 +16,53 @@ namespace euclid {
 namespace lie {
   
   template<class G> struct traits;
- 
-  template<class G>
-  using algebra = typename traits<G>::algebra;
   
+  // Lie algebra
   template<class G>
-  using coalgebra = euclid::dual< algebra<G> >;
+  using alg = typename traits<G>::algebra;
   
+  // Lie coalgebra
   template<class G>
-  using exponential = typename traits<G>::exponential;
-
-  template<class G>
-  using logarithm = typename traits<G>::logarithm;
+  using coalg = euclid::dual< alg<G> >;
   
+  // exponential: alg<G> -> G
   template<class G>
-  using adjoint = typename traits<G>::adjoint;
+  using exp = typename traits<G>::exp;
 
+  // logarithm: G -> alg<G>
   template<class G>
-  using coadjoint = typename traits<G>::coadjoint;
+  using log = typename traits<G>::log;
+  
+  // adjoint: alg<G> -> alg<G>
+  template<class G>
+  using ad = typename traits<G>::ad;
 
+  // coadjoint: coalg<G> -> coalg<G>
+  template<class G>
+  using adT = typename traits<G>::adT;
+  
 }
 
 namespace func {
+  
   template<class F, class = void> struct traits;
+
+  // domain over which the function is defined
+  template<class F>
+  using domain = typename traits<F>::domain;
+  
+  // range of the function
+  template<class F>
+  using range = typename traits<F>::range;
+  
+  // pushforward (derivative) type
+  template<class F>
+  using push = typename traits<F>::push;
+  
+  // pullback (derivative transpose) type
+  template<class F>
+  using pull = typename traits<F>::pull;
+
 }
 
 

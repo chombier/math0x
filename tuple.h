@@ -176,22 +176,22 @@ namespace lie {
     typedef std::tuple< group<Args>... > impl_type;
     impl_type impl;
   
-    typedef std::tuple< lie::algebra<Args>... > algebra;
+    typedef std::tuple< lie::alg<Args>... > alg;
     
     
-    struct adjoint {
+    struct ad {
       // TODO 
     };
 
-    struct coadjoint {
+    struct adT {
       // TODO 
     };
 
-    struct exponential  {
+    struct exp  {
       // TODO 
     };
 
-    struct logarithm  {
+    struct log  {
       // TODO 
     };
 

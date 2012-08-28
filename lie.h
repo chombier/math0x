@@ -16,8 +16,18 @@ namespace lie {
       G x = id();
       group lie( x );
       
-      // TODO check exp/log domain/range
+      static_assert( std::is_same< G, func::range< lie::exp<G> > >::value, "exp range error" );
+      static_assert( std::is_same< lie::alg<G>, func::domain< lie::exp<G> > >::value, "exp domain error" );
 
+      static_assert( std::is_same< G, func::domain< lie::log<G> > >::value, "log range error" );
+      static_assert( std::is_same< lie::alg<G>, func::range< lie::log<G> > >::value, "exp domain error" );
+
+      static_assert( std::is_same< lie::alg<G>, func::range< lie::ad<G> > >::value, "ad range error" );
+      static_assert( std::is_same< lie::alg<G>, func::domain< lie::ad<G> > >::value, "ad domain error" );
+
+      static_assert( std::is_same< lie::coalg<G>, func::range< lie::adT<G> > >::value, "adT range error" );
+      static_assert( std::is_same< lie::coalg<G>, func::domain< lie::adT<G> > >::value, "adT domain error" );
+      
       noop(x, lie);
     }
     
@@ -28,11 +38,15 @@ namespace lie {
     }
 
     // identity
-    G id() const { return impl.id(); }
+    G id() const { 
+      return impl.id(); 
+    }
 
     // inverse
-    G inv(const G& x) const { return impl.inv(x); }
-
+    G inv(const G& x) const { 
+      return impl.inv(x); 
+    }
+    
     // product
     G prod(const G& x, const G& y) const { 
       return impl.prod(x, y); 
@@ -41,16 +55,16 @@ namespace lie {
     // TODO rvalue overloads for efficiency ?
     
     // algebra euclidean structure
-    euclid::space< algebra > alg() const { 
+    euclid::space< lie::alg<G> > alg() const { 
       return impl.alg();
     }
+    
 
+    lie::ad<G> ad(const G& g) const { return {g}; }
+    lie::adT<G> adT(const G& g) const { return {g}; }
 
-    adjoint<G> ad(const G& g) const { return {g}; }
-    coadjoint<G> adT(const G& g) const { return {g}; }
-
-    exponential<G> exp() const { return {*this}; }
-    logarithm<G> log() const { return {*this}; }
+    lie::exp<G> exp() const { return {*this}; }
+    lie::log<G> log() const { return {*this}; }
     
     template<class ... Args>
     group(Args&& ... args) : impl(std::forward<Args>(args)...) {  }
