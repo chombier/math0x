@@ -6,6 +6,7 @@
 ** is it possible to have a vector of functions ?
 
 
+* machine precision
 * operators
 * Lie group functions
 
@@ -14,7 +15,7 @@
 * tuple Lie group structure 
 
 
-* quaternions, rotations
+* rotations
 * dual quaternions, rigid transforms
 
 * some kinematics

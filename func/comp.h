@@ -19,7 +19,7 @@ namespace func {
     auto operator()(const domain<Inner>& x) const -> decltype( outer(inner( x ) ) ) {
       return outer( inner( x ) );
     }
-
+    
     auto operator()(domain<Inner>&& x) const -> decltype( outer(inner( std::move(x)))) {
       return outer( inner( std::move(x) ) );
     }
@@ -48,8 +48,9 @@ namespace func {
 
   };
 
+  // TODO move to ops.h ?
   namespace impl {
-
+    
     // only defined when both types are function types
     template<class Outer, class Inner, class = void> struct comp;
     

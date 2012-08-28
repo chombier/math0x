@@ -51,7 +51,37 @@ namespace func {
     template<class F>
     typename self<F>::pull pull(F*);
       
-    // TODO default push/pull ?
+    template<class F>
+    struct default_push : func::error< lie::alg< func::domain<F> >,
+				       lie::alg< func::range<F> >,
+				       std::logic_error > {
+      default_push(const F&, const func::domain<F>& )
+	: default_push::self{ std::logic_error("no pushforward lol") }  {
+	
+      }      
+      
+    };
+
+    template<class F>
+    struct default_pull : func::error< lie::coalg< func::range<F> >,
+				       lie::coalg< func::domain<F> >,
+				       std::logic_error > {
+      default_pull(const F&, const func::domain<F>& )
+	: default_pull::self{ std::logic_error("no pullback lol") } {
+	
+      }      
+      
+    };
+
+    
+    // default pushforward
+    template<class F>
+    default_push<F> push( ... );
+
+    // default pullback
+    template<class F>
+    default_pull<F> pull( ... );
+    
   }
 
 
@@ -62,8 +92,8 @@ namespace func {
     typedef decltype( impl::range(&F::operator()) ) range;
     typedef decltype( impl::domain(&F::operator()) ) domain;
       
-    typedef decltype( impl::push<F>( 0 ))  push;
-    typedef decltype( impl::pull<F>( 0 ))  pull;
+    typedef decltype( impl::push<F>( 0 )) push;
+    typedef decltype( impl::pull<F>( 0 )) pull;
   };
   
   

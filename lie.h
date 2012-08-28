@@ -2,6 +2,7 @@
 #define GROUP_LIE_H
 
 #include <group/euclid.h>
+#include <group/meta.h>
 
 namespace lie {
   
@@ -34,7 +35,7 @@ namespace lie {
   public:
     
     ~group() {
-      noop( &group::constraints );
+      meta::noop( &group::constraints );
     }
 
     // identity

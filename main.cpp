@@ -9,7 +9,7 @@
 #include <group/lie.h>
 
 #include <group/vector.h>
-#include <group/eigen.h>
+// #include <group/eigen.h>
 
 #include <group/func/push.h>
 #include <group/func/pull.h>
@@ -29,6 +29,12 @@
 #include <group/func/ref.h>
 
 #include <group/func/scal.h>
+
+#include <group/quaternion.h>
+#include <group/SO.h>
+#include <group/vector.h>
+#include <group/func/error.h>
+
 
 int main(int, char** ) {
 
@@ -50,11 +56,7 @@ int main(int, char** ) {
   dpair = DPair.sum(dpair, dpair);
 
   debug( dpair );
-
- 
   
-  typedef Eigen::Vector3d vec3;
-
   vec3 u, v;
 
   u = vec3::Ones();
@@ -91,5 +93,22 @@ int main(int, char** ) {
 
   auto ff = func::ref( michel );
   
+
+  SO<3> g1, g2;
+
+  typedef vector< SO<3>, 3 > test_type;
+  test_type test;
+
+  lie::group< test_type > test_lie;
+ 
+  test_type zz = test_lie.inv( test );
+
+
+  auto log = test_lie.log();
+  
+  func::any< lie::alg< test_type >, lie::alg<test_type> > ww = func::d(log)(test);
+  
+  // ww( test_lie.alg().zero() );
+
   return z == E.zero();
 }
