@@ -79,9 +79,11 @@ int main(int, char** ) {
   
 
   func::any<RR, vec3> michel = lu;
-  func::any< euclid::dual<vec3>, RR> dTmichel = func::dT( std::move(michel) )(1.0);
+  func::any< euclid::dual<vec3>, RR> dTmichel = func::dT( michel )(1.0);
   
   debug("michel", dTmichel( u.transpose() ));
   
+  if( michel ) michel.reset();
+
   return z == E.zero();
 }

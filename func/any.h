@@ -4,11 +4,11 @@
 #include <group/lie.h>
 #include <memory>
 
+// #include <group/debug.h>
+
 namespace func {
 
   // type erasure class
-
-  // TODO boolean cast, set to zero
   template<class Domain, class Range>
   class any {
 
@@ -19,13 +19,13 @@ namespace func {
     struct base {
       virtual ~base() { }
 
-      // TODO rvalue ?
       virtual Range operator()(const Domain& x) const = 0;
+      virtual Range operator()(Domain&& x) const = 0;
       
       virtual push_type push(const Domain& at) const = 0;
       virtual pull_type pull(const Domain& at) const = 0;
       
-      // virtual base* copy() const = 0;
+      virtual base* copy() const = 0;
     };
 
     template<class F>
@@ -37,13 +37,14 @@ namespace func {
       
       impl(const F& value ) : value(value) { }
       impl(F&& value ) : value( std::move(value) ) { }
-
+      
       Range operator()(const Domain& x) const { return value(x); }
+      Range operator()(Domain&& x) const { return value( std::move(x) ); }
       
       push_type push(const Domain& at) const { return func::push<F>(value, at); }
       pull_type pull(const Domain& at) const { return func::pull<F>(value, at); }
       
-      // base* copy() const { return new impl(value); }
+      base* copy() const { return new impl(value); }
     };
 
     typedef std::unique_ptr<base> ptr_type;
@@ -62,26 +63,30 @@ namespace func {
   public:
     typedef any self;
 
-    // any copy() const {
-    //   any res;
-    //   res.ptr.reset( ptr ? ptr->copy() : 0 );
-    //   return res;
-    // }
+    any copy() const {
+      // debug("func::any::copy");
+      any res;
+      res.ptr.reset( ptr ? ptr->copy() : 0 );
+      return res;
+    }
     
     Range operator()(const Domain& x) const { 
       return get()(x);
     }
+
     
     any() { }
 
     template<class F>
     any(F&& f) : ptr( make_ptr( std::forward<F>(f) ) )  {}
     
-    any( const any& ) = delete;
+    any( const any& other) :  any( other.copy() ) { }
     any( any&& ) = default;
     
-
-    any& operator=(const any& ) = delete;
+    any& operator=(const any& other) {
+      return (*this = other.copy());
+    }
+    
     any& operator=(any&& ) = default;
 
     template<class F>
@@ -90,6 +95,11 @@ namespace func {
       return *this;
     }
     
+    explicit operator bool() const {
+      return ptr.get();
+    }
+    
+    void reset() { ptr.reset(); }
 
     struct push : push_type {
       
