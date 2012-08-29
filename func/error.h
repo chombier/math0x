@@ -6,6 +6,7 @@
 
 namespace func {
 
+  // throw an error
   template<class Domain, class Range, class What >
   struct error {
     typedef error self;

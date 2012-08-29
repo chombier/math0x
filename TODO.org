@@ -2,6 +2,7 @@
 * get rid of the nasty ::self member type
 ** used to get nested push::push types right
 
+
 * Lie group structure for Eigen types
 ** is it possible to have a vector of functions ?
 
@@ -9,16 +10,16 @@
 * machine precision
 * operators
 * Lie group functions
+** operations, translations
 
 * tuple functions (group, partial )
 
 * tuple Lie group structure 
 
 
-* rotations
+* finish rotations (exp/log)
 * dual quaternions, rigid transforms
 
-* some kinematics
-
+* rigid body kinematics
 * polynomials
 * splines 

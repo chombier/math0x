@@ -31,7 +31,7 @@ namespace impl {
   
 }
 namespace euclid {
-
+ 
   template<class U, int M, int N>
   struct traits< Eigen::Matrix<U, M, N> > {
 

@@ -29,6 +29,7 @@
 #include <group/func/ref.h>
 
 #include <group/func/scal.h>
+#include <group/func/poly.h>
 
 #include <group/quaternion.h>
 #include <group/SO.h>
