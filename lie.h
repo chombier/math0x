@@ -8,28 +8,31 @@ namespace lie {
   
   template<class G>
   class group {
+    // friend class traits<G>;
     typedef traits<G> impl_type;
+
+  public:
     impl_type impl;
-    
+  private:
     void constraints() {
       // TODO more
 
       G x = id();
       group lie( x );
       
-      static_assert( std::is_same< G, func::range< lie::exp<G> > >::value, "exp range error" );
-      static_assert( std::is_same< lie::alg<G>, func::domain< lie::exp<G> > >::value, "exp domain error" );
+      // static_assert( std::is_same< G, func::range< lie::exp<G> > >::value, "exp range error" );
+      // static_assert( std::is_same< lie::alg<G>, func::domain< lie::exp<G> > >::value, "exp domain error" );
 
-      static_assert( std::is_same< G, func::domain< lie::log<G> > >::value, "log range error" );
-      static_assert( std::is_same< lie::alg<G>, func::range< lie::log<G> > >::value, "exp domain error" );
+      // static_assert( std::is_same< G, func::domain< lie::log<G> > >::value, "log range error" );
+      // static_assert( std::is_same< lie::alg<G>, func::range< lie::log<G> > >::value, "exp domain error" );
 
-      static_assert( std::is_same< lie::alg<G>, func::range< lie::ad<G> > >::value, "ad range error" );
-      static_assert( std::is_same< lie::alg<G>, func::domain< lie::ad<G> > >::value, "ad domain error" );
+      // static_assert( std::is_same< lie::alg<G>, func::range< lie::ad<G> > >::value, "ad range error" );
+      // static_assert( std::is_same< lie::alg<G>, func::domain< lie::ad<G> > >::value, "ad domain error" );
 
-      static_assert( std::is_same< lie::coalg<G>, func::range< lie::adT<G> > >::value, "adT range error" );
-      static_assert( std::is_same< lie::coalg<G>, func::domain< lie::adT<G> > >::value, "adT domain error" );
+      // static_assert( std::is_same< lie::coalg<G>, func::range< lie::adT<G> > >::value, "adT range error" );
+      // static_assert( std::is_same< lie::coalg<G>, func::domain< lie::adT<G> > >::value, "adT domain error" );
       
-      // noop(x, lie);
+      meta::noop(x, lie);
     }
     
   public:

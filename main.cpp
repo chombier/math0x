@@ -112,6 +112,33 @@ int main(int, char** ) {
   func::any< lie::alg< test_type >, lie::alg<test_type> > ww = func::d(log)(test);
   
   // ww( test_lie.alg().zero() );
+  
+  // lie::group< std::tuple< SO<3> > > joe;
+  // auto tt = joe.alg().zero();
+  // auto ss = joe.ad( joe.prod( joe.id(), joe.id() ) );
 
+
+  lie::adT<SO<3> > adT{ SO<3>() };
+  
+  auto mitch = func::make_tuple(adT);
+  
+  func::domain< decltype(mitch) > henri;
+  func::range< decltype(mitch) > bidou;
+  
+  mitch( henri );
+  
+  lie::group< std::tuple<SO<3> > > ryan;
+
+  debug(ryan.ad( ryan.id() )( ryan.alg().zero() ));
+  debug(ryan.adT( ryan.id() )( (*ryan.alg()).zero() ));
+
+  // lie::group<SO<3> > so3;
+  // so3.exp()(so3.alg().zero());
+  // so3.log()(so3.id());
+
+  // why do these fail !?
+  ryan.log()( ryan.id() );
+  // ryan.exp()( ryan.alg().zero() );
+  
   return z == E.zero();
 }

@@ -3,6 +3,7 @@
 
 #include <group/tuple.h>
 #include <group/meta.h>
+#include <group/func.h>
 
 namespace func {
   
@@ -20,14 +21,25 @@ namespace func {
     
     typedef std::tuple< func::domain<Args>... > domain;
     typedef std::tuple< func::range<Args>... > range;
+    
+    // typedef double domain_type;
+    typedef double range_type;
 
+    template<int I>
+    using type = ::tuple::element<I, args_type>;
+    
+
+    // TODO better return types ?
     struct call_lvalue {
       const args_type& args;
       const domain& x;
       
       template<int I>
-      auto operator()() const -> decltype( std::get<I>(args)(std::get<I>(x))) {
-	return std::get<I>(args)(std::get<I>(x));
+      func::range< type<I> > operator()() const {
+    	const type<I>& argi = std::get<I>(args);
+    	const func::domain< type<I> >& xi = std::get<I>(x);
+	
+    	return argi( xi );
       }
       
     };
@@ -37,8 +49,8 @@ namespace func {
       domain&& x;
       
       template<int I>
-      auto operator()() const -> decltype( std::get<I>(args)(std::get<I>(x))) {
-	return std::get<I>(args)( std::move( std::get<I>(x) ) );
+      func::range< type<I> > operator()() const {
+    	return std::get<I>(args)( std::move( std::get<I>(x) ) );
       }
       
     };
@@ -48,9 +60,9 @@ namespace func {
       return each::map( call_lvalue{args, x} );
     }
 
-    range operator()(domain&& x) const {
-      return each::map( call_rvalue{args, std::move(x) } );
-    }
+    // range operator()(domain&& x) const {
+    //   return each::map( call_rvalue{args, std::move(x) } );
+    // }
     
     
     struct push : tuple< func::push<Args>... > {
@@ -61,12 +73,12 @@ namespace func {
 	const domain& at;
 
 	template<int I>
-	func::push< ::tuple::element<I, args_type> > operator()() const {
+	func::push< type<I> > operator()() const {
 	  return { std::get<I>(args), std::get<I>(at) };
 	}
 	
       };
-
+      
       push(const tuple& of, const domain& at) 
 	: push::self{ each::map( get{of.args, at} )  } {
 	
@@ -74,22 +86,23 @@ namespace func {
 
     };
 
+
     struct pull : tuple< func::pull<Args>... > {
 
       struct get {
 	
-	const args_type& args;
-	const domain& at;
+        const args_type& args;
+        const domain& at;
 
-	template<int I>
-	func::pull< ::tuple::element<I, args_type> > operator()() const {
+        template<int I>
+        func::pull< type<I> > operator()() const {
 	  return { std::get<I>(args), std::get<I>(at) };
-	}
+        }
 	
       };
 
       pull(const tuple& of, const domain& at) 
-	: pull::self{ each::map( get{of.args, at} )  } {
+        : pull::self{ each::map( get{of.args, at} )  } {
 	
       }
       
@@ -97,6 +110,12 @@ namespace func {
     
     
   };
+
+
+ 
+
+
+ 
 
 
   template<class ... Args>

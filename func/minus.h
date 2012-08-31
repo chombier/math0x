@@ -16,20 +16,25 @@ namespace func {
     }
 
     
-    struct push : minus {
-      
-      push(const minus& of, const E& ) : push::self(of) { }
-    
-    };
-    
-    struct pull : minus< euclid::dual<E> > {
-      
-      pull(const minus& of, const E& ) : pull::self{ *of.space } {  }
-      
-    };
+    struct push;
+    struct pull;
     
   };
   
+
+  template<class E>
+  struct minus<E>::push : minus {
+      
+    push(const minus& of, const E& ) : push::self(of) { }
+    
+  };
+
+  template<class E>
+  struct minus<E>::pull : minus< euclid::dual<E> > {
+    
+    pull(const minus& of, const E& ) : pull::self{ *of.space } {  }
+    
+  };
   
 }
 

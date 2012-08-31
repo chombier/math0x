@@ -18,19 +18,26 @@ namespace func {
       return space.sum( std::get<0>(x), std::get<1>(x) );
     }
     
-    struct push : sum {
-      push(const sum& of, const E& ) : push::self(of) { }
-    };
-    
-    
-    struct pull : tie< id< euclid::dual<E> > > {
-
-      pull(const sum&, const E& )  { }
-
-    };
+    struct push;
+    struct pull;
     
   };
 
+
+
+  template<class E>
+  struct sum<E>::push : sum {
+    push(const sum& of, const E& ) : push::self(of) { }
+  };
+
+
+
+  template<class E>
+  struct sum<E>::pull : tie< id< euclid::dual<E> > > {
+
+    pull(const sum&, const E& )  { }
+
+  }; 
 
 }
 

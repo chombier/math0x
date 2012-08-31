@@ -42,21 +42,24 @@ namespace func {
     }
     
     
-    struct push : form {
-      
-      push(const form& of, const E& ) : form(of) { }
-      
-    };
-
-
-    struct pull : line< euclid::dual<E> > {
-      
-      pull( const form& of, const E& )
-	: pull::self(of.value) { }
-      
-    };
+    struct push;
+    struct pull;
     
     
+  };
+
+  template<class E>
+  struct form<E>::push : form {
+    push(const form& of, const E& ) : form(of) { }
+  };
+
+
+  template<class E>
+  struct form<E>::pull : line< euclid::dual<E> > {
+      
+    pull( const form& of, const E& )
+      : pull::self(of.value) { }
+      
   };
 
 }

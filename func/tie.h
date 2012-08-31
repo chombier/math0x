@@ -16,14 +16,14 @@ namespace func {
     typedef std::tuple< Args... > args_type;
     args_type args;
 
-    typedef func::domain< tuple::element<0, args_type > > domain;
+    typedef func::domain< ::tuple::element<0, args_type > > domain;
     typedef std::tuple< func::range<Args> ... > range;
 
-    static_assert( std::is_same< tuple::repeat< domain, sizeof...(Args) >,
+    static_assert( std::is_same< ::tuple::repeat< domain, sizeof...(Args) >,
 				 std::tuple< func::domain<Args>... > >::value,
 		   "functions should share domain" );
 
-    typedef tuple::range<Args...> each;
+    typedef ::tuple::range<Args...> each;
     
     struct call {
       
@@ -31,7 +31,7 @@ namespace func {
       const domain& x;
 
       template<int I>
-      func::range< tuple::element<I, args_type> > operator()() const {
+      func::range< ::tuple::element<I, args_type> > operator()() const {
 	return std::get<I>(args)(x);
       }
       

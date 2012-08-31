@@ -2,8 +2,12 @@
 #define GROUP_SO_H
 
 #include <group/types.h>
+#include <group/lie.h>
+
 #include <group/quaternion.h>
+
 #include <group/vector.h>
+#include <group/covector.h>
 
 #include <group/error.h>
 
@@ -58,37 +62,48 @@ namespace lie {
     
     euclid::space<algebra> alg() const { return {}; }
     
-    struct ad : G { };
+    struct ad :  G {
+      ad(const G& at) : G(at) { }
+    };
     
-    // TODO better
+    // TODO better ?
     struct adT { 
       G at;
       
-      adT( const G& at ) : G(at.inv()) { }
+      adT( const G& g ) : at( g.inv() ) { }
       
-      coalg<G> operator()(const coalg<G>& f) const {
-	return at(f.transpose()).transpose();
+      lie::coalg<G> operator()(const lie::coalg<G>& f) const {
+      	return at(f.transpose()).transpose();
       }
       
     };
 
 
     struct exp {
-      exp(const group<G>& ) { }
+      typedef exp self;
+      
+      exp(const group<G>& = group<G>() ) { }
 
       G operator()(const lie::alg<G>& x) const { 
-	throw error("not implemented");
+	// throw error("not implemented");
       }
+
+      
 
     };
 
 
     struct log {
-      log(const group<G>& ) { }
+      typedef log self;
+      
+      log(const group<G>& = group<G>() ) { }
 
       lie::alg<G> operator()(const G& x) const { 
-      	throw error("not implemented");
+      	// throw error("not implemented");
       }
+      
+      // struct push { push(const log&, const G&) { } };
+      // struct pull { pull( const log&, const G& ) { } }; 
       
     };
     

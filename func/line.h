@@ -23,21 +23,27 @@ namespace func {
       return space.scal(alpha, dir);
     }
     
-    struct push : line {
-      
-      push(const line& of, const euclid::field<E>& ) : line(of) { }
-      
-    };
-    
-    struct pull : form< euclid::dual<E> > {
-      
-      pull(const line& of, const euclid::field<E>& ) 
-	: pull::self(of.dir) { }
-      
-    };
-    
+    struct push;
+    struct pull;
   };
 
+
+
+  template<class E>
+  struct line<E>::push : line<E> {
+    push(const line& of, const euclid::field<E>& ) : line(of) { }
+  };
+
+
+
+  template<class E>
+  struct line<E>::pull: form< euclid::dual<E> > {
+      
+    pull(const line& of, const euclid::field<E>& ) 
+      : pull::self(of.dir) { }
+      
+  };
+  
 }
 
 

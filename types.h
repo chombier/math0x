@@ -35,6 +35,8 @@ namespace func {
 
   template<class Domain, class Range, class Error> struct error;
 
+  template<class ... > struct tuple;
+
 }
 
 

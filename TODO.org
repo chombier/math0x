@@ -12,9 +12,9 @@
 * Lie group functions
 ** operations, translations
 
-* tuple functions (group, partial )
 
-* tuple Lie group structure 
+* tuple functions (partial)
+* harmonize make_ ... and friends
 
 
 * finish rotations (exp/log)
@@ -22,3 +22,4 @@
 
 * rigid body kinematics
 * splines 
+  

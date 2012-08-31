@@ -4,6 +4,8 @@
 #include <group/types.h>
 #include <group/meta.h>
 
+#include <stdexcept>
+
 namespace func {
 
   namespace impl {
@@ -38,7 +40,7 @@ namespace func {
 
     template<class Range, class G, class Domain>
     Domain domain(Range (G::*)(Domain&&) const );
-      
+ 
     // we require member typename ::self to get successive push/pull
     // rights. other, pull::pull refers to the first pull due to
     // c++ name injection
@@ -84,12 +86,10 @@ namespace func {
     
   }
 
-
   template<class F>
   struct traits<F, decltype( requires<F>() ) >  {
-      
 
-    typedef decltype( impl::range(&F::operator()) ) range;
+    typedef decltype( impl::range( &F::operator()) ) range;
     typedef decltype( impl::domain(&F::operator()) ) domain;
       
     typedef decltype( impl::push<F>( 0 )) push;

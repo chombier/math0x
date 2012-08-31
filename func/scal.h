@@ -23,16 +23,21 @@ namespace func {
     
     E operator()(const E& x) const { return space.scal(lambda, x); }
     
-    struct push : scal { 
-      push(const scal& of, const E& ) : push::self(of) { }
-    };
-
-    struct pull : scal< euclid::dual<E> > { 
-      pull(const scal& of, const E& ) : pull::self(of.lambda, *of.space) { }
-    };
-    
+    struct push;
+    struct pull;    
   };
 
+  
+  template<class E>
+  struct scal<E>::push : scal { 
+    push(const scal& of, const E& ) : push::self(of) { }
+  };
+
+
+  template<class E>
+  struct scal<E>::pull : scal< euclid::dual<E> > { 
+    pull(const scal& of, const E& ) : pull::self(of.lambda, *of.space) { }
+  };
 
 }
 
