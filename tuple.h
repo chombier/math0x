@@ -176,8 +176,7 @@ namespace lie {
     typedef std::tuple< group<Args>... > impl_type;
     impl_type impl;
   
-    typedef std::tuple< lie::alg<Args>... > alg;
-    
+    typedef std::tuple< lie::alg<Args>... > algebra;
     
     struct ad {
       // TODO 

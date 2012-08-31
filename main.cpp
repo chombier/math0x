@@ -21,6 +21,7 @@
 #include <group/func/dot.h>
 
 #include <group/func/tie.h>
+#include <group/func/tuple.h>
 #include <group/func/sum.h>
 #include <group/func/minus.h>
 
@@ -77,8 +78,9 @@ int main(int, char** ) {
 
   // func::tuple_tie< func::id<RR>, func::id<RR> > h = { std::make_tuple(lu, lu) };
 
-  auto bob = func::tie( lu, lu );
-
+  auto bob = func::make_tie( lu, lu );
+  auto marcel = func::make_tuple( lu, lu );
+  
   debug( "bob", bob(2.0) );
   
   // auto dTbob = func::dT( bob )( 1.0 );

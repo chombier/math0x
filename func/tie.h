@@ -10,8 +10,8 @@ namespace func {
 
   // f(a) = (f1(a), f2(a), ..., fn(a))
   template<class ... Args>
-  struct tuple_tie {
-    typedef tuple_tie self;
+  struct tie {
+    typedef tie self;
 
     typedef std::tuple< Args... > args_type;
     args_type args;
@@ -42,9 +42,9 @@ namespace func {
     }
     
     
-    struct push : tuple_tie< func::push<Args>... > {
+    struct push : tie< func::push<Args>... > {
       
-      push( const tuple_tie& of,
+      push( const tie& of,
 	    const domain& at ) 
 	: push::self{ func::push<Args>(of.args, at)... } {
 
@@ -96,7 +96,7 @@ namespace func {
   };
 
   template<class ... Args>
-  tuple_tie< meta::decay<Args>... > tie( Args&& ... args) {
+  tie< meta::decay<Args>... > make_tie( Args&& ... args) {
     return { std::make_tuple( std::forward<Args>(args)... )  };
   }
 

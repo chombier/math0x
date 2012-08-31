@@ -161,10 +161,12 @@ namespace lie {
     euclid::space< lie::alg<G> > alg() const { return { n, sub.alg() }; }
 
     struct ad {
-      ad( const G& ) { };
+      G at;
+      
+      ad( const G& g) : at(g) { };
       
       lie::alg<G> operator()(const lie::alg<G>& ) const {
-	throw error("not implemented");
+	
       }
       
     };

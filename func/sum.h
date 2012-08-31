@@ -23,7 +23,7 @@ namespace func {
     };
     
     
-    struct pull : tuple_tie< id< euclid::dual<E> > > {
+    struct pull : tie< id< euclid::dual<E> > > {
 
       pull(const sum&, const E& )  { }
 
