@@ -33,6 +33,10 @@ namespace func {
   template<class E> struct line;
   template<class E> struct form;
 
+  template<class E> struct minus;
+  
+  template<class Outer, class Inner> struct comp;
+
   template<class Domain, class Range, class Error> struct error;
 
   template<class ... > struct tuple;

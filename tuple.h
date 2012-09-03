@@ -289,32 +289,32 @@ namespace lie {
     
     struct exp : func::tuple< lie::exp<Args>... >  {
       struct get {
-    	const group<G>& g;
+    	const args_type& args;
 
     	template<int I>
     	lie::exp< type<I> > operator()() const {
-    	  return std::get<I>(g.impl.args).exp();
+    	  return std::get<I>(args).exp();
     	}
       };
-
-      exp( const group<G>& g) : exp::self{ each::map( get{g} ) }  { }
+      
+      exp( const group<G>& g = group<G>() ) 
+	: exp::self{ each::map( get{g.impl.args} ) }  { }
       
       
     };
 
     struct log : func::tuple< lie::log<Args>... >  {
       struct get {
-    	const group<G>& g;
+    	const args_type& args;
 
     	template<int I>
     	lie::log< type<I> > operator()() const {
-    	  return std::get<I>(g.impl.args).log();
+    	  return std::get<I>(args).log();
     	}
       };
       
-      log( const group<G>& g) : log::self{ each::map( get{g} ) }  { }
-     
-      
+      log( const group<G>& g = group<G>() ) 
+	: log::self{ each::map( get{g.impl.args} ) }  { }
       
     };
 

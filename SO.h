@@ -84,8 +84,8 @@ namespace lie {
       
       exp(const group<G>& = group<G>() ) { }
 
-      G operator()(const lie::alg<G>& x) const { 
-	// throw error("not implemented");
+      G operator()(const lie::alg<G>& ) const { 
+	throw error("not implemented");
       }
 
       
@@ -97,9 +97,9 @@ namespace lie {
       typedef log self;
       
       log(const group<G>& = group<G>() ) { }
-
-      lie::alg<G> operator()(const G& x) const { 
-      	// throw error("not implemented");
+      
+      lie::alg<G> operator()(const G& ) const { 
+      	throw error("not implemented");
       }
       
       // struct push { push(const log&, const G&) { } };

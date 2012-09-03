@@ -19,12 +19,9 @@ namespace func {
 
     typedef ::tuple::range<Args...> each;
     
-    typedef std::tuple< func::domain<Args>... > domain;
-    typedef std::tuple< func::range<Args>... > range;
+    typedef std::tuple< func::domain<Args>... > domain_type;
+    typedef std::tuple< func::range<Args>... > range_type;
     
-    // typedef double domain_type;
-    typedef double range_type;
-
     template<int I>
     using type = ::tuple::element<I, args_type>;
     
@@ -32,21 +29,18 @@ namespace func {
     // TODO better return types ?
     struct call_lvalue {
       const args_type& args;
-      const domain& x;
+      const domain_type& x;
       
       template<int I>
-      func::range< type<I> > operator()() const {
-    	const type<I>& argi = std::get<I>(args);
-    	const func::domain< type<I> >& xi = std::get<I>(x);
-	
-    	return argi( xi );
+      func::domain< type<I> > operator()() const {
+	return std::get<I>(args)( std::get<I>(x) );
       }
       
     };
     
     struct call_rvalue {
       const args_type& args;
-      domain&& x;
+      domain_type&& x;
       
       template<int I>
       func::range< type<I> > operator()() const {
@@ -56,7 +50,7 @@ namespace func {
     };
     
 
-    range operator()(const domain& x) const {
+    range_type operator()(const domain_type& x) const {
       return each::map( call_lvalue{args, x} );
     }
 
@@ -70,7 +64,7 @@ namespace func {
       struct get {
 	
 	const args_type& args;
-	const domain& at;
+	const domain_type& at;
 
 	template<int I>
 	func::push< type<I> > operator()() const {
@@ -79,7 +73,7 @@ namespace func {
 	
       };
       
-      push(const tuple& of, const domain& at) 
+      push(const tuple& of, const domain_type& at) 
 	: push::self{ each::map( get{of.args, at} )  } {
 	
       }
@@ -92,7 +86,7 @@ namespace func {
       struct get {
 	
         const args_type& args;
-        const domain& at;
+        const domain_type& at;
 
         template<int I>
         func::pull< type<I> > operator()() const {
@@ -101,7 +95,7 @@ namespace func {
 	
       };
 
-      pull(const tuple& of, const domain& at) 
+      pull(const tuple& of, const domain_type& at) 
         : pull::self{ each::map( get{of.args, at} )  } {
 	
       }

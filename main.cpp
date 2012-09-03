@@ -9,7 +9,7 @@
 #include <group/lie.h>
 
 #include <group/vector.h>
-// #include <group/eigen.h>
+#include <group/covector.h>
 
 #include <group/func/push.h>
 #include <group/func/pull.h>
@@ -35,7 +35,11 @@
 #include <group/quaternion.h>
 #include <group/SO.h>
 #include <group/vector.h>
+
 #include <group/func/error.h>
+
+#include <group/func/trans.h>
+#include <group/func/inv.h>
 
 
 int main(int, char** ) {
@@ -99,46 +103,54 @@ int main(int, char** ) {
 
   SO<3> g1, g2;
 
-  typedef vector< SO<3>, 3 > test_type;
-  test_type test;
+  // typedef vector< SO<3>, 3 > test_type;
+  // test_type test;
 
-  lie::group< test_type > test_lie;
+  // lie::group< test_type > test_lie;
  
-  test_type zz = test_lie.inv( test );
+  // test_type zz = test_lie.inv( test );
 
 
-  auto log = test_lie.log();
+  // auto log = test_lie.log();
   
-  func::any< lie::alg< test_type >, lie::alg<test_type> > ww = func::d(log)(test);
+  // func::any< lie::alg< test_type >, lie::alg<test_type> > ww = func::d(log)(test);
   
-  // ww( test_lie.alg().zero() );
+  // // ww( test_lie.alg().zero() );
   
-  // lie::group< std::tuple< SO<3> > > joe;
-  // auto tt = joe.alg().zero();
-  // auto ss = joe.ad( joe.prod( joe.id(), joe.id() ) );
+  // // lie::group< std::tuple< SO<3> > > joe;
+  // // auto tt = joe.alg().zero();
+  // // auto ss = joe.ad( joe.prod( joe.id(), joe.id() ) );
 
 
-  lie::adT<SO<3> > adT{ SO<3>() };
+  // lie::adT<SO<3> > adT{ SO<3>() };
   
-  auto mitch = func::make_tuple(adT);
+  // auto mitch = func::make_tuple(adT);
   
-  func::domain< decltype(mitch) > henri;
-  func::range< decltype(mitch) > bidou;
+  // func::domain< decltype(mitch) > henri;
+  // func::range< decltype(mitch) > bidou;
   
-  mitch( henri );
+  // mitch( henri );
   
   lie::group< std::tuple<SO<3> > > ryan;
 
   debug(ryan.ad( ryan.id() )( ryan.alg().zero() ));
   debug(ryan.adT( ryan.id() )( (*ryan.alg()).zero() ));
 
-  // lie::group<SO<3> > so3;
-  // so3.exp()(so3.alg().zero());
-  // so3.log()(so3.id());
+  lie::group<SO<3> > so3;
+  so3.exp()(so3.alg().zero());
+  so3.log()(so3.id());
+
+  typedef std::tuple< SO<3> > prout_type;
+  
+  // lie::log< prout_type  > prout;
+  
+  // func::domain< lie::log< prout_type  > > p;
 
   // why do these fail !?
-  ryan.log()( ryan.id() );
+  // ryan.log()( ryan.id() );
   // ryan.exp()( ryan.alg().zero() );
+
+  // RR c = (*hermite<RR>::ptr)( 1.0 );
   
   return z == E.zero();
 }
