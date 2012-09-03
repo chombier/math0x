@@ -96,7 +96,7 @@ int main(int, char** ) {
   
   if( michel ) michel.reset();
   
-  auto gg = func::val<vec3, RR>(10.0);
+  auto gg = func::val<vec3>(10.0);
 
   auto ff = func::ref( michel );
   

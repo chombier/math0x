@@ -6,7 +6,7 @@
 
 * Lie group
   - one parameter subgroups
-  - ...
+  - product
 
 * tuple functions (partial)
 
