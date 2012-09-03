@@ -1,25 +1,28 @@
 
-* get rid of the nasty ::self member type
-** used to get nested push::push types right
-
-
-* Lie group structure for Eigen types
-** is it possible to have a vector of functions ?
-
 
 * machine precision
+
 * operators
-* Lie group functions
-** inverse
+
+* Lie group
+  - one parameter subgroups
+  - ...
 
 * tuple functions (partial)
+
 * harmonize make_ ... and friends
 
-
 * finish rotations (exp/log)
-* dual quaternions, rigid transforms
+
+* dual quaternions (?), rigid transforms
 
 * rigid body kinematics
+
 * splines 
+
+* lambdas ?
+
+* get rid of the nasty ::self member type ?
+** used to get nested push::push types rig  
   
   
