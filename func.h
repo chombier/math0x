@@ -30,16 +30,16 @@ namespace func {
   namespace impl {
           
     template<class Range, class G, class Domain>
-    meta::decay<Range> range(Range (G::*)(const Domain&) const );
-      
-    template<class Range, class G, class Domain>
-    meta::decay<Range> range(Range (G::*)(Domain&&) const );
-      
-    template<class Range, class G, class Domain>
-    Domain domain(Range (G::*)(const Domain&) const );
+    meta::decay<Range> range(Range (G::*)(const Domain&) const, ...  );
 
     template<class Range, class G, class Domain>
-    Domain domain(Range (G::*)(Domain&&) const );
+    meta::decay<Range> range(Range (G::*)(Domain&&) const, G* );
+
+    template<class Range, class G, class Domain>
+    Domain domain(Range (G::*)(const Domain&) const, ... );
+
+    template<class Range, class G, class Domain>
+    Domain domain(Range (G::*)(Domain&&) const, G* );
  
     // we require member typename ::self to get successive push/pull
     // rights. other, pull::pull refers to the first pull due to
@@ -86,10 +86,10 @@ namespace func {
     
   }
 
-  template<class F>
-  struct traits<F, decltype( requires<F>() ) >  {
+  template<class F, class >
+  struct traits  {
 
-    typedef decltype( impl::range( &F::operator()) ) range;
+    typedef decltype( impl::range( &F::operator(), 0) ) range;
     typedef decltype( impl::domain(&F::operator()) ) domain;
       
     typedef decltype( impl::push<F>( 0 )) push;
