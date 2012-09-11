@@ -16,8 +16,10 @@
 
 * dual quaternions (?), rigid transforms
 
-* rigid body kinematics
+* complex numbers
 
+* rigid body kinematics
+  
 * splines 
 
 * lambdas ?
@@ -25,4 +27,6 @@
 * get rid of the nasty ::self member type ?
 ** used to get nested push::push types rig  
   
-  
+* modules ?
+
+* lua interface ?
