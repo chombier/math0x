@@ -73,7 +73,8 @@ int main(int, char** ) {
   
   func::id<vec3> id;
 
-  auto g = id << id << lu;
+  using func::operator<<;
+  auto g = id << (id << lu);
 
   auto dg = func::d(g)(1.0);
 
@@ -147,7 +148,7 @@ int main(int, char** ) {
   // func::domain< lie::log< prout_type  > > p;
 
   // why do these fail !?
-  // ryan.log()( ryan.id() );
+  ryan.log()( ryan.id() );
   // ryan.exp()( ryan.alg().zero() );
 
   // RR c = (*hermite<RR>::ptr)( 1.0 );

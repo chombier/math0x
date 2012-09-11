@@ -76,9 +76,9 @@ typedef integer ZZ;
 typedef real RR;
 
 // rotations
-template<int, class = RR> struct SO;
+template<int, class = RR> class SO;
 
 // rigid
-template<int, class = RR> struct SE;
+template<int, class = RR> class SE;
 
 #endif

@@ -16,7 +16,7 @@ namespace func {
     const Range& operator()(const Domain& ) const { return data; }
     
     struct push : value< lie::alg<Domain>, lie::alg<Range> > {
-      push(const value& of, const Domain& )
+      push(const value& , const Domain& )
 	: push::self{ lie::group<Range>(data).alg().zero() } {
 
       }

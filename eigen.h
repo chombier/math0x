@@ -182,7 +182,7 @@ namespace lie {
     struct exp {
       exp( const group<G>& ) { }
 
-      G operator()(const lie::alg<G>& x) const { 
+      G operator()(const lie::alg<G>& ) const { 
 	throw error("not implemented");
       }
       
@@ -191,7 +191,7 @@ namespace lie {
     struct log { 
       log( const group<G>& ) { }
 
-      lie::alg<G> operator()(const G& x) const { 
+      lie::alg<G> operator()(const G& ) const { 
 	throw error("not implemented");
       }
       
