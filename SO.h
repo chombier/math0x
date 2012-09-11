@@ -41,6 +41,7 @@ public:
   
   // TODO push/pull
   
+
 };
 
 
@@ -49,6 +50,7 @@ namespace lie {
   template<class U>
   struct traits< SO<3, U> > {
 
+    // TODO make so<3, U> and wrap skew-symmetric matrices
     typedef vector<U, 3> algebra;
     
     typedef SO<3, U> G;

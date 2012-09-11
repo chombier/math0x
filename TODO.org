@@ -1,22 +1,33 @@
 
 
-* machine precision
+* machine precision ?
 
 * operators
 
 * Lie group
-  - one parameter subgroups
   - product
 
-* tuple functions (partial)
+* tuple
+  - partial
 
 * harmonize make_ ... and friends
 
-* finish rotations (exp/log)
-
+* SO3
+  - exp/log
+  - so3, so3T
+    
 * dual quaternions (?), rigid transforms
 
-* complex numbers
+* SE3
+  - se3
+  - se3T
+
+* SL3
+  - sl3
+  - sl3T
+
+* complex numbers ?
+  - CC 
 
 * rigid body kinematics
   
@@ -25,7 +36,7 @@
 * lambdas ?
 
 * get rid of the nasty ::self member type ?
-** used to get nested push::push types rig  
+** used to get nested push::push types right  
   
 * modules ?
 

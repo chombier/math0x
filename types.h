@@ -75,10 +75,19 @@ typedef natural NN;
 typedef integer ZZ;
 typedef real RR;
 
-// rotations
+// special orthogonal
 template<int, class = RR> class SO;
+template<int, class = RR> class so;
+template<int, class = RR> class soT;
 
-// rigid
+// special euclidean
 template<int, class = RR> class SE;
+template<int, class = RR> class se;
+template<int, class = RR> class seT;
+
+// special linear
+template<int, class = RR> class SL;
+template<int, class = RR> class sl;
+template<int, class = RR> class slT;
 
 #endif
