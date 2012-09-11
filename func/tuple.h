@@ -32,7 +32,7 @@ namespace func {
       const domain_type& x;
       
       template<int I>
-      func::domain< type<I> > operator()() const {
+      func::range< type<I> > operator()() const {
 	return std::get<I>(args)( std::get<I>(x) );
       }
       

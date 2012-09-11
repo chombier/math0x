@@ -68,6 +68,8 @@ namespace lie {
     
     // TODO better ?
     struct adT { 
+      typedef adT self;
+      
       G at;
       
       adT( const G& g ) : at( g.inv() ) { }

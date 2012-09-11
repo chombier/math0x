@@ -27,10 +27,14 @@ namespace euclid {
 
     typedef std::tuple<Args...> E;
 
-    // choose first as field TODO check consistency
-    typedef euclid::field< tuple::element<0, E> > field;
-    typedef std::tuple< euclid::dual<Args>... > dual;
+    template<int I>
+    using type = ::tuple::element<I, E>;
 
+    // choose first as field TODO check consistency
+    typedef euclid::field< type<0> > field;
+    typedef std::tuple< euclid::dual<Args>... > dual;
+    
+    
     // some helper functors for implementing operations
     struct helper {
 
@@ -40,7 +44,7 @@ namespace euclid {
 	const E& value;
 
 	template<int I>
-	euclid::space< tuple::element<I, E> > operator()() const {
+	euclid::space< type<I> > operator()() const {
 	  return { std::get<I>(value) };
 	}
 	
@@ -51,7 +55,7 @@ namespace euclid {
   	const impl_type& impl;
 
   	template<int I>
-  	auto operator()() const -> decltype( *std::get<I>(impl) ) {
+  	euclid::space< euclid::dual< type<I> > > operator()() const {
   	  return *std::get<I>(impl);
   	}
       };
@@ -95,7 +99,7 @@ namespace euclid {
 	const impl_type& impl;
 	
 	template<int I>
-	auto operator()() const -> decltype( std::get<I>(impl).zero() ) {
+	type<I> operator()() const {
 	  return std::get<I>(impl).zero();
 	}
 	

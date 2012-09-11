@@ -86,11 +86,11 @@ namespace func {
     
   }
 
-  template<class F, class >
-  struct traits  {
+  template<class F>
+  struct traits<F, decltype( requires<F>() ) >  {
 
     typedef decltype( impl::range( &F::operator(), 0) ) range;
-    typedef decltype( impl::domain(&F::operator()) ) domain;
+    typedef decltype( impl::domain(&F::operator(), 0) ) domain;
       
     typedef decltype( impl::push<F>( 0 )) push;
     typedef decltype( impl::pull<F>( 0 )) pull;
