@@ -20,12 +20,12 @@ namespace func {
 
     G operator()(const G& g) const { return group.prod(h, g); }
     
-    struct push : id< lie::alg<G> > { 
+    struct push : id< lie::algebra<G> > { 
       push(const left&, const G&) { } 
     };
 
 
-    struct pull : id< lie::coalg<G> > { 
+    struct pull : id< lie::coalgebra<G> > { 
       pull(const left&, const G&) { } 
     };
     
@@ -46,11 +46,11 @@ namespace func {
     
     G operator()(const G& g) const {  return group.prod(g, h); }
     
-    struct push : lie::ad<G> { 
+    struct push : lie::Ad<G> { 
       push(const right& of, const G&) : pull::self(of.group.inv(of.h)) { } 
     };
     
-    struct pull : lie::adT<G> {
+    struct pull : lie::AdT<G> {
       pull(const right& of, const G&) : pull::self(of.group.inv(of.h)) { } 
     };
     

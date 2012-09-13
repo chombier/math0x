@@ -15,14 +15,14 @@ namespace func {
 
     const Range& operator()(const Domain& ) const { return data; }
     
-    struct push : value< lie::alg<Domain>, lie::alg<Range> > {
+    struct push : value< lie::algebra<Domain>, lie::algebra<Range> > {
       push(const value& , const Domain& )
 	: push::self{ lie::group<Range>(data).alg().zero() } {
 
       }
     };
 
-    struct pull : value< lie::coalg<Range>, lie::coalg<Domain> > {
+    struct pull : value< lie::coalgebra<Range>, lie::coalgebra<Domain> > {
       pull(const value& , const Domain& at)
 	: pull::self{ lie::group<Domain>(at).coalg().zero() } {
 	

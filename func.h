@@ -54,8 +54,8 @@ namespace func {
     typename self<F>::pull pull(F*);
       
     template<class F>
-    struct default_push : func::error< lie::alg< func::domain<F> >,
-				       lie::alg< func::range<F> >,
+    struct default_push : func::error< lie::algebra< func::domain<F> >,
+				       lie::algebra< func::range<F> >,
 				       std::logic_error > {
       default_push(const F&, const func::domain<F>& )
 	: default_push::self{ std::logic_error("no pushforward lol") }  {
@@ -65,8 +65,8 @@ namespace func {
     };
 
     template<class F>
-    struct default_pull : func::error< lie::coalg< func::range<F> >,
-				       lie::coalg< func::domain<F> >,
+    struct default_pull : func::error< lie::coalgebra< func::range<F> >,
+				       lie::coalgebra< func::domain<F> >,
 				       std::logic_error > {
       default_pull(const F&, const func::domain<F>& )
 	: default_pull::self{ std::logic_error("no pullback lol") } {

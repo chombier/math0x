@@ -64,19 +64,19 @@ namespace lie {
     
     euclid::space<algebra> alg() const { return {}; }
     
-    struct ad :  G {
-      ad(const G& at) : G(at) { }
+    struct Ad :  G {
+      Ad(const G& at) : G(at) { }
     };
     
     // TODO better ?
-    struct adT { 
-      typedef adT self;
+    struct AdT { 
+      typedef AdT self;
       
       G at;
       
-      adT( const G& g ) : at( g.inv() ) { }
+      AdT( const G& g ) : at( g.inv() ) { }
       
-      lie::coalg<G> operator()(const lie::coalg<G>& f) const {
+      lie::coalgebra<G> operator()(const lie::coalgebra<G>& f) const {
       	return at(f.transpose()).transpose();
       }
       
@@ -88,7 +88,7 @@ namespace lie {
       
       exp(const group<G>& = group<G>() ) { }
 
-      G operator()(const lie::alg<G>& ) const { 
+      G operator()(const lie::algebra<G>& ) const { 
 	throw error("not implemented");
       }
 
@@ -102,7 +102,7 @@ namespace lie {
       
       log(const group<G>& = group<G>() ) { }
       
-      lie::alg<G> operator()(const G& ) const { 
+      lie::algebra<G> operator()(const G& ) const { 
       	throw error("not implemented");
       }
       

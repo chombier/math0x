@@ -111,7 +111,7 @@ namespace lie {
       assert( n );
     }
 
-    typedef Eigen::Matrix< lie::alg<U>, M, N > algebra;
+    typedef Eigen::Matrix< lie::algebra<U>, M, N > algebra;
 
     typedef Eigen::Matrix<U, M, N> G;
     
@@ -158,14 +158,14 @@ namespace lie {
       return impl::binary(x, y, typename op::prod{sub} );
     }
 
-    euclid::space< lie::alg<G> > alg() const { return { n, sub.alg() }; }
+    euclid::space< lie::algebra<G> > alg() const { return { n, sub.alg() }; }
 
     struct ad {
       G at;
       
       ad( const G& g) : at(g) { };
       
-      lie::alg<G> operator()(const lie::alg<G>& ) const {
+      lie::algebra<G> operator()(const lie::algebra<G>& ) const {
 	
       }
       
@@ -174,7 +174,7 @@ namespace lie {
     struct adT {  
       adT( const G& ) { };
       
-      lie::coalg<G> operator()(const lie::coalg<G>& ) const {
+      lie::coalgebra<G> operator()(const lie::coalgebra<G>& ) const {
 	throw error("not implemented");
       }
     };
@@ -182,7 +182,7 @@ namespace lie {
     struct exp {
       exp( const group<G>& ) { }
 
-      G operator()(const lie::alg<G>& ) const { 
+      G operator()(const lie::algebra<G>& ) const { 
 	throw error("not implemented");
       }
       
@@ -191,7 +191,7 @@ namespace lie {
     struct log { 
       log( const group<G>& ) { }
 
-      lie::alg<G> operator()(const G& ) const { 
+      lie::algebra<G> operator()(const G& ) const { 
 	throw error("not implemented");
       }
       

@@ -57,7 +57,7 @@ namespace func {
 
     struct pull  {
 
-      typedef euclid::space< lie::coalg<domain> > space_type;
+      typedef euclid::space< lie::coalgebra<domain> > space_type;
       space_type space ;
       
       typedef std::tuple< func::pull<Args> ... > args_type;
@@ -65,11 +65,11 @@ namespace func {
       
       struct call {
 	
-	lie::coalg<domain>& res;
+	lie::coalgebra<domain>& res;
 	
 	const space_type& space;
 	const args_type& args;
-	const lie::coalg<range>& fx;
+	const lie::coalgebra<range>& fx;
 	
 	
 	template<int I>
@@ -79,8 +79,8 @@ namespace func {
 	
       };
 
-      lie::coalg<domain> operator()(const lie::coalg<range>& fx) const {
-	lie::coalg<domain> res = space.zero();
+      lie::coalgebra<domain> operator()(const lie::coalgebra<range>& fx) const {
+	lie::coalgebra<domain> res = space.zero();
 	
 	each::apply( call{res, space, args, fx} );
 

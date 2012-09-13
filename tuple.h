@@ -179,7 +179,7 @@ namespace lie {
     typedef std::tuple< group<Args>... > args_type;
     args_type args;
   
-    typedef std::tuple< lie::alg<Args>... > algebra;
+    typedef std::tuple< lie::algebra<Args>... > algebra;
 
     template<int I>
     using type = ::tuple::element<I, G>;
@@ -189,7 +189,7 @@ namespace lie {
       const args_type& args;
 
       template<int I>
-      euclid::space< lie::alg< type<I> > > operator()() const {
+      euclid::space< lie::algebra< type<I> > > operator()() const {
 	return std::get<I>(args).alg();
       }
 
@@ -261,33 +261,33 @@ namespace lie {
     traits( const args_type& args = args_type() ) : args(args) { }
 
 
-    struct ad : func::tuple< lie::ad<Args>... > {
+    struct Ad : func::tuple< lie::Ad<Args>... > {
       
       struct get {
 	const G& at;
 	
 	template<int I>
-	lie::ad< type<I> > operator()() const {
+	lie::Ad< type<I> > operator()() const {
 	  return { std::get<I>(at) };
 	}
       };
       
-      ad( const G& at) : ad::self{ each::map( get{at} ) } { }
+      Ad( const G& at) : Ad::self{ each::map( get{at} ) } { }
       
     };
 
-    struct adT : func::tuple< lie::adT<Args>... > {
+    struct AdT : func::tuple< lie::AdT<Args>... > {
       
       struct get {
     	const G& at;
 	
     	template<int I>
-    	lie::adT< type<I> > operator()() const {
+    	lie::AdT< type<I> > operator()() const {
     	  return { std::get<I>(at) };
     	}
       };
       
-      adT( const G& at) : adT::self{ each::map( get{at} ) } { }
+       AdT( const G& at) : AdT::self{ each::map( get{at} ) } { }
       
     };
     

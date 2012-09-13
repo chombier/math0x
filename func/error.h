@@ -18,14 +18,14 @@ namespace func {
     }
     
     
-    struct push : error< lie::alg<Domain>, lie::alg<Range>, What > {
+    struct push : error< lie::algebra<Domain>, lie::algebra<Range>, What > {
       
       push(const error& of, const Domain& ) : push::self{of.what} { }
       
     };
 
 
-    struct pull : error< lie::coalg<Range>, lie::coalg<Domain>, What > {
+    struct pull : error< lie::coalgebra<Range>, lie::coalgebra<Domain>, What > {
       pull(const error& of, const Domain& ) : pull::self{of.what} { }
     };
 

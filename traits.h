@@ -21,11 +21,11 @@ namespace lie {
   
   // Lie algebra
   template<class G>
-  using alg = typename traits<G>::algebra;
+  using algebra = typename traits<G>::algebra;
   
   // Lie coalgebra
   template<class G>
-  using coalg = euclid::dual< alg<G> >;
+  using coalgebra = euclid::dual< algebra<G> >;
   
   // exponential: alg<G> -> G
   template<class G>
@@ -37,11 +37,11 @@ namespace lie {
   
   // adjoint: alg<G> -> alg<G>
   template<class G>
-  using ad = typename traits<G>::ad;
+  using Ad = typename traits<G>::Ad;
 
   // coadjoint: coalg<G> -> coalg<G>
   template<class G>
-  using adT = typename traits<G>::adT;
+  using AdT = typename traits<G>::AdT;
   
 }
 

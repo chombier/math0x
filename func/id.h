@@ -15,11 +15,11 @@ namespace func {
     
     G operator()(G&& x) const { return x; }
     
-    struct push : id< lie::alg<G> > { 
+    struct push : id< lie::algebra<G> > { 
       push( const id&, const G& )  { }
     };
 
-    struct pull : id< lie::coalg<G> > { 
+    struct pull : id< lie::coalgebra<G> > { 
       pull( const id&, const G& )  { }
     };
     

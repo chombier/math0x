@@ -15,11 +15,11 @@ namespace func {
   struct subgroup {
     typedef subgroup self;
     
-    typedef euclid::field< lie::alg< G > > field;
+    typedef euclid::field< lie::algebra< G > > field;
     
-    lie::alg< G > dir;
+    lie::algebra< G > dir;
     lie::group<G> group;
-    euclid::space< lie::alg<G> > alg;
+    euclid::space< lie::algebra<G> > alg;
     lie::exp< G > exp;
     
     subgroup(const G& dir) 
@@ -35,7 +35,7 @@ namespace func {
     }
     
     // mmmhh not sure if this will produce good second derivatives...
-    struct push : line< lie::alg<G> > {
+    struct push : line< lie::algebra<G> > {
       
 
       push(const subgroup& of, const field& )
@@ -45,7 +45,7 @@ namespace func {
 
     };
 
-    struct pull : form< lie::coalg<G> > {
+    struct pull : form< lie::coalgebra<G> > {
       
       pull(const subgroup& of, const field& )
 	: pull::self( of.dir ) { 

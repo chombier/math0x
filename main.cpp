@@ -134,8 +134,8 @@ int main(int, char** ) {
   
   lie::group< std::tuple<SO<3> > > ryan;
 
-  debug(ryan.ad( ryan.id() )( ryan.alg().zero() ));
-  debug(ryan.adT( ryan.id() )( (*ryan.alg()).zero() ));
+  debug(ryan.Ad( ryan.id() )( ryan.alg().zero() ));
+  debug(ryan.AdT( ryan.id() )( (*ryan.alg()).zero() ));
 
   lie::group<SO<3> > so3;
   so3.exp()(so3.alg().zero());

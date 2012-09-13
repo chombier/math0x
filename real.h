@@ -47,12 +47,12 @@ namespace lie {
     
     typedef RR algebra;
     
-    struct ad : func::id< RR > {
-      ad(const RR& ) { }
+    struct Ad : func::id< RR > {
+      Ad(const RR& ) { }
     };
 
-    struct adT : func::id< RR > {
-      adT(const RR& ) { }
+    struct AdT : func::id< RR > {
+      AdT(const RR& ) { }
     };
     
     struct exp : func::id<RR> {

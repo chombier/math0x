@@ -59,14 +59,14 @@ namespace lie {
     // TODO rvalue overloads for efficiency ?
     
     // algebra euclidean structure
-    euclid::space< lie::alg<G> > alg() const { 
+    euclid::space< lie::algebra<G> > alg() const { 
       return impl.alg();
     }
     
 
-    lie::ad<G> ad(const G& g) const { return {g}; }
-    lie::adT<G> adT(const G& g) const { return {g}; }
-
+    lie::Ad<G> Ad(const G& g) const { return {g}; }
+    lie::AdT<G> AdT(const G& g) const { return {g}; }
+    
     lie::exp<G> exp() const { return {*this}; }
     lie::log<G> log() const { return {*this}; }
     
