@@ -35,6 +35,8 @@ namespace euclid {
       return x; 
     }
     
+    static constexpr int static_dim = 1;
+
   };
 
 }

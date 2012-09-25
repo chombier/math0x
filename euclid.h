@@ -18,6 +18,9 @@ namespace euclid {
       space euclid(x);
 
       meta::noop(x, euclid);
+
+      static_assert( (static_dim > 0) || (static_dim == -1),
+		     "static_dim must be positive or -1" );
     }    
     
   public:
@@ -52,6 +55,9 @@ namespace euclid {
 
     // zero element
     E zero() const { return impl.zero(); }
+    
+    // dimension if known at compile-time
+    static constexpr int static_dim = impl_type::static_dim;
     
     // coordinate iterators
     template<class F>

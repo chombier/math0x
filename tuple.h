@@ -11,6 +11,29 @@
 
 namespace euclid {
   
+
+  namespace impl {
+
+    template<class ... Args> struct static_dim;
+    
+    template<class Head, class ... Tail> 
+    struct static_dim<Head, Tail...> {
+      static constexpr int head = euclid::space<Head>::static_dim;
+      static constexpr int tail = static_dim<Tail...>::value;
+      
+      static constexpr int value = head == -1 ? -1
+	: tail == -1 ? -1 
+	: head + tail;
+      
+    }; 
+
+    template<> struct static_dim<> { 
+      static constexpr int value = 0;
+    };
+    
+
+  }
+
   template<class ... Args>
   struct traits< std::tuple<Args...> > {
     
@@ -25,6 +48,8 @@ namespace euclid {
     
     NN dimension;
 
+    static constexpr int static_dim = impl::static_dim<Args...>::value;
+    
     typedef std::tuple<Args...> E;
 
     template<int I>

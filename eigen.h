@@ -41,7 +41,7 @@ namespace euclid {
     NN n;
     space<U> sub;
     
-    traits(NN n = impl::static_size<M>() * impl::static_size<N>(),
+    traits(NN n = ::impl::static_size<M>() * ::impl::static_size<N>(),
 	   const space<U>& sub = space<U>())
       : n(n),
 	sub(sub) {
@@ -86,6 +86,12 @@ namespace euclid {
       return { n, *sub };
     }
     
+
+    static constexpr int static_dim = M == -1 ? -1 
+      : N == -1 ? -1 
+      : M * N;
+    
+
   };
 
   
