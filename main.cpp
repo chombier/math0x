@@ -42,6 +42,8 @@
 #include <group/func/inv.h>
 #include <group/func/prod.h>
 
+#include <group/func/ops.h>
+#include <group/func/val.h>
 
 int main(int, char** ) {
 
@@ -104,6 +106,17 @@ int main(int, char** ) {
   
 
   SO<3> g1, g2;
+
+  {
+    func::id<RR> x;
+    
+    // auto p = x + x + x;
+
+    auto p = 0.5 * (x^2) +  2 * x + func::val<RR>(1.0);
+    
+    debug( "domain:", typeid( func::domain< decltype(p) > ).name());
+    debug( "range:", typeid( func::range< decltype(p) > ).name());
+  }
 
   // typedef vector< SO<3>, 3 > test_type;
   // test_type test;

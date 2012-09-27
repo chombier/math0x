@@ -13,7 +13,7 @@ namespace func {
     euclid::space<E> space;
     
     scal( const euclid::field<E>& lambda,
-	  const euclid::space<E>& space = euclid::space<E>() ) 
+	  const euclid::space<E>& space = {} ) 
       : lambda( lambda ),
 	space( space ) 
     {

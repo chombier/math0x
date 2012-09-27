@@ -35,10 +35,12 @@
   
 * lambdas ?
 
-* get rid of the nasty ::self member type ?
+* get rid of the nasty ::base member type ?
+
 ** used to get nested push::push types right  
   
-
+** does not seem possible, we need to flag base class one way or another :-/
+   
 * modules ?
   to include parts of the lib directly
 

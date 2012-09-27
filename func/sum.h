@@ -13,7 +13,8 @@ namespace func {
     typedef sum base;
     
     euclid::space<E> space;
-
+    sum( const euclid::space<E>& space = {}) : space(space) { }
+    
     E operator()(const std::tuple<E, E>& x) const {
       return space.sum( std::get<0>(x), std::get<1>(x) );
     }
@@ -33,7 +34,8 @@ namespace func {
 
 
   template<class E>
-  struct sum<E>::pull : tie< id< euclid::dual<E> > > {
+  struct sum<E>::pull : tie< id< euclid::dual<E> >,
+			     id< euclid::dual<E> > > {
 
     pull(const sum&, const E& )  { }
 
