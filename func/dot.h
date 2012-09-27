@@ -18,8 +18,8 @@ namespace func {
     
     riesz<E, Metric> impl;
     
-    dot(const euclid::space<E>& space = euclid::space<E>(),
-	const Metric& metric = Metric()) 
+    dot(const euclid::space<E>& space = {},
+	const Metric& metric = {}) 
       : impl(space, metric) { }
     
     

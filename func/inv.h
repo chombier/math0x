@@ -7,7 +7,7 @@
 
 namespace func {
 
-  // group inverse
+  // lie group inverse
   template<class G>
   struct inverse {
     typedef inverse self;

@@ -14,8 +14,8 @@ namespace func {
     
     Metric metric;
     
-    riesz(const euclid::space<E>& primal = euclid::space<E>(),
-	  const Metric& metric = Metric() )
+    riesz(const euclid::space<E>& primal = {},
+	  const Metric& metric = {} )
       : primal(primal),
 	dual( *primal ),
 	metric( metric ) {

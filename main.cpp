@@ -40,6 +40,7 @@
 
 #include <group/func/trans.h>
 #include <group/func/inv.h>
+#include <group/func/prod.h>
 
 
 int main(int, char** ) {
