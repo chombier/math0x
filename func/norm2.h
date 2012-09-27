@@ -13,7 +13,7 @@ namespace func {
   // squared norm, given a metric M: x -> x^T M x
   template<class E, class Metric = id<E> >
   struct norm2 {
-    typedef norm2 self;
+    typedef norm2 base;
     
     riesz<E, Metric> impl;
     
@@ -27,7 +27,7 @@ namespace func {
     struct push : form<E> {
       
       push(const norm2& of, const E& at)
-	: push::self( of.impl.dual.scal( 2.0, of.impl(at) ) ) {
+	: push::base( of.impl.dual.scal( 2.0, of.impl(at) ) ) {
 
       }
       
@@ -35,7 +35,7 @@ namespace func {
 
     struct pull : line< euclid::dual<E> > {
       pull(const norm2& of, const E& at) 
-	: pull::self( of.impl.dual.scal( 2.0, of.impl(at) ) ) {
+	: pull::base( of.impl.dual.scal( 2.0, of.impl(at) ) ) {
 	
       }
     };

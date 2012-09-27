@@ -8,7 +8,7 @@ namespace func {
   
   template<class E>
   struct form {
-    typedef form self;
+    typedef form base;
     
     euclid::dual<E> value;
     
@@ -58,7 +58,7 @@ namespace func {
   struct form<E>::pull : line< euclid::dual<E> > {
       
     pull( const form& of, const E& )
-      : pull::self(of.value) { }
+      : pull::base(of.value) { }
       
   };
 

@@ -12,7 +12,7 @@ namespace func {
   // f(x1, ... xn) = (f1(x1), ..., fn(xn) )
   template<class ... Args>
   struct tuple {
-    typedef tuple self;
+    typedef tuple base;
     
     typedef std::tuple<Args...> args_type;
     args_type args;
@@ -74,7 +74,7 @@ namespace func {
       };
       
       push(const tuple& of, const domain_type& at) 
-	: push::self{ each::map( get{of.args, at} )  } {
+	: push::base{ each::map( get{of.args, at} )  } {
 	
       }
 
@@ -96,7 +96,7 @@ namespace func {
       };
 
       pull(const tuple& of, const domain_type& at) 
-        : pull::self{ each::map( get{of.args, at} )  } {
+        : pull::base{ each::map( get{of.args, at} )  } {
 	
       }
       

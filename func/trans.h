@@ -11,7 +11,7 @@ namespace func {
 
   template<class G>
   struct left {
-    typedef left self;
+    typedef left base;
 
     G h;
     lie::group<G> group;
@@ -37,7 +37,7 @@ namespace func {
 
   template<class G>
   struct right {
-    typedef right self;
+    typedef right base;
 
     G h;
     lie::group<G> group;
@@ -47,11 +47,11 @@ namespace func {
     G operator()(const G& g) const {  return group.prod(g, h); }
     
     struct push : lie::Ad<G> { 
-      push(const right& of, const G&) : pull::self(of.group.inv(of.h)) { } 
+      push(const right& of, const G&) : pull::base(of.group.inv(of.h)) { } 
     };
     
     struct pull : lie::AdT<G> {
-      pull(const right& of, const G&) : pull::self(of.group.inv(of.h)) { } 
+      pull(const right& of, const G&) : pull::base(of.group.inv(of.h)) { } 
     };
     
 

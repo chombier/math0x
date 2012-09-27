@@ -5,9 +5,6 @@
 
 * operators for functions
 
-* Lie group
-  - product map
-    
 * Lie brackets/cobrackets
 
 * tuple
@@ -19,8 +16,6 @@
   - exp/log
   - so3, so3T ?
 
-* static_size in euclidean spaces, coords_type
-    
 * dual quaternions (?), rigid transforms
 
 * SE3

@@ -10,7 +10,7 @@ namespace func {
   // lie group inverse
   template<class G>
   struct inverse {
-    typedef inverse self;
+    typedef inverse base;
     
     lie::group<G> group;
     inverse(const lie::group<G>& group = lie::group<G>() ) : group(group) { }
@@ -21,7 +21,7 @@ namespace func {
     struct push : comp< minus< lie::algebra<G> >, lie::Ad<G> > {
 
       push(const inverse& of,
-	   const G& at) : push::self( minus< lie::algebra<G> >{of.group.alg()},
+	   const G& at) : push::base( minus< lie::algebra<G> >{of.group.alg()},
 				      lie::Ad<G>{at} ) {
 
       }
@@ -31,7 +31,7 @@ namespace func {
     struct pull : comp< minus< lie::coalgebra<G> >, lie::AdT<G> > {
        
       pull(const inverse& of,
-	   const G& at) : pull::self( minus< lie::coalgebra<G> >{of.group.coalg()},
+	   const G& at) : pull::base( minus< lie::coalgebra<G> >{of.group.coalg()},
 				      lie::AdT<G>{at} ) {
 	 
       }

@@ -297,7 +297,7 @@ namespace lie {
 	}
       };
       
-      Ad( const G& at) : Ad::self{ each::map( get{at} ) } { }
+      Ad( const G& at) : Ad::base{ each::map( get{at} ) } { }
       
     };
 
@@ -312,7 +312,7 @@ namespace lie {
     	}
       };
       
-       AdT( const G& at) : AdT::self{ each::map( get{at} ) } { }
+       AdT( const G& at) : AdT::base{ each::map( get{at} ) } { }
       
     };
     
@@ -327,7 +327,7 @@ namespace lie {
       };
       
       exp( const group<G>& g = group<G>() ) 
-	: exp::self{ each::map( get{g.impl.args} ) }  { }
+	: exp::base{ each::map( get{g.impl.args} ) }  { }
       
       
     };
@@ -343,7 +343,7 @@ namespace lie {
       };
       
       log( const group<G>& g = group<G>() ) 
-	: log::self{ each::map( get{g.impl.args} ) }  { }
+	: log::base{ each::map( get{g.impl.args} ) }  { }
       
     };
 

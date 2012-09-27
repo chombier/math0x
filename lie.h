@@ -63,16 +63,33 @@ namespace lie {
       return impl.alg();
     }
     
-
+    // adjoint
     lie::Ad<G> Ad(const G& g) const { return {g}; }
+
+    // coadjoint
     lie::AdT<G> AdT(const G& g) const { return {g}; }
     
+    // exponential
     lie::exp<G> exp() const { return {*this}; }
+
+    // logarithm
     lie::log<G> log() const { return {*this}; }
     
+    // lie bracket
+    algebra<G> bracket(const algebra<G>& x, const algebra<G>& y) { 
+      return impl.bracket(x, y);
+    }
+
+    // lie cobracket
+    coalgebra<G> cobracket(const coalgebra<G>& x, const coalgebra<G>& y) { 
+      return impl.cobracket(x, y);
+    }
+    
+    // forward ctor
     template<class ... Args>
     group(Args&& ... args) : impl(std::forward<Args>(args)...) {  }
     
+    // 
     group(const group& ) = default;
     group(group&& ) = default;
     

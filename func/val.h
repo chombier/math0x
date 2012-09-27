@@ -9,7 +9,7 @@ namespace func {
   // constant value
   template<class Domain, class Range>
   struct value {
-    typedef value self;
+    typedef value base;
     
     Range data;
 
@@ -17,14 +17,14 @@ namespace func {
     
     struct push : value< lie::algebra<Domain>, lie::algebra<Range> > {
       push(const value& , const Domain& )
-	: push::self{ lie::group<Range>(data).alg().zero() } {
+	: push::base{ lie::group<Range>(data).alg().zero() } {
 
       }
     };
 
     struct pull : value< lie::coalgebra<Range>, lie::coalgebra<Domain> > {
       pull(const value& , const Domain& at)
-	: pull::self{ lie::group<Domain>(at).coalg().zero() } {
+	: pull::base{ lie::group<Domain>(at).coalg().zero() } {
 	
       }
     };

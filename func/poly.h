@@ -8,7 +8,7 @@ namespace func {
   // a monomial of degree n: x -> x^n
   template<class U = real>
   struct poly {
-    typedef poly self;
+    typedef poly base;
     
     NN degree;
     

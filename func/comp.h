@@ -8,7 +8,7 @@ namespace func {
 
   template<class Outer, class Inner>
   struct comp {
-    typedef comp self;
+    typedef comp base;
     
     Outer outer;
     Inner inner;
@@ -28,7 +28,7 @@ namespace func {
 			func::push<Inner> > {
 
       push(const comp& of, const domain<Inner>& at) 
-	: push::self{ func::push<Outer>(of.outer, of.inner(at)),
+	: push::base{ func::push<Outer>(of.outer, of.inner(at)),
 	  func::push<Inner>(of.inner, at ) } {
       }
       
@@ -38,7 +38,7 @@ namespace func {
 			func::pull<Outer> > {
 
       pull( const comp& of, const domain<Inner>& at) 
-	: pull::self{ func::pull<Inner>(of.inner, at),
+	: pull::base{ func::pull<Inner>(of.inner, at),
 	  func::pull<Outer>(of.outer, of.inner(at)) } {
 	
       }

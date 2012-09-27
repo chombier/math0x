@@ -10,6 +10,8 @@ DEPENDPATH += . ..
 
 QMAKE_CXXFLAGS += -std=c++11
 
-SOURCES = main.cpp
-
+SOURCES = \
+    main.cpp \
+#    test.cpp \
+    
 # CONFIG += debug

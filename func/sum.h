@@ -10,7 +10,7 @@ namespace func {
 
   template<class E>
   struct sum {
-    typedef sum self;
+    typedef sum base;
     
     euclid::space<E> space;
 
@@ -27,7 +27,7 @@ namespace func {
 
   template<class E>
   struct sum<E>::push : sum {
-    push(const sum& of, const E& ) : push::self(of) { }
+    push(const sum& of, const E& ) : push::base(of) { }
   };
 
 

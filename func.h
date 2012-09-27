@@ -41,24 +41,24 @@ namespace func {
     template<class Range, class G, class Domain>
     Domain domain(Range (G::*)(Domain&&) const, G* );
  
-    // we require member typename ::self to get successive push/pull
+    // we require member typename ::base to get successive push/pull
     // rights. other, pull::pull refers to the first pull due to
     // c++ name injection
     template<class F>
-    using self = typename F::self;
+    using base = typename F::base;
       
     template<class F>
-    typename self<F>::push push(F*);
+    typename base<F>::push push(F*);
 
     template<class F>
-    typename self<F>::pull pull(F*);
+    typename base<F>::pull pull(F*);
       
     template<class F>
     struct default_push : func::error< lie::algebra< func::domain<F> >,
 				       lie::algebra< func::range<F> >,
 				       std::logic_error > {
       default_push(const F&, const func::domain<F>& )
-	: default_push::self{ std::logic_error("no pushforward lol") }  {
+	: default_push::base{ std::logic_error("no pushforward lol") }  {
 	
       }      
       
@@ -69,7 +69,7 @@ namespace func {
 				       lie::coalgebra< func::domain<F> >,
 				       std::logic_error > {
       default_pull(const F&, const func::domain<F>& )
-	: default_pull::self{ std::logic_error("no pullback lol") } {
+	: default_pull::base{ std::logic_error("no pullback lol") } {
 	
       }      
       

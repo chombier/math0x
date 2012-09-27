@@ -7,7 +7,7 @@ namespace func {
 
   template<class E>
   struct scal {
-    typedef scal self;
+    typedef scal base;
     
     euclid::field<E> lambda;
     euclid::space<E> space;
@@ -30,13 +30,13 @@ namespace func {
   
   template<class E>
   struct scal<E>::push : scal { 
-    push(const scal& of, const E& ) : push::self(of) { }
+    push(const scal& of, const E& ) : push::base(of) { }
   };
 
 
   template<class E>
   struct scal<E>::pull : scal< euclid::dual<E> > { 
-    pull(const scal& of, const E& ) : pull::self(of.lambda, *of.space) { }
+    pull(const scal& of, const E& ) : pull::base(of.lambda, *of.space) { }
   };
 
 }

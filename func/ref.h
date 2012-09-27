@@ -8,7 +8,7 @@ namespace func {
   // reference wrapper (use it to avoid costly copies)
   template<class F>
   struct reference {
-    typedef reference self;
+    typedef reference base;
     
     const F& to;
 

@@ -7,7 +7,7 @@ namespace func {
 
   template<class E>
   struct minus {
-    typedef minus self;
+    typedef minus base;
     
     euclid::space<E> space;
 
@@ -25,14 +25,14 @@ namespace func {
   template<class E>
   struct minus<E>::push : minus {
       
-    push(const minus& of, const E& ) : push::self(of) { }
+    push(const minus& of, const E& ) : push::base(of) { }
     
   };
 
   template<class E>
   struct minus<E>::pull : minus< euclid::dual<E> > {
     
-    pull(const minus& of, const E& ) : pull::self{ *of.space } {  }
+    pull(const minus& of, const E& ) : pull::base{ *of.space } {  }
     
   };
   

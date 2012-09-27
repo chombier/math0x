@@ -16,8 +16,8 @@ namespace func {
     typedef any< lie::coalgebra<Range>, lie::coalgebra<Domain> > pull_type;
     
     
-    struct base {
-      virtual ~base() { }
+    struct interface {
+      virtual ~interface() { }
 
       virtual Range operator()(const Domain& x) const = 0;
       virtual Range operator()(Domain&& x) const = 0;
@@ -25,11 +25,11 @@ namespace func {
       virtual push_type push(const Domain& at) const = 0;
       virtual pull_type pull(const Domain& at) const = 0;
       
-      virtual base* copy() const = 0;
+      virtual interface* copy() const = 0;
     };
 
     template<class F>
-    struct impl : base {
+    struct impl : interface {
       F value;
       
       static_assert( std::is_same< Domain, func::domain<F> >::value, "bad domain" );
@@ -44,13 +44,13 @@ namespace func {
       push_type push(const Domain& at) const { return func::push<F>(value, at); }
       pull_type pull(const Domain& at) const { return func::pull<F>(value, at); }
       
-      base* copy() const { return new impl(value); }
+      interface* copy() const { return new impl(value); }
     };
 
-    typedef std::unique_ptr<base> ptr_type;
+    typedef std::unique_ptr<interface> ptr_type;
     ptr_type ptr;
     
-    const base& get() const { 
+    const interface& get() const { 
       assert( ptr ); 
       return *ptr;
     }
@@ -61,7 +61,7 @@ namespace func {
     }
 
   public:
-    typedef any self;
+    typedef any base;
 
     any copy() const {
       // debug("func::any::copy");
@@ -108,14 +108,14 @@ namespace func {
     struct push : push_type {
       
       push(const any& of, const Domain& at) 
-	: push::self(of.get().push(at)) { }
+	: push::base(of.get().push(at)) { }
       
     };
 
     struct pull : pull_type {
       
       pull(const any& of, const Domain& at) 
-	: pull::self(of.get().pull(at)) { }
+	: pull::base(of.get().pull(at)) { }
       
     };
 

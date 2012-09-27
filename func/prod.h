@@ -8,6 +8,8 @@ namespace func {
   // lie group product
   template<class G>
   struct product {
+    typedef product base;
+    
     lie::group<G> group;
     
     product(const lie::group<G>& group = {} ) : group(group) { }

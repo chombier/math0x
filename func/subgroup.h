@@ -13,7 +13,7 @@ namespace func {
   // we don't simply use exp << line(dir) as the push/pull are simpler
   template<class G>
   struct subgroup {
-    typedef subgroup self;
+    typedef subgroup base;
     
     typedef euclid::field< lie::algebra< G > > field;
     
@@ -39,7 +39,7 @@ namespace func {
       
 
       push(const subgroup& of, const field& )
-	: push::self( of.dir ) { 
+	: push::base( of.dir ) { 
 
       }
 
@@ -48,7 +48,7 @@ namespace func {
     struct pull : form< lie::coalgebra<G> > {
       
       pull(const subgroup& of, const field& )
-	: pull::self( of.dir ) { 
+	: pull::base( of.dir ) { 
 	
       }
 

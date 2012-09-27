@@ -8,7 +8,7 @@ namespace func {
   
   template<class E>
   struct line {
-    typedef line self;
+    typedef line base;
     
     E dir;
     euclid::space<E> space;
@@ -40,7 +40,7 @@ namespace func {
   struct line<E>::pull: form< euclid::dual<E> > {
       
     pull(const line& of, const euclid::field<E>& ) 
-      : pull::self(of.dir) { }
+      : pull::base(of.dir) { }
       
   };
   

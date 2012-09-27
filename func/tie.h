@@ -11,7 +11,7 @@ namespace func {
   // f(a) = (f1(a), f2(a), ..., fn(a))
   template<class ... Args>
   struct tie {
-    typedef tie self;
+    typedef tie base;
 
     typedef std::tuple< Args... > args_type;
     args_type args;
@@ -49,7 +49,7 @@ namespace func {
       
       push( const tie& of,
 	    const domain& at ) 
-	: push::self{ func::push<Args>(of.args, at)... } {
+	: push::base{ func::push<Args>(of.args, at)... } {
 
       }
 

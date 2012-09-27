@@ -9,7 +9,7 @@ namespace func {
   // throw an error
   template<class Domain, class Range, class What >
   struct error {
-    typedef error self;
+    typedef error base;
     
     What what;
     
@@ -20,13 +20,13 @@ namespace func {
     
     struct push : error< lie::algebra<Domain>, lie::algebra<Range>, What > {
       
-      push(const error& of, const Domain& ) : push::self{of.what} { }
+      push(const error& of, const Domain& ) : push::base{of.what} { }
       
     };
 
 
     struct pull : error< lie::coalgebra<Range>, lie::coalgebra<Domain>, What > {
-      pull(const error& of, const Domain& ) : pull::self{of.what} { }
+      pull(const error& of, const Domain& ) : pull::base{of.what} { }
     };
 
   };

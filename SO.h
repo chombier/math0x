@@ -17,7 +17,7 @@ class SO<3, U> {
   typedef quaternion<U> quat_type;
   quat_type quat;
 public:
-  typedef SO self;
+  typedef SO base;
   
   SO( const quat_type& quat = quat_type::Identity() ) 
     : quat( quat ) {
@@ -70,7 +70,7 @@ namespace lie {
     
     // TODO better ?
     struct AdT { 
-      typedef AdT self;
+      typedef AdT base;
       
       G at;
       
@@ -84,7 +84,7 @@ namespace lie {
 
 
     struct exp {
-      typedef exp self;
+      typedef exp base;
       
       exp(const group<G>& = group<G>() ) { }
 
@@ -98,7 +98,7 @@ namespace lie {
 
 
     struct log {
-      typedef log self;
+      typedef log base;
       
       log(const group<G>& = group<G>() ) { }
       
