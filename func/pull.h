@@ -1,25 +1,26 @@
-#ifndef GROUP_FUNC_PULL_H
-#define GROUP_FUNC_PULL_H
+#ifndef MATH0X_FUNC_PULL_H
+#define MATH0X_FUNC_PULL_H
 
-#include <group/func.h>
-#include <group/meta.h>
+#include <math0x/func.h>
+#include <math0x/meta.h>
 
-namespace func {
+namespace math0x { 
+  namespace func {
 
-  template<class F>
-  struct pullback {
-    F of;
+    template<class F>
+    struct pullback {
+      F of;
       
-    pull<F> operator()(const domain<F>& x) const {
-      return pull<F>(of, x);
-    }
+      pull<F> operator()(const domain<F>& x) const {
+	return pull<F>(of, x);
+      }
       
-  };
+    };
     
-  template<class F>
-  pullback< meta::decay<F> > dT(F&& f) { return {std::forward<F>(f)}; }
+    template<class F>
+    pullback< meta::decay<F> > dT(F&& f) { return {std::forward<F>(f)}; }
   
+  }
+
 }
-
-
 #endif

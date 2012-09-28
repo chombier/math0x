@@ -18,13 +18,18 @@ namespace math0x {
       typedef get base;
       
       typedef std::tuple<Args...> domain;
-      typedef tuple::element<I, domain> range;
+      typedef math0x::tuple::element<I, domain> range;
 
-      range operator()(const domain& x) const {
+
+      const range& operator()(const domain& x) const {
 	return std::get<I>(x);
       }
 
-
+      range operator()(domain&& x) const {
+	return std::move( std::get<I>(x) );
+      }
+      
+      
       struct push : get<I, lie::algebra<domain> > {
       	push(const get&, const domain& ) { }
       };

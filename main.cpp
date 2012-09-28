@@ -50,9 +50,12 @@
 
 #include <math0x/func/part.h>
 #include <math0x/func/get.h>
+#include <math0x/func/jacobian.h>
+
 
 int main(int, char** ) {
-
+  using namespace math0x;
+  
   euclid::space<RR> E;
   
   RR x = E.zero();

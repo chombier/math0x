@@ -1,35 +1,36 @@
-#ifndef GROUP_TUPLE_STREAM_H
-#define GROUP_TUPLE_STREAM_H
+#ifndef MATH0X_TUPLE_STREAM_H
+#define MATH0X_TUPLE_STREAM_H
 
-#include <group/tuple/range.h>
+#include <math0x/tuple/range.h>
 #include <ostream>
 
-namespace tuple {
+namespace math0x { 
+  namespace tuple {
 
-  namespace impl {
+    namespace impl {
 
-    template<class ... Args>
-    struct stream {
+      template<class ... Args>
+      struct stream {
       
-      std::ostream& out;
-      const std::tuple<Args...>& data;
+	std::ostream& out;
+	const std::tuple<Args...>& data;
     
-      template<int I>
-      void operator()() const {
-	out << std::get<I>(data);
+	template<int I>
+	void operator()() const {
+	  out << std::get<I>(data);
 	
-	if( I < (sizeof...(Args) - 1) ) out << ", ";
-      }
+	  if( I < (sizeof...(Args) - 1) ) out << ", ";
+	}
       
-    };
+      };
+    }
   }
 }
-
 
 template<class ... Args>
 std::ostream& operator<<(std::ostream& out,
 			 const std::tuple<Args...>& args) {
-  tuple::make_range(args).apply( tuple::impl::stream<Args...>{out, args} ); 
+  math0x::tuple::make_range(args).apply( math0x::tuple::impl::stream<Args...>{out, args} ); 
   return out;
 }
 

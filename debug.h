@@ -1,5 +1,5 @@
-#ifndef GROUP_LOG_H
-#define GROUP_LOG_H
+#ifndef MATH0X_LOG_H
+#define MATH0X_LOG_H
 
 #include <iostream>
 

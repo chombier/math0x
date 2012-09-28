@@ -1,38 +1,39 @@
-#ifndef GROUP_FUNC_ERROR_H
-#define GROUP_FUNC_ERROR_H
+#ifndef MATH0X_FUNC_ERROR_H
+#define MATH0X_FUNC_ERROR_H
 
-#include <group/types.h>
-#include <group/lie.h>
+#include <math0x/types.h>
+#include <math0x/lie.h>
 
-namespace func {
+namespace math0x { 
+  namespace func {
 
-  // throw an error
-  template<class Domain, class Range, class What >
-  struct error {
-    typedef error base;
+    // throw an error
+    template<class Domain, class Range, class What >
+    struct error {
+      typedef error base;
     
-    What what;
+      What what;
     
-    Range operator()(const Domain& ) const { 
-      throw what;
-    }
+      Range operator()(const Domain& ) const { 
+	throw what;
+      }
     
     
-    struct push : error< lie::algebra<Domain>, lie::algebra<Range>, What > {
+      struct push : error< lie::algebra<Domain>, lie::algebra<Range>, What > {
       
-      push(const error& of, const Domain& ) : push::base{of.what} { }
+	push(const error& of, const Domain& ) : push::base{of.what} { }
       
+      };
+
+
+      struct pull : error< lie::coalgebra<Range>, lie::coalgebra<Domain>, What > {
+	pull(const error& of, const Domain& ) : pull::base{of.what} { }
+      };
+
     };
 
-
-    struct pull : error< lie::coalgebra<Range>, lie::coalgebra<Domain>, What > {
-      pull(const error& of, const Domain& ) : pull::base{of.what} { }
-    };
 
   };
 
-
-};
-
-
+}
 #endif

@@ -18,13 +18,19 @@ namespace math0x {
       typedef partial base;
 
       typedef std::tuple<Args...> range;
-      typedef tuple::element<I, range> domain;
+      typedef math0x::tuple::element<I, range> domain;
       
       range at;
       
       range operator()(const domain& x) const {
 	range res = at;
 	std::get<I>(res) = x;
+	return res;
+      }
+
+      range operator()(domain&& x) const {
+	range res = at;
+	std::get<I>(res) = std::move(x);
 	return res;
       }
 
