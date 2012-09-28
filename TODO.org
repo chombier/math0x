@@ -3,13 +3,6 @@
 * machine precision ?
   std::numeric_limits<double>::epsilon
 
-* operators for functions
-
-* Lie brackets/cobrackets
-
-* tuple
-  - partial
-    
 * harmonize make_ ... and friends
 
 * SO3
@@ -46,5 +39,5 @@
 
 * lua interface ?
 * rename to  math0x
-* minres
+
 

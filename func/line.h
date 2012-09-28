@@ -2,10 +2,14 @@
 #define GROUP_FUNC_LINE_H
 
 #include <group/euclid.h>
+#include <math0x/func/form.h>
 
-// vector line
+
 namespace func {
   
+  template<class E> struct form;
+
+  // vector line: field -> E 
   template<class E>
   struct line {
     typedef line base;

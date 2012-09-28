@@ -1,11 +1,14 @@
-#ifndef GROUP_FUNC_FORM_H
-#define GROUP_FUNC_FORM_H
+#ifndef MATH0X_FUNC_FORM_H
+#define MATH0X_FUNC_FORM_H
 
-#include <group/euclid.h>
+#include <math0x/euclid.h>
+#include <math0x/func/line.h>
 
-// linear form over a vector space E 
 namespace func {
-  
+
+  template<class E> struct line;
+
+  // linear form over a vector space: E -> field
   template<class E>
   struct form {
     typedef form base;

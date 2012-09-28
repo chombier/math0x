@@ -54,9 +54,9 @@ namespace func {
       return each::map( call_lvalue{args, x} );
     }
 
-    // range operator()(domain&& x) const {
-    //   return each::map( call_rvalue{args, std::move(x) } );
-    // }
+    range_type operator()(domain_type&& x) const {
+      return each::map( call_rvalue{args, std::move(x) } );
+    }
     
     
     struct push : tuple< func::push<Args>... > {
@@ -106,12 +106,7 @@ namespace func {
   };
 
 
- 
-
-
- 
-
-
+  
   template<class ... Args>
   tuple< meta::decay<Args>... > make_tuple(Args&& ... args) {
     return { std::make_tuple(std::forward<Args>(args)...) };

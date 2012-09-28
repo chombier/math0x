@@ -45,6 +45,12 @@
 #include <group/func/ops.h>
 #include <group/func/val.h>
 
+#include <group/iter.h>
+#include <group/minres.h>
+
+#include <math0x/func/part.h>
+#include <math0x/func/get.h>
+
 int main(int, char** ) {
 
   euclid::space<RR> E;
@@ -164,6 +170,13 @@ int main(int, char** ) {
   // why do these fail !?
   ryan.log()( ryan.id() );
   ryan.exp()( ryan.alg().zero() );
+
+
+  math0x::iter iter(10, 1e-4);
+
+  iter([&] {
+      return 0.1;
+    });
 
   // RR c = (*hermite<RR>::ptr)( 1.0 );
   

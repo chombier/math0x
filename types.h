@@ -30,9 +30,6 @@ namespace func {
   
   template<class G> struct id;
 
-  template<class E> struct line;
-  template<class E> struct form;
-
   template<class E> struct minus;
   
   template<class Outer, class Inner> struct comp;
@@ -41,6 +38,7 @@ namespace func {
 
   template<class ... > struct tuple;
 
+  
 }
 
 
