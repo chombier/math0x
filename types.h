@@ -39,7 +39,7 @@ namespace math0x {
 
     template<class ... > struct tuple;
 
-  
+    template<class G> struct apply;  
   }
 
 

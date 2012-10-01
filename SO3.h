@@ -1,5 +1,5 @@
-#ifndef MATH0X_SO_H
-#define MATH0X_SO_H
+#ifndef MATH0X_SO3_H
+#define MATH0X_SO3_H
 
 #include <math0x/types.h>
 #include <math0x/lie.h>
@@ -12,6 +12,7 @@
 #include <math0x/error.h>
 
 namespace math0x { 
+
   // 3-dimensional rotation group
   template<class U>
   class SO<3, U> {
@@ -40,7 +41,29 @@ namespace math0x {
       return quat * x;
     }
   
-    // TODO push/pull
+    struct push : SO {
+      
+      push(const SO& of, const vec3_type& ) 
+	: push::base(of) {
+
+      }
+
+    };
+
+    struct pull {
+      
+      SO of_inv;
+      
+      pull(const SO& of, const vec3_type& ) 
+	: of_inv(of.inv()) {
+	
+      }
+      
+      lie::coalgebra<vec3_type> operator()(const lie::coalgebra<vec3_type>& f) const {
+	return of_inv(f.transpose()).transpose();
+      }
+      
+    };
   
 
   };
@@ -65,6 +88,12 @@ namespace math0x {
     
       euclid::space<algebra> alg() const { return {}; }
     
+      
+      algebra bracket(const algebra& x, const algebra& y) const {
+	return x.cross(y);
+      }
+
+
       struct Ad :  G {
 	Ad(const G& at) : G(at) { }
       };
@@ -117,5 +146,46 @@ namespace math0x {
 
 
   }
+
+
+  namespace func {
+
+    template<class U>
+    struct apply< SO<3, U> > {
+      
+      typedef SO<3, U> G;
+
+      typedef std::tuple<G, func::domain<G> > domain;
+      typedef func::range<G> range;
+      
+      range operator()(const domain& x) const {
+	return std::get<0>(x)(std::get<1>(x));
+      }
+      
+
+      struct push {
+
+	domain at;
+	lie::group<G> group;
+	
+	push( const apply&, const domain& at) : at(at) { }
+
+	lie::algebra<range> operator()(const lie::algebra<domain>& dx) const {
+	  
+	  return std::get<0>(at)( group.bracket(std::get<0>(dx), std::get<1>(at))
+				  + std::get<1>(dx) );
+	}
+	
+      };
+      
+
+    };
+
+  }
+
+
 }
+
+
+
 #endif

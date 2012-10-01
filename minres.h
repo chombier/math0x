@@ -15,9 +15,49 @@ namespace math0x {
     typedef U real;
     typedef vector<U, M> vec;
     
+    static inline real abs(const real& x) { return x < 0 ? -x : x; }
+    static inline real sign(const real& x) { return x < 0 ? -1.0 : 1.0; }
+    
     static void sym_ortho(const real& a, const real& b,
 			  real& c, real& s, real& r) {
+      // TODO asserts ! nans !
+      if( !b  ) {
+	s = 0;
+	r = abs( a );
+      
+	c = a ? sign(a) : 1.0;
+      
+      } else if ( !a ) {
+	c = 0;
+	s = sign(b);
+	r = abs(b);
+      } else {
 
+	const real aabs = abs(a);
+	const real babs = abs(b);
+      
+	if( babs > aabs ) {
+	  const real tau = a / b;
+	
+	  s = sign( b ) / std::sqrt( 1 + tau * tau );
+	  c = s * tau;
+	  r = b / s;
+	} else if( aabs > babs ) { 
+	  const real tau = b / a;
+	    
+	  c = sign( a ) / std::sqrt( 1 + tau * tau );
+	  s = c * tau;
+	  r = a / c;
+	}  else {
+	  
+	  const real tau = b / a;
+	  
+	  c = sign( a ) / std::sqrt( 1 + tau * tau );
+	  s = c * tau;
+	  r = a / c;
+	}
+	
+      }
     }
 
   public:
@@ -25,7 +65,7 @@ namespace math0x {
     struct lanczos {
       real& alpha;
       real& beta;
-      vector<real, M>& v;
+      vec& v;
 
       template<class Matrix>
       static void step(const Matrix& A, 
@@ -82,11 +122,9 @@ namespace math0x {
 	auto zero = vec::Zero(n);
 	
 	r = rr;
-	assert(!nan(r));
-      
+	
 	beta = r.norm();
-	assert(!nan(beta));
-      
+
 	if( beta <= threshold ) {
 	  // we are done already lol
 	  phi = 0;
@@ -96,7 +134,8 @@ namespace math0x {
 	v_prev = zero;
 	v = r.normalized();
 
-	assert( !nan(v) );
+	// TODO nans !
+	// assert( !nan(v) ); 
  
 	v_next = zero;
 
@@ -181,22 +220,22 @@ namespace math0x {
     };
 
 
-    iter it;
+    math0x::iter iter;
     U sigma;
     
     minres(RR sigma = 0) : sigma(sigma) { }
 
     // solves (A - sigma * I) x = b, for symmetric A
     template<class Matrix>
-    iter solve(vec& x, const Matrix& A, const vec& b) const {
+    math0x::iter solve(vec& x, const Matrix& A, const vec& b) const {
       const NN n = b.size();
       
-      if( x.empty() ) x = vec::Zero(n);
+      if( !x.size() ) x = vec::Zero(n);
       
       data_type data;
-      data.init(b, it.epsilon);
+      data.init(b, iter.epsilon);
       
-      return it( [&] {
+      return iter( [&] {
 	  data.step(x, A, sigma);
 	  return data.phi;
 	});

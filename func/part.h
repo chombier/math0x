@@ -37,7 +37,7 @@ namespace math0x {
 
       struct push : partial<I, lie::algebra<range> > {
 
-	push(const partial& of, const domain& at) 
+	push(const partial& of, const domain&) 
 	  : push::base{ lie::group<range>(of.at).alg().zero() }
 	{
 	  
@@ -58,7 +58,21 @@ namespace math0x {
       
     };
 
+    template<int I, class ... Args>
+    partial<I, std::tuple<Args...> > part(const std::tuple<Args...>& at) {
+      return {at};
+    }
 
+    template<int I, class ... Args>
+    partial<I, std::tuple<Args...> > part(std::tuple<Args...>&& at) {
+      return {std::move(at)};
+    }
+
+    template<int I, class ... Args>
+    partial<I, std::tuple<meta::decay<Args>...> > part(Args&&... args) {
+      return { std::make_tuple(std::forward<Args>(args)...) };
+    }
+    
   }
 
 }

@@ -168,20 +168,20 @@ namespace math0x {
 
       euclid::space< lie::algebra<G> > alg() const { return { n, sub.alg() }; }
 
-      struct ad {
+      struct Ad {
 	G at;
       
-	ad( const G& g) : at(g) { };
+	Ad( const G& g) : at(g) { };
       
 	lie::algebra<G> operator()(const lie::algebra<G>& ) const {
-	
+	  throw error("not implemented");
 	}
       
       };
     
-      struct adT {  
-	adT( const G& ) { };
-      
+      struct AdT {  
+	AdT( const G& ) { };
+	
 	lie::coalgebra<G> operator()(const lie::coalgebra<G>& ) const {
 	  throw error("not implemented");
 	}

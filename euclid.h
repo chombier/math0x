@@ -4,6 +4,9 @@
 #include <math0x/types.h>
 #include <math0x/meta.h>
 
+#include <cmath>
+#include <cassert>
+
 namespace math0x {
   namespace euclid {
   
@@ -146,6 +149,21 @@ namespace math0x {
 	  coord(i, x) = v(i);
 	}
       
+      }
+
+
+      // canonical squared norm
+      field<E> norm2(const E& x) const {
+	field<E> res = 0;
+	each(x, [&](const field<E>& xi) {
+	    res += xi * xi;
+	  });
+	return res;
+      }
+
+      // canonical norm
+      field<E> norm(const E& x) const {
+	return std::sqrt( norm2(x) );
       }
 
     };

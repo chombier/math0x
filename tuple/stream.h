@@ -4,6 +4,9 @@
 #include <math0x/tuple/range.h>
 #include <ostream>
 
+template<class ... Args>
+std::ostream& operator<<(std::ostream& out,
+			 const std::tuple<Args...>& args);
 namespace math0x { 
   namespace tuple {
 

@@ -33,7 +33,7 @@
 #include <math0x/func/poly.h>
 
 #include <math0x/quaternion.h>
-#include <math0x/SO.h>
+#include <math0x/SO3.h>
 #include <math0x/vector.h>
 
 #include <math0x/func/error.h>
@@ -181,10 +181,23 @@ int main(int, char** ) {
       return 0.1;
     });
 
+
+  vec3 ex = vec3::UnitX();
+  vec3 ey = vec3::UnitY();
+  SO<3> id3;
+  
+  auto map = func::apply< SO<3> >() << func::part<0>(id3, ex);
+  
   levmar opt;
+
   opt.outer.bound = 10;
   opt.outer.epsilon = 1e-7;
 
+  opt.inner.bound = 10;
+  opt.inner.epsilon = 0;
+  
+  // opt.dense(id3, map, ey);
+  // debug(so3.log()(id3).transpose());
   
   // RR c = (*hermite<RR>::ptr)( 1.0 );
   

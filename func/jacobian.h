@@ -29,6 +29,15 @@ namespace math0x {
       euclid::space< domain_algebra > dmn_alg;
       euclid::space< range_algebra > rng_alg;
       
+      // jacobian(const F& of,
+      // 	       const euclid::space< domain_algebra >& dmn_alg,
+      // 	       const euclid::space< range_algebra >& rng_alg)
+      // 	: of(of),
+      // 	  dmn_alg(dmn_alg),
+      // 	  rng_alg(rng_alg) {
+
+      // }
+      
       typedef of_domain domain;
       typedef matrix< field, 
 		      euclid::space< domain_algebra >::static_dim, 
