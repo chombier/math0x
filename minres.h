@@ -3,8 +3,8 @@
 
 #include <cmath>
 
-#include <group/vector.h>
-#include <group/iter.h>
+#include <math0x/vector.h>
+#include <math0x/iter.h>
 
 namespace math0x {
 
@@ -181,9 +181,14 @@ namespace math0x {
     };
 
 
+    iter it;
+    U sigma;
+    
+    minres(RR sigma = 0) : sigma(sigma) { }
+
     // solves (A - sigma * I) x = b, for symmetric A
     template<class Matrix>
-    iter solve(vec& x, const Matrix& A, const vec& b, const iter& it, real sigma = 0) {
+    iter solve(vec& x, const Matrix& A, const vec& b) const {
       const NN n = b.size();
       
       if( x.empty() ) x = vec::Zero(n);

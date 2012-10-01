@@ -1,8 +1,8 @@
-#ifndef GROUP_ITER_H
-#define GROUP_ITER_H
+#ifndef MATH0X_ITER_H
+#define MATH0X_ITER_H
 
-#include <group/types.h>
-#include <group/comma.h>
+#include <math0x/types.h>
+#include <math0x/comma.h>
 
 namespace math0x {
 

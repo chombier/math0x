@@ -1,57 +1,58 @@
 
-#include <group/euclid.h>
-#include <group/real.h>
+#include <math0x/euclid.h>
+#include <math0x/real.h>
 
-#include <group/tuple.h>
-#include <group/tuple/stream.h>
+#include <math0x/tuple.h>
+#include <math0x/tuple/stream.h>
 
-#include <group/debug.h>
-#include <group/lie.h>
+#include <math0x/debug.h>
+#include <math0x/lie.h>
 
-#include <group/vector.h>
-#include <group/covector.h>
+#include <math0x/vector.h>
+#include <math0x/covector.h>
 
-#include <group/func/push.h>
-#include <group/func/pull.h>
-#include <group/func/line.h>
-#include <group/func/form.h>
-#include <group/func/comp.h>
+#include <math0x/func/push.h>
+#include <math0x/func/pull.h>
+#include <math0x/func/line.h>
+#include <math0x/func/form.h>
+#include <math0x/func/comp.h>
 
-#include <group/func/norm2.h>
-#include <group/func/dot.h>
+#include <math0x/func/norm2.h>
+#include <math0x/func/dot.h>
 
-#include <group/func/tie.h>
-#include <group/func/tuple.h>
-#include <group/func/sum.h>
-#include <group/func/minus.h>
+#include <math0x/func/tie.h>
+#include <math0x/func/tuple.h>
+#include <math0x/func/sum.h>
+#include <math0x/func/minus.h>
 
-#include <group/func/any.h>
-#include <group/func/val.h>
-#include <group/func/ref.h>
+#include <math0x/func/any.h>
+#include <math0x/func/val.h>
+#include <math0x/func/ref.h>
 
-#include <group/func/scal.h>
-#include <group/func/poly.h>
+#include <math0x/func/scal.h>
+#include <math0x/func/poly.h>
 
-#include <group/quaternion.h>
-#include <group/SO.h>
-#include <group/vector.h>
+#include <math0x/quaternion.h>
+#include <math0x/SO.h>
+#include <math0x/vector.h>
 
-#include <group/func/error.h>
+#include <math0x/func/error.h>
 
-#include <group/func/trans.h>
-#include <group/func/inv.h>
-#include <group/func/prod.h>
+#include <math0x/func/trans.h>
+#include <math0x/func/inv.h>
+#include <math0x/func/prod.h>
 
-#include <group/func/ops.h>
-#include <group/func/val.h>
+#include <math0x/func/ops.h>
+#include <math0x/func/val.h>
 
-#include <group/iter.h>
-#include <group/minres.h>
+#include <math0x/iter.h>
+#include <math0x/minres.h>
 
 #include <math0x/func/part.h>
 #include <math0x/func/get.h>
-#include <math0x/func/jacobian.h>
 
+#include <math0x/func/jacobian.h>
+#include <math0x/levmar.h>
 
 int main(int, char** ) {
   using namespace math0x;
@@ -173,14 +174,18 @@ int main(int, char** ) {
   // why do these fail !?
   ryan.log()( ryan.id() );
   ryan.exp()( ryan.alg().zero() );
+  
+  math0x::iter it(10, 1e-4);
 
-
-  math0x::iter iter(10, 1e-4);
-
-  iter([&] {
+  it([&] {
       return 0.1;
     });
 
+  levmar opt;
+  opt.outer.bound = 10;
+  opt.outer.epsilon = 1e-7;
+
+  
   // RR c = (*hermite<RR>::ptr)( 1.0 );
   
   return z == E.zero();
