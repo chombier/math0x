@@ -162,6 +162,13 @@ int main(int, char** ) {
   debug(ryan.AdT( ryan.id() )( (*ryan.alg()).zero() ));
 
   lie::group<SO<3> > so3;
+
+  {
+	  SO<3> q = so3.exp()( vec3::UnitY() );
+	  
+	  debug( so3.log()( q ).transpose() );
+  }
+
   so3.exp()(so3.alg().zero());
   so3.log()(so3.id());
 
@@ -174,7 +181,8 @@ int main(int, char** ) {
   // why do these fail !?
   ryan.log()( ryan.id() );
   ryan.exp()( ryan.alg().zero() );
-  
+
+  debug("iter");
   math0x::iter it(10, 1e-4);
 
   it([&] {
@@ -188,6 +196,7 @@ int main(int, char** ) {
   
   auto map = func::apply< SO<3> >() << func::part<0>(q, ex);
   
+  debug("levmar");
   levmar opt;
 
   opt.outer.bound = 10;
@@ -200,6 +209,8 @@ int main(int, char** ) {
   // debug(so3.log()(id3).transpose());
   
   // RR c = (*hermite<RR>::ptr)( 1.0 );
+  
+
   
   return z == E.zero();
 }

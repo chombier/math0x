@@ -1,14 +1,4 @@
 
-* func::apply:
-  
-  for Lie group transforms ?
-  (g, x) -> g(x)
-
-** this provides the action of alg<G> over domain<G> ?
-=> makes more sense to implement ((co)tangent) group actions ?
-=> actually apply is a group action
-=> meh
-
 * lie brackets/cobrackets
 
 * machine precision ?
