@@ -12,7 +12,8 @@ namespace math0x {
 
 		namespace impl {
 
-			template<class ... F> void _void(F...);
+			// converts return type to void
+			template<class ... F> void to_void(F...);
 
 			// F qualifies as a function type if it has one of the following
 			// operators:
@@ -26,30 +27,34 @@ namespace math0x {
   
 		// this one is only defined when each F qualifies as a function
 		template<class ... F>
-		auto requires() -> decltype( impl::_void( impl::requires(&F::operator())...)  );
-  
+		auto requires() -> decltype( impl::to_void( impl::requires(&F::operator())...)  );
+		
 		// default automatic function traits
 		namespace impl {
           
+			// range type
+			
+			// lower priority
 			template<class Range, class G, class Domain>
 			meta::decay<Range> range(Range (G::*)(const Domain&) const, ...  );
 
+			// higher priority
 			template<class Range, class G, class Domain>
 			meta::decay<Range> range(Range (G::*)(Domain&&) const, G* );
 
+			// same here for domain type
 			template<class Range, class G, class Domain>
 			Domain domain(Range (G::*)(const Domain&) const, ... );
 
 			template<class Range, class G, class Domain>
 			Domain domain(Range (G::*)(Domain&&) const, G* );
  
-			// we require member typename ::base to get successive push/pull
-			// rights. other, pull::pull refers to the first pull due to
-			// c++ name injection
-
-			// so if your typename F::push derives from class A, A needs to
-			// have a member type A::base equal to A, otherwise
-			// push<push<F>> will be push<F> instead of push<A>
+			// push/pull types
+			
+			// due to c++ name injection rules, if your typename F::push
+			// derives from class A, A needs to have a member type A::base
+			// equal to A, otherwise push<push<F>> will refer to push<F>
+			// instead of push<A>
 			template<class F>
 			using base = typename F::base;
       
@@ -92,7 +97,8 @@ namespace math0x {
       
 			};
 
-    
+			// lowest priority overloads
+
 			// default pushforward
 			template<class F>
 			default_push<F> push( ... );
