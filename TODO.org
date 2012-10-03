@@ -1,6 +1,6 @@
 
 * lie brackets/cobrackets
-
+	
 * machine precision ?
   std::numeric_limits<double>::epsilon
 
@@ -8,7 +8,7 @@
 
 * SO3
   - exp/log
-  - so3, so3T ?
+		derivatives ?
 
 * dual quaternions (?), rigid transforms
 
@@ -30,7 +30,6 @@
 * lambdas ?
 
 * get rid of the nasty ::base member type ?
-
 ** used to get nested push::push types right  
   
 ** does not seem possible, we need to flag base class one way or another :-/

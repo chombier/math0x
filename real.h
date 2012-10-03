@@ -46,14 +46,15 @@ namespace math0x {
 
 	}
 
-	// (flat) lie group structure
+	// (commutative) lie group structure
 	namespace lie {
-  
+		
 		template<> 
 		struct traits<RR> {
     
 			typedef RR algebra;
-    
+			typedef euclid::dual<algebra> coalgebra;
+			
 			struct Ad : func::id< RR > {
 				Ad(const RR& ) { }
 			};
@@ -79,6 +80,8 @@ namespace math0x {
     
 			euclid::space< algebra > alg() const { return {}; }
     
+			algebra bracket(const algebra&, const algebra& ) const { return 0; }
+			coalgebra cobracket(const coalgebra&, const coalgebra& ) const { return 0; }
 		};
 
 	}

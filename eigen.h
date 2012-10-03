@@ -6,7 +6,7 @@
 #include <math0x/error.h>
 
 #include <math0x/func/array.h>
-
+#include <math0x/each.h>
 #include <Eigen/Core>
 
 // adapts eigen vectors for use with this library.
@@ -18,21 +18,7 @@ namespace math0x {
 		return K;
 	}
 	
-	namespace impl {
-		
-		template<class Xpr, class F>
-		Eigen::CwiseUnaryOp<F, Xpr > unary(const Xpr& xpr, const F& f) {
-			return {xpr, f};
-		}
-
-		template<class LHS, class RHS, class F>
-		Eigen::CwiseBinaryOp<F, LHS, RHS > binary(const LHS& lhs,
-		                                          const RHS& rhs,
-		                                          const F& f) {
-			return {lhs, rhs, f};
-		}
-	}
-
+	
 
 	// template<class Vector, class F>
 	// Vector map(F&& f,
@@ -86,10 +72,10 @@ namespace math0x {
 				E res;
 				res.resize( n );
 
-				for( NN i = 0; i < n; ++i) {
-					res(i) = sub.zero();
-				}
-      
+				each(res, [&](NN i) {
+						res(i) = sub.zero();
+					});
+					
 				return res;
 			}
     
@@ -148,47 +134,41 @@ namespace math0x {
 				assert( n );
 			}
     
-			struct op {
-
-				struct inv {
-					const group<U>& sub;
-
-					U operator()(const U& x) const {
-						return sub.inv(x);
-					}
-	
-				};
-
-				struct prod {
-					const group<U>& sub;
-	
-					U operator()(const U& x, const U& y) const {
-						return sub.prod(x, y);
-					}
-	
-				};
-
-
-				
-
-			};
-
-
+			
 			G id() const {
 				G res; res.resize(n);
-				for(NN i = 0, n = res.size(); i < n; ++i) res(i) = sub.id(); 
+				each(res, [&](NN i) { res(i) = sub.id(); } );
 				return res;
 			}
     
 			G inv( const G& x ) const { 
-				return impl::unary(x, typename op::inv{sub} );
+				G res; res.resize( n );
+				each(res, [&](NN i) { res(i) = sub.inv(x(i)); } );
+				return res;
 			}
 
 			G prod( const G& x, const G& y) const { 
-				return impl::binary(x, y, typename op::prod{sub} );
+				G res; res.resize( n );
+				each(res, [&](NN i) { res(i) = sub.prod(x(i), y(i)); } );
+				return res;
 			}
 
-			euclid::space< lie::algebra<G> > alg() const { return { n, sub.alg() }; }
+			euclid::space< lie::algebra<G> > alg() const { 
+				return { n, sub.alg() }; 
+			}
+			
+
+			algebra bracket(const algebra& x, const algebra& y) const {
+				algebra res; res.resize(n);
+				each(res, [&](NN i) { res(i) = sub.bracket(x(i), y(i)); });
+				return res;
+			}
+
+			coalgebra cobracket(const coalgebra& x, const coalgebra& y) const {
+				coalgebra res; res.resize(n);
+				each(res, [&](NN i) { res(i) = sub.cobracket(x(i), y(i)); });
+				return res;
+			}
 
 			struct Ad : func::array< lie::Ad< U >, 
 			                         algebra,
@@ -249,7 +229,7 @@ namespace math0x {
 		
     
 		};
-
+		
 	} 
 }
 #endif
