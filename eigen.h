@@ -5,17 +5,21 @@
 #include <math0x/lie.h>
 #include <math0x/error.h>
 
+#include <math0x/array.h>
+
 #include <Eigen/Core>
 
 // adapts eigen vectors for use with this library.
 namespace math0x {
 
+	template<int K>
+	NN ensure_static() {
+		static_assert( K != -1, "should not be called for dynamic size" );
+		return K;
+	}
+	
+
 	namespace impl {
-		template<int K>
-		NN static_size() {
-			static_assert( K != Eigen::Dynamic, "should not be called for dynamic size" );
-			return K;
-		}
   
 		template<class Xpr, class F>
 		Eigen::CwiseUnaryOp<F, Xpr > unary(const Xpr& xpr, const F& f) {
@@ -40,7 +44,7 @@ namespace math0x {
 
 	template<class Vector, class F>
 	Vector map(F&& f,
-	           int size = impl::static_size< euclid::space<Vector>::static_dim >() ) {
+	           int size = ensure_static< Vector::SizeAtComileTime >() ) {
 		Vector res;
 		res.resize( size );
 		
@@ -62,17 +66,18 @@ namespace math0x {
     
 			NN n;
 			space<U> sub;
+
+			typedef euclid::field<U> field;
+			typedef Eigen::Matrix<U, M, N> E;
+
     
-			traits(NN n = math0x::impl::static_size<M>() * math0x::impl::static_size<N>(),
+			traits(NN n = ensure_static< E::SizeAtCompileTime >(),
 			       const space<U>& sub = space<U>())
 				: n(n),
 				  sub(sub) {
 				assert( dim() );
 			}
     
-			typedef euclid::field<U> field;
-    
-			typedef Eigen::Matrix<U, M, N> E;
     
 			traits( const E& x ) 
 			: n( x.size() ),
@@ -132,17 +137,17 @@ namespace math0x {
 			NN n;
 			group<U> sub;
 
-			traits(NN n = impl::static_size<M>() * impl::static_size<N>(),
+			typedef Eigen::Matrix< lie::algebra<U>, M, N > algebra;
+			typedef Eigen::Matrix<U, M, N> G;
+			
+			traits(NN n = ensure_static< G::SizeAtCompileTime >(),
 			       const group<U>& sub = group<U>())
 				: n(n),
 				  sub(sub) {
 				assert( n );
 			}
 
-			typedef Eigen::Matrix< lie::algebra<U>, M, N > algebra;
-
-			typedef Eigen::Matrix<U, M, N> G;
-    
+	  
 			traits( const G& x ) 
 			: n( x.size() ),
 			  sub( x(0)) {
@@ -170,14 +175,7 @@ namespace math0x {
 				};
 
 
-				struct apply {
-					
-					template<class Fun>
-					func::range<Fun> operator()(const Fun& fun, const func::domain<Fun>& x) const {
-						return fun(x);
-					}
-					
-				};
+				
 
 			};
 
@@ -201,7 +199,8 @@ namespace math0x {
 			struct Ad {
 				
 				group<U> sub;
-				typedef Eigen::Matrix<lie::Ad<U>, M, N> Ads_type;
+				typedef array< lie::Ad<U>, G::SizeAtCompileTime  > Ads_type;
+				
 				Ads_type Ads;
 				
 				struct get {
@@ -216,13 +215,19 @@ namespace math0x {
 
 				Ad( const G& g ) 
 				: sub( g(0) ),
-				  Ads( map< Ads_type >( get { sub, g },
-				                        g.size() ) ) {
+				  Ads( g.size(), get { sub, g } ) {
 					
 				}
       
 				lie::algebra<G> operator()(const lie::algebra<G>& x) const {
-					return impl::binary(Ads, x, typename op::apply{} );
+					G res;
+					res.resize( Ads.size() );
+					
+					for(NN i = 0, n = Ads.size(); i < n; ++i) {
+						res(i) = Ads(i)(x(i));
+					}
+
+					return res;
 				}
       
 			};

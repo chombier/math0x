@@ -53,6 +53,7 @@
 
 #include <math0x/func/jacobian.h>
 #include <math0x/levmar.h>
+#include <math0x/array.h>
 
 
 int main(int, char** ) {
@@ -194,8 +195,9 @@ int main(int, char** ) {
   vec3 ex = vec3::UnitX();
   vec3 ey = vec3::UnitY();
 
-  // lie::Ad<vec3> zob( vec3::Zero()) ;
+  lie::Ad<vec3> zob( vec3::Zero()) ;
   
+  zob( vec3::Zero() );
 
   SO<3> q;
   
@@ -216,6 +218,16 @@ int main(int, char** ) {
   // RR c = (*hermite<RR>::ptr)( 1.0 );
   
 
+  array< lie::Ad<RR> > henri(5, [&](NN i ) {
+		  return lie::Ad<RR>(0.0);
+	  });
   
+  
+  array< lie::Ad<RR>, 5 > roger(5, [&](NN i )  {
+	   return lie::Ad<RR>(0.0);
+  });
+  
+  
+
   return z == E.zero();
 }

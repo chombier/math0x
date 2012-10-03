@@ -1,5 +1,5 @@
-#ifndef GROUP_META_H
-#define GROUP_META_H
+#ifndef MATH0X_META_H
+#define MATH0X_META_H
 
 #include <utility>
 
@@ -12,10 +12,7 @@ namespace meta {
   using remove_pointer = typename std::remove_pointer<F>::type;
   
   template<class ... Args>
-  void noop(Args&& ... ) { }
-
-  
-  
+  inline void noop(Args&& ... ) { }
 
 }
 
