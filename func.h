@@ -5,6 +5,7 @@
 #include <math0x/meta.h>
 
 #include <stdexcept>
+#include <typeinfo>
 
 namespace math0x { 
 	namespace func {
@@ -45,21 +46,36 @@ namespace math0x {
 			// we require member typename ::base to get successive push/pull
 			// rights. other, pull::pull refers to the first pull due to
 			// c++ name injection
+
+			// so if your typename F::push derives from class A, A needs to
+			// have a member type A::base equal to A, otherwise
+			// push<push<F>> will be push<F> instead of push<A>
 			template<class F>
 			using base = typename F::base;
       
+			// lower priority overload
 			template<class F>
-			typename base<F>::push push(F*);
+			typename F::push push(F*, ...);
+			
+			// higher priority overload
+			template<class F>
+			typename base<F>::push push(F*, F*);
+			
+			// same story for pull
+			template<class F>
+			typename F::pull pull(F*, ... );
 
 			template<class F>
-			typename base<F>::pull pull(F*);
-      
+			typename base<F>::pull pull(F*, F*);
+
+
+			// default pushforward/pullback
 			template<class F>
 			struct default_push : func::error< lie::algebra< func::domain<F> >,
 			                                   lie::algebra< func::range<F> >,
 			                                   std::logic_error > {
 				default_push(const F&, const func::domain<F>& )
-					: default_push::base{ std::logic_error("no pushforward lol") }  {
+					: default_push::base{ std::logic_error(typeid(F).name()) }  {
 	
 				}      
       
@@ -70,8 +86,8 @@ namespace math0x {
 			                                   lie::coalgebra< func::domain<F> >,
 			                                   std::logic_error > {
 				default_pull(const F&, const func::domain<F>& )
-					: default_pull::base{ std::logic_error("no pullback lol") } {
-	
+					: default_pull::base{ std::logic_error(typeid(F).name() ) } {
+					
 				}      
       
 			};
@@ -93,8 +109,8 @@ namespace math0x {
 			typedef decltype( impl::range( &F::operator(), 0) ) range;
 			typedef decltype( impl::domain(&F::operator(), 0) ) domain;
       
-			typedef decltype( impl::push<F>( 0 )) push;
-			typedef decltype( impl::pull<F>( 0 )) pull;
+			typedef decltype( impl::push<F>( 0, 0 )) push;
+			typedef decltype( impl::pull<F>( 0, 0 )) pull;
 		};
 
 	}

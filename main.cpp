@@ -42,7 +42,7 @@
 #include <math0x/func/inv.h>
 #include <math0x/func/prod.h>
 
-#include <math0x/func/ops.h>
+// #include <math0x/func/ops.h>
 #include <math0x/func/val.h>
 
 #include <math0x/iter.h>
@@ -124,10 +124,10 @@ int main(int, char** ) {
     
     // auto p = x + x + x;
 
-    auto p = 0.5 * (x^2) +  2 * x + func::val<RR>(1.0);
+    // auto p = 0.5 * (x^2) +  2 * x + func::val<RR>(1.0);
     
-    debug( "domain:", typeid( func::domain< decltype(p) > ).name());
-    debug( "range:", typeid( func::range< decltype(p) > ).name());
+    // debug( "domain:", typeid( func::domain< decltype(p) > ).name());
+    // debug( "range:", typeid( func::range< decltype(p) > ).name());
   }
 
   // typedef vector< SO<3>, 3 > test_type;

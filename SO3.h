@@ -179,11 +179,12 @@ namespace math0x {
 
 		template<class U>
 		struct apply< SO<3, U> > {
-      
+			
 			typedef SO<3, U> G;
 
-			typedef std::tuple<G, func::domain<G> > domain;
-			typedef func::range<G> range;
+
+			typedef std::tuple<G, vector<U, 3> > domain;
+			typedef vector<U, 3> range;
       
 			range operator()(const domain& x) const {
 				return std::get<0>(x)(std::get<1>(x));
@@ -198,9 +199,7 @@ namespace math0x {
 				push( const apply&, const domain& at) : at(at) { }
 
 				lie::algebra<range> operator()(const lie::algebra<domain>& dx) const {
-	  
-					return std::get<0>(at)( group.bracket(std::get<0>(dx), std::get<1>(at))
-					                        + std::get<1>(dx) );
+					return std::get<0>(at)( group.bracket(std::get<0>(dx), std::get<1>(at)) + std::get<1>(dx) );
 				}
 	
 			};

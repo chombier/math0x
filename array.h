@@ -43,6 +43,8 @@ namespace math0x {
 			assert( int(size) == M );
 			meta::noop( size );
 		}
+
+		
 		
 	};
 	

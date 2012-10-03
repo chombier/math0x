@@ -5,7 +5,7 @@
 #include <math0x/lie.h>
 #include <math0x/error.h>
 
-#include <math0x/array.h>
+#include <math0x/func/array.h>
 
 #include <Eigen/Core>
 
@@ -18,9 +18,8 @@ namespace math0x {
 		return K;
 	}
 	
-
 	namespace impl {
-  
+		
 		template<class Xpr, class F>
 		Eigen::CwiseUnaryOp<F, Xpr > unary(const Xpr& xpr, const F& f) {
 			return {xpr, f};
@@ -34,26 +33,19 @@ namespace math0x {
 		}
 	}
 
-	template<class U, int M, int N, class F>
-	void each(const Eigen::Matrix<U, M, N>& v, F&& f) {
-		for(NN i = 0, n = v.size(); i < n; ++i) {
-			f(i);
-		}
-	};
-	
 
-	template<class Vector, class F>
-	Vector map(F&& f,
-	           int size = ensure_static< Vector::SizeAtComileTime >() ) {
-		Vector res;
-		res.resize( size );
+	// template<class Vector, class F>
+	// Vector map(F&& f,
+	//            int size = ensure_static< Vector::SizeAtComileTime >() ) {
+	// 	Vector res;
+	// 	res.resize( size );
 		
-		each(res, [&](NN i ) {
-				res(i) = f(i);
-			});
+	// 	each(res, [&](NN i ) {
+	// 			res(i) = f(i);
+	// 		});
 		
-		return res;
-	}
+	// 	return res;
+	// }
 	
 
 	namespace euclid {
@@ -138,6 +130,8 @@ namespace math0x {
 			group<U> sub;
 
 			typedef Eigen::Matrix< lie::algebra<U>, M, N > algebra;
+			typedef euclid::dual< algebra > coalgebra;
+
 			typedef Eigen::Matrix<U, M, N> G;
 			
 			traits(NN n = ensure_static< G::SizeAtCompileTime >(),
@@ -196,67 +190,63 @@ namespace math0x {
 
 			euclid::space< lie::algebra<G> > alg() const { return { n, sub.alg() }; }
 
-			struct Ad {
-				
-				group<U> sub;
-				typedef array< lie::Ad<U>, G::SizeAtCompileTime  > Ads_type;
-				
-				Ads_type Ads;
-				
-				struct get {
-					const group<U>& sub;
-					const G& at;
-					
-					lie::Ad<U> operator()(NN i) const {
-						return sub.Ad(at(i));
-					}
-					
-				};
-
-				Ad( const G& g ) 
-				: sub( g(0) ),
-				  Ads( g.size(), get { sub, g } ) {
+			struct Ad : func::array< lie::Ad< U >, 
+			                         algebra,
+			                         algebra,
+			                         G::SizeAtCompileTime> {
+				Ad(const G& at) 
+				: Ad::base(at.size(), [&](NN i) {
+						return lie::Ad< U >(at(i));
+					}) {
 					
 				}
-      
-				lie::algebra<G> operator()(const lie::algebra<G>& x) const {
-					G res;
-					res.resize( Ads.size() );
-					
-					for(NN i = 0, n = Ads.size(); i < n; ++i) {
-						res(i) = Ads(i)(x(i));
-					}
+				
+			};
 
-					return res;
+			struct AdT : func::array< lie::AdT<U> , 
+			                          coalgebra,
+			                          coalgebra,
+			                          G::SizeAtCompileTime> {
+				AdT(const G& at) 
+				: AdT::base(at.size(), [&](NN i) {
+						return lie::AdT< U >(at(i));
+					}) {
+					
 				}
-      
+				
 			};
     
-			struct AdT {  
-				AdT( const G& ) { };
-	
-				lie::coalgebra<G> operator()(const lie::coalgebra<G>& ) const {
-					throw error("not implemented");
+		
+
+			struct exp : func::array< lie::exp<U>,
+			                          algebra,
+			                          G,
+			                          G::SizeAtCompileTime > {
+
+				exp( const group<G>& g) 
+					: exp::base(g.impl.n, [&](NN ) {
+							return lie::exp<U>(g.impl.sub);
+						}) { 
+					
 				}
+
 			};
 
-			struct exp {
-				exp( const group<G>& ) { }
+			struct log : func::array< lie::log<U>,
+			                          G,
+			                          algebra,
+			                          G::SizeAtCompileTime > {
 
-				G operator()(const lie::algebra<G>& ) const { 
-					throw error("not implemented");
+				log( const group<G>& g) 
+					: log::base(g.impl.n, [&](NN ) {
+							return lie::log<U>(g.impl.sub);
+						}) { 
+					
 				}
-      
+
 			};
 
-			struct log { 
-				log( const group<G>& ) { }
-
-				lie::algebra<G> operator()(const G& ) const { 
-					throw error("not implemented");
-				}
-      
-			};
+		
     
 		};
 
