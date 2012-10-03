@@ -54,6 +54,7 @@
 #include <math0x/func/jacobian.h>
 #include <math0x/levmar.h>
 
+
 int main(int, char** ) {
   using namespace math0x;
   
@@ -189,9 +190,13 @@ int main(int, char** ) {
       return 0.1;
     });
 
-
+ 
   vec3 ex = vec3::UnitX();
   vec3 ey = vec3::UnitY();
+
+  // lie::Ad<vec3> zob( vec3::Zero()) ;
+  
+
   SO<3> q;
   
   auto map = func::apply< SO<3> >() << func::part<0>(q, ex);

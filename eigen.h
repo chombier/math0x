@@ -28,9 +28,29 @@ namespace math0x {
 		                                          const F& f) {
 			return {lhs, rhs, f};
 		}
-  
-  
 	}
+
+	template<class U, int M, int N, class F>
+	void each(const Eigen::Matrix<U, M, N>& v, F&& f) {
+		for(NN i = 0, n = v.size(); i < n; ++i) {
+			f(i);
+		}
+	};
+	
+
+	template<class Vector, class F>
+	Vector map(F&& f,
+	           int size = impl::static_size< euclid::space<Vector>::static_dim >() ) {
+		Vector res;
+		res.resize( size );
+		
+		each(res, [&](NN i ) {
+				res(i) = f(i);
+			});
+		
+		return res;
+	}
+	
 
 	namespace euclid {
  
@@ -149,6 +169,16 @@ namespace math0x {
 	
 				};
 
+
+				struct apply {
+					
+					template<class Fun>
+					func::range<Fun> operator()(const Fun& fun, const func::domain<Fun>& x) const {
+						return fun(x);
+					}
+					
+				};
+
 			};
 
 
@@ -169,12 +199,30 @@ namespace math0x {
 			euclid::space< lie::algebra<G> > alg() const { return { n, sub.alg() }; }
 
 			struct Ad {
-				G at;
+				
+				group<U> sub;
+				typedef Eigen::Matrix<lie::Ad<U>, M, N> Ads_type;
+				Ads_type Ads;
+				
+				struct get {
+					const group<U>& sub;
+					const G& at;
+					
+					lie::Ad<U> operator()(NN i) const {
+						return sub.Ad(at(i));
+					}
+					
+				};
+
+				Ad( const G& g ) 
+				: sub( g(0) ),
+				  Ads( map< Ads_type >( get { sub, g },
+				                        g.size() ) ) {
+					
+				}
       
-				Ad( const G& g) : at(g) { };
-      
-				lie::algebra<G> operator()(const lie::algebra<G>& ) const {
-					throw error("not implemented");
+				lie::algebra<G> operator()(const lie::algebra<G>& x) const {
+					return impl::binary(Ads, x, typename op::apply{} );
 				}
       
 			};
