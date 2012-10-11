@@ -235,7 +235,7 @@ namespace math0x {
 			data_type data;
 			data.init(b, iter.epsilon);
       
-			return iter( [&] {
+			return iter( [&] () -> U {
 					data.step(x, A, sigma);
 					return data.phi;
 				});

@@ -77,7 +77,7 @@ namespace math0x {
 				return dmn_tmp;
 			};
 
-			return outer( [&]  {
+			return outer( [&] ()-> RR  {
 	  
 					J = Jf(x);
 					if( this->lambda ) diag = J.colwise().squaredNorm().transpose();					

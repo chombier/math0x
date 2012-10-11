@@ -139,7 +139,33 @@ namespace math0x {
 					                      sinc * w.z() );
 				}
 				 
-				// TODO push/pull
+
+				struct push {
+					
+					lie::algebra<G> at;
+					
+					push(const exp&, const lie::algebra<G>& at) 
+						: at(at) {						
+					}
+					
+					
+					lie::algebra<G> operator()(const lie::algebra<G>& dx) const {
+
+						U theta2 = at.squaredNorm();
+						U theta = std::sqrt( theta2 );
+
+						if( theta < 1e-14 ) return dx;
+						
+						lie::algebra<G> u, v, proj;
+
+						u = (at.dot(dx) / theta2 ) * at;
+						
+						
+
+					}
+					
+
+				};
 				
 			};
 

@@ -218,7 +218,7 @@ int main(int, char** ) {
   // RR c = (*hermite<RR>::ptr)( 1.0 );
   
 
-  array< lie::Ad<RR> > henri(5, [&](NN i ) {
+  array< lie::Ad<RR> > henri(5, [&](NN  ) {
 		  return lie::Ad<RR>(0.0);
 	  });
   

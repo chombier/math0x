@@ -1,6 +1,13 @@
 
 * lie brackets/cobrackets
-	
+** it should actually be:
+
+for x,y in algebra
+
+   ad(x)(y);
+   adT(x)(y); => 
+
+
 * machine precision ?
   std::numeric_limits<double>::epsilon
 
@@ -8,7 +15,8 @@
 
 * SO3
   - exp/log
-		derivatives ?
+	- derivatives ?
+	- pullbacks ?  
 
 * dual quaternions (?), rigid transforms
 
@@ -41,3 +49,4 @@
 * rename to  math0x
 
 
+  

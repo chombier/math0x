@@ -55,8 +55,9 @@ namespace math0x {
 			// derives from class A, A needs to have a member type A::base
 			// equal to A, otherwise push<push<F>> will refer to push<F>
 			// instead of push<A>
-			template<class F>
-			using base = typename F::base;
+
+			// template<class F>
+			// using base = typename F::base;
       
 			// lower priority overload
 			template<class F>
@@ -64,14 +65,14 @@ namespace math0x {
 			
 			// higher priority overload
 			template<class F>
-			typename base<F>::push push(F*, F*);
+			typename F::base::push push(F*, F*);
 			
 			// same story for pull
 			template<class F>
 			typename F::pull pull(F*, ... );
 
 			template<class F>
-			typename base<F>::pull pull(F*, F*);
+			typename F::base::pull pull(F*, F*);
 
 
 			// default pushforward/pullback
@@ -110,8 +111,9 @@ namespace math0x {
 		}
 
 		template<class F>
-		struct traits<F, decltype( requires<F>() ) >  {
-
+		struct traits<F> // <F, decltype( requires<F>() ) >
+		{
+ 
 			typedef decltype( impl::range( &F::operator(), 0) ) range;
 			typedef decltype( impl::domain(&F::operator(), 0) ) domain;
       
