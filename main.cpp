@@ -228,6 +228,7 @@ int main(int, char** ) {
   });
   
   
-
+  auto dexp = func::d(ryan.exp())(ryan.alg().zero()) (ryan.alg().zero() );
+  
   return z == E.zero();
 }

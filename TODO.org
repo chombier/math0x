@@ -12,7 +12,7 @@ for x,y in algebra
   std::numeric_limits<double>::epsilon
 
 * harmonize make_ ... and friends
-
+	
 * SO3
   - exp/log
 	- derivatives ?
@@ -45,8 +45,6 @@ for x,y in algebra
 * modules ?
   to include parts of the lib directly
 
-* lua interface ?
-* rename to  math0x
 
 
   

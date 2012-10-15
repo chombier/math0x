@@ -6,7 +6,10 @@ INCLUDEPATH += .. /usr/include/eigen3
 DEPENDPATH += . .. 
 
 headers.path = $$PREFIX/include/math0x
-headers.files = *.h tuple/*.h func/*.h
+headers.files = *.h tuple func
+header.depends = distclean
+
+QMAKE_DISTCLEAN += tuple/*~ func/*~
 
 INSTALLS += headers
 

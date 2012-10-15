@@ -11,6 +11,7 @@
 #include <math0x/matrix.h>
 
 #include <math0x/error.h>
+#include <math0x/epsilon.h>
 
 #include <boost/math/special_functions/sinc.hpp>
 
@@ -29,7 +30,7 @@ namespace math0x {
 		SO( const quaternion_type& quaternion = quaternion_type::Identity() ) 
 			: quaternion( quaternion ) {
 			// TODO precision
-			assert( std::abs( quat().norm() -  1 ) < 1e-14 );
+			assert( std::abs( quat().norm() -  1 ) < epsilon<U>() );
 		}
 		
 		SO operator*(const SO& other) const {
@@ -154,7 +155,7 @@ namespace math0x {
 						U theta2 = at.squaredNorm();
 						U theta = std::sqrt( theta2 );
 
-						if( theta < 1e-14 ) return dx;
+						if( theta < epsilon<U>() ) return dx;
 						
 						lie::algebra<G> u, v, proj;
 
