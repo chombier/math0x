@@ -55,6 +55,8 @@
 #include <math0x/levmar.h>
 #include <math0x/array.h>
 
+#include <math0x/test/push.h>
+
 
 int main(int, char** ) {
   using namespace math0x;
@@ -228,7 +230,14 @@ int main(int, char** ) {
   });
   
   
-  auto dexp = func::d(ryan.exp())(ryan.alg().zero()) (ryan.alg().zero() );
-  
+  auto dexp = func::d(ryan.exp())(ryan.alg().zero());
+
+
+  RR error = test::push( func::norm2<vec3>(), 1e-5 );
+   
+  debug("exp error:", error);
+
   return z == E.zero();
+
+
 }

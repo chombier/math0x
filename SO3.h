@@ -88,6 +88,7 @@ namespace math0x {
 
 			// TODO make so<3, U> and wrap skew-symmetric matrices
 			typedef vector<U, 3> algebra;
+			typedef covector<U, 3> coalgebra;
     
 			typedef SO<3, U> G;
 
@@ -140,38 +141,80 @@ namespace math0x {
 					                      sinc * w.z() );
 				}
 				 
-
-				struct push {
+				
+				class push {
+	
+					algebra at;
+					U theta2;
+					U theta;
+					U c;
+					U sinc;
+					quaternion<U> q;
 					
-					lie::algebra<G> at;
+				public:
+					push(const exp&, const algebra& at) 
+						: at(at),
+						  theta2(at.squaredNorm()),
+						  theta(std::sqrt(theta2) ),
+						  c( std::cos(theta) ),
+						  sinc( boost::math::sinc_pi(theta) ),
+						  q( c, sinc * at.x(), sinc * at.y(), sinc * at.z() )
+					{ }
 					
-					push(const exp&, const lie::algebra<G>& at) 
-						: at(at) {						
+					algebra operator()(const algebra& h) const {
+	  
+						if( theta < epsilon<U>()) return h;
+      
+						const algebra proj = at * ( at.dot(h) / theta2 );
+						const algebra orth = h - proj;
+	    
+						const algebra body = 
+							h + (sinc * c - 1) * orth  // symmetric part
+							- sinc * q.vec().cross(orth); // antisymmetric part
+						
+						return body;
 					}
+	
+				};
+      
+
+				class pull {
+	  
+					algebra at;
+	  
+					U theta2;
+					U theta;
+					U c;
+					U sinc;
+				public:
 					
-					
-					lie::algebra<G> operator()(const lie::algebra<G>& dx) const {
+					pull(const exp&, const algebra& at) 
+						: at(at),
+						  theta2( at.squaredNorm() ),
+						  theta( std::sqrt( theta2 ) ),
+						  c( std::cos(theta) ),
+						  sinc( boost::math::sinc_pi(theta) )
+					{ }
 
-						U theta2 = at.squaredNorm();
-						U theta = std::sqrt( theta2 );
+					coalgebra operator()(const coalgebra& f) const {
+						if( theta < epsilon<U>()) return f;
+	    
+						const algebra proj = at * (at.dot(f.transpose()) / theta2);
+						const algebra orth = f.transpose() - proj;
+	    
+						const coalgebra body = f + (sinc * c - 1) * orth.transpose()
+							+ (sinc * sinc) * at.cross(orth).transpose();
 
-						if( theta < epsilon<U>() ) return dx;
-						
-						lie::algebra<G> u, v, proj;
-
-						u = (at.dot(dx) / theta2 ) * at;
-						
-						
-
+						return body;
 					}
-					
 
 				};
-				
+
 			};
+		
 
 
-			struct log {
+		struct log {
 				typedef log base;
       
 				log(const group<G>& = group<G>() ) { }

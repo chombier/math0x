@@ -4,65 +4,71 @@
 #include <math0x/lie.h>
 
 namespace math0x { 
-  namespace func {
+	namespace func {
 
-    // lie group product
-    template<class G>
-    struct product {
-      typedef product base;
+		// lie group product
+		template<class G>
+		struct prod {
+			typedef prod base;
     
-      lie::group<G> group;
+			lie::group<G> group;
     
-      product(const lie::group<G>& group = {} ) : group(group) { }
+			prod(const lie::group<G>& group = {} ) : group(group) { }
     
-      typedef std::tuple<G, G> domain;
+			typedef std::tuple<G, G> domain;
     
-      G operator()(const domain& g) const {
-	return group.prod( std::get<0>(g), 
-			   std::get<1>(g) );
-      }
+			G operator()(const domain& g) const {
+				return group.prod( std::get<0>(g), 
+				                   std::get<1>(g) );
+			}
     
     
-      struct push {
+			struct push {
 
-	euclid::space< lie::algebra<G> > alg;
-	lie::Ad<G> Ad;
+				euclid::space< lie::algebra<G> > alg;
+				lie::Ad<G> Ad;
 
-	push(const product& of, const domain& at)
-	  : alg(of.group.alg()), 
-	    Ad(of.group.ad( of.group.inv(std::get<1>(at) ) ) )
-	{
+				push(const prod& of, const domain& at)
+					: alg(of.group.alg()), 
+					  Ad(of.group.ad( of.group.inv(std::get<1>(at) ) ) )
+				{
 	
-	}
+				}
 
-	lie::algebra<G> operator()(const lie::algebra<domain>& v) const {
-	  return alg.sum( Ad(std::get<0>(v)), 
-			  std::get<1>(v) );
-	}
+				lie::algebra<G> operator()(const lie::algebra<domain>& v) const {
+					return alg.sum( Ad(std::get<0>(v)), 
+					                std::get<1>(v) );
+				}
       
-      };
+			};
 
 
-      struct pull {
+			struct pull {
 
-	lie::AdT<G> AdT;
+				lie::AdT<G> AdT;
 
-	pull(const product& of, const domain& at) 
-	  : AdT(of.group.ad( of.group.inv(std::get<1>(at) ) ) )  {
+				pull(const prod& of, const domain& at) 
+					: AdT(of.group.ad( of.group.inv(std::get<1>(at) ) ) )  {
 	
-	}
+				}
 
-	lie::coalgebra<domain> operator()(const lie::coalgebra<G>& p) const {
-	  return std::make_tuple(AdT(p), p);
-	}
+				lie::coalgebra<domain> operator()(const lie::coalgebra<G>& p) const {
+					return std::make_tuple(AdT(p), p);
+				}
       
-      };
+			};
 
     
 
-    };
+		};
 
-  }
+
+		// convenience 
+		template<class G>
+		prod<G> make_prod(const lie::group<G>& group) { return {group}; }
+		
+
+	}
 
 }
 #endif

@@ -8,9 +8,6 @@ for x,y in algebra
    adT(x)(y); => 
 
 
-* machine precision ?
-  std::numeric_limits<double>::epsilon
-
 * harmonize make_ ... and friends
 	
 * SO3

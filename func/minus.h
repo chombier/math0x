@@ -4,40 +4,44 @@
 #include <math0x/euclid.h>
 
 namespace math0x { 
-  namespace func {
+	namespace func {
 
-    template<class E>
-    struct minus {
-      typedef minus base;
+		template<class E>
+		struct minus {
+			typedef minus base;
     
-      euclid::space<E> space;
+			euclid::space<E> space;
 
-      E operator()(const E& x) const {
-	return space.minus(x);
-      }
+			E operator()(const E& x) const {
+				return space.minus(x);
+			}
 
     
-      struct push;
-      struct pull;
+			struct push;
+			struct pull;
     
-    };
+		};
   
 
-    template<class E>
-    struct minus<E>::push : minus {
+		template<class E>
+		struct minus<E>::push : minus {
       
-      push(const minus& of, const E& ) : push::base(of) { }
+			push(const minus& of, const E& ) : push::base(of) { }
     
-    };
+		};
 
-    template<class E>
-    struct minus<E>::pull : minus< euclid::dual<E> > {
+		template<class E>
+		struct minus<E>::pull : minus< euclid::dual<E> > {
     
-      pull(const minus& of, const E& ) : pull::base{ *of.space } {  }
+			pull(const minus& of, const E& ) : pull::base{ *of.space } {  }
     
-    };
+		};
   
-  }
+		template<class E>
+		minus<E> make_minus(const euclid::space<E>& space) { return {space}; }
+		
+	}
 
 }
+
 #endif
