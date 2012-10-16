@@ -12,7 +12,8 @@ namespace math0x {
 		// numerical differentiation
 		template<class F>
 		struct num {
-		
+			typedef num base;
+			
 			F of;
 			RR step;
 		
@@ -63,6 +64,47 @@ namespace math0x {
 				}				
 				
 			};
+
+			
+			// TODO find more efficient ?
+			struct pull {
+				
+				push df;
+
+				euclid::space< lie::algebra< domain<F> > > dmn_alg;
+				euclid::space< lie::coalgebra< domain<F> > > dmn_coalg;
+				
+				pull(const num& of, const domain<F>& at) 
+					: df(of, at),
+					  dmn_alg( df.dmn.alg() ),
+					  dmn_coalg( *dmn_alg )
+				{
+					
+				}
+				
+				lie::coalgebra< domain<F> > operator()( const lie::coalgebra<range<F> >& f) const {
+					
+					lie::algebra< domain<F> > v = dmn_alg.zero();
+					
+					lie::coalgebra< domain<F> > res = dmn_coalg.zero();
+					
+					auto coord = make_form(f) << df;
+					
+					for(NN i = 0, n = dmn_alg.dim(); i < n; ++i ) {
+						dmn_alg.coord(i, v) = 1;
+
+						dmn_coalg.coord(i, res) = coord(v);
+						
+						dmn_alg.coord(i, v) = 0;
+					}
+
+					return res;
+				};
+
+
+			};
+
+			
 			
 		};
 

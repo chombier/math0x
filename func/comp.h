@@ -36,47 +36,48 @@ namespace math0x {
       
 			};
 
-		struct pull : comp< func::pull<Inner>, 
-		                    func::pull<Outer> > {
+			struct pull : comp< func::pull<Inner>, 
+			                    func::pull<Outer> > {
 
-			pull( const comp& of, const domain<Inner>& at) 
-				: pull::base{ func::pull<Inner>(of.inner, at),
-					func::pull<Outer>(of.outer, of.inner(at)) } {
+				pull( const comp& of, const domain<Inner>& at) 
+					: pull::base{ func::pull<Inner>(of.inner, at),
+						func::pull<Outer>(of.outer, of.inner(at)) } {
 	
-			}
+				}
       
+			};
+
+
 		};
 
-
-};
-
-// TODO move to ops.h ?
-namespace impl {
+		// TODO move to ops.h ?
+		namespace impl {
     
-	// only defined when both types are function types
-	template<class Outer, class Inner, class = void> struct comp;
+			// only defined when both types are function types
+			template<class Outer, class Inner, class = void> struct comp;
     
-	template<class Outer, class Inner>
-	struct comp<Outer, Inner// , decltype( func::requires<Outer, Inner>() )
-	            > {
-		typedef func::comp<Outer, Inner> type;
-	};
+			template<class Outer, class Inner>
+			struct comp<Outer, Inner// , decltype( func::requires<Outer, Inner>() )
+			            > {
+				typedef func::comp<Outer, Inner> type;
+			};
     
-}
+		}
 
-template<class Outer, class Inner>
-typename impl::comp< meta::decay<Outer>,
-                     meta::decay<Inner> >::type operator<<(Outer&& outer, Inner&& inner) {
-	return { std::forward<Outer>(outer), std::forward<Inner>(inner) };
-                     }
+		template<class Outer, class Inner>
+		typename impl::comp< meta::decay<Outer>,
+		                     meta::decay<Inner> >::type operator<<(Outer&& outer, Inner&& inner) {
+			return { std::forward<Outer>(outer), std::forward<Inner>(inner) };
+		}
 
-template<class Outer, class Inner>
-typename impl::comp< meta::decay<Outer>,
-                     meta::decay<Inner> >::type operator>>(Inner&& inner, Outer&& outer) {
-	return { std::forward<Outer>(outer), std::forward<Inner>(inner) };
-                     }
+		template<class Outer, class Inner>
+		typename impl::comp< meta::decay<Outer>,
+		                     meta::decay<Inner> >::type operator>>(Inner&& inner, Outer&& outer) {
+			return { std::forward<Outer>(outer), std::forward<Inner>(inner) };
+		}
   
-}
+	}
 
 }
+
 #endif

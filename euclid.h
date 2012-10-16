@@ -129,7 +129,6 @@ namespace math0x {
 				return sum(E(x), y);
 			}
     
-
 			// convenience
 			template<class Vector>
 			void get(Vector&& v, const E& x) const {

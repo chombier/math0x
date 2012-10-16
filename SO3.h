@@ -74,7 +74,7 @@ namespace math0x {
 			lie::coalgebra<vec_type> operator()(const lie::coalgebra<vec_type>& f) const {
 				return of_inv(f.transpose()).transpose();
 			}
-      
+			
 		};
   
 
@@ -144,35 +144,37 @@ namespace math0x {
 				
 				class push {
 	
-					algebra at;
+					algebra x;
 					U theta2;
 					U theta;
-					U c;
-					U sinc;
-					quaternion<U> q;
+
+					G qT;
 					
 				public:
-					push(const exp&, const algebra& at) 
-						: at(at),
-						  theta2(at.squaredNorm()),
-						  theta(std::sqrt(theta2) ),
-						  c( std::cos(theta) ),
-						  sinc( boost::math::sinc_pi(theta) ),
-						  q( c, sinc * at.x(), sinc * at.y(), sinc * at.z() )
+					push(const exp& of, const algebra& at) 
+						: x(at),
+						  theta2(x.squaredNorm()),
+						  theta( std::sqrt(theta2) ),
+						  qT( of(-at) )
 					{ }
 					
 					algebra operator()(const algebra& h) const {
-	  
+						
+						// easy peasy
 						if( theta < epsilon<U>()) return h;
       
-						const algebra proj = at * ( at.dot(h) / theta2 );
-						const algebra orth = h - proj;
-	    
-						const algebra body = 
-							h + (sinc * c - 1) * orth  // symmetric part
-							- sinc * q.vec().cross(orth); // antisymmetric part
+						// we decompose dx = u + ad(x).v, with u in ker(ad(x))
+						const algebra u = x * ( x.dot(h) / theta2 );
+
+						// w = ad(x).v
+						const algebra w = h - u;
 						
-						return body;
+						// obtain v
+						const algebra v = w.cross(x) / theta2;
+						
+						// general result is Ad(exp(-x)).u + (I - Ad(exp(-x))).v, but here
+						// Ad(exp(-x)) = qT which leaves u invariant
+						return u + v - qT(v);
 					}
 	
 				};
@@ -180,34 +182,44 @@ namespace math0x {
 
 				class pull {
 	  
-					algebra at;
-	  
+					algebra x;
+					
 					U theta2;
 					U theta;
-					U c;
-					U sinc;
+					
+					G q;
 				public:
 					
-					pull(const exp&, const algebra& at) 
-						: at(at),
-						  theta2( at.squaredNorm() ),
+					pull(const exp& of, const algebra& at) 
+						: x( at),
+						  theta2( x.squaredNorm() ),
 						  theta( std::sqrt( theta2 ) ),
-						  c( std::cos(theta) ),
-						  sinc( boost::math::sinc_pi(theta) )
+						  q( of(at) )
 					{ }
-
+					
 					coalgebra operator()(const coalgebra& f) const {
-						if( theta < epsilon<U>()) return f;
-	    
-						const algebra proj = at * (at.dot(f.transpose()) / theta2);
-						const algebra orth = f.transpose() - proj;
-	    
-						const coalgebra body = f + (sinc * c - 1) * orth.transpose()
-							+ (sinc * sinc) * at.cross(orth).transpose();
+						// easy peasy
+						if( theta < epsilon<U>() ) return f;
+						
+						// convenience
+						algebra fT = f.transpose();
+						
+						// f pulled on u 
+						algebra fTu = fT;
 
-						return body;
+						// f pulled on v
+						algebra fTv = fT - q(fT);
+						
+						// f pulled on w
+						algebra fTw = x.cross(fTv) / theta2;
+						
+						// f pulled on dx
+						algebra fTdx = fTw + x * x.dot( fTu - fTw ) / theta2; 
+						
+						// and back into shape
+						return fTdx.transpose();
 					}
-
+					
 				};
 
 			};

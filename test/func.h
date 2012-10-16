@@ -1,8 +1,10 @@
 #ifndef MATH0X_TEST_FUNC_H
 #define MATH0X_TEST_FUNC_H
 
+#include <math0x/test/push.h>
+#include <math0x/test/pull.h>
+
 #include <math0x/debug.h>
-#include <math0x/test/func.h>
 #include <math0x/meta.h>
 
 namespace math0x {
@@ -18,6 +20,7 @@ namespace math0x {
 			
 			debug("testing",meta::name<F>());
 			
+			// pushforward
 			{
 				RR error = push(f, step, dmn, rng);
 				
@@ -25,6 +28,17 @@ namespace math0x {
 					debug("push error:", error);
 				} else {
 					debug("push ok");
+				}
+			}
+
+			// pullback
+			{
+				RR error = pull(f, step, dmn, rng);
+				
+				if( error > epsilon ) {
+					debug("pull error:", error);
+				} else {
+					debug("pull ok");
 				}
 			}
 			

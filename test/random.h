@@ -24,14 +24,15 @@ namespace math0x {
 		
 		
 		template<class G>
-		G random_cotangent(const lie::group<G>& group = {} ) {
+		lie::coalgebra<G> random_cotangent(const lie::group<G>& group = {} ) {
 			euclid::coords< lie::coalgebra<G> > vec;
 			
-			vec.resize( group.alg().dim() );
+			auto coalg = *group.alg();
+			vec.resize( coalg.dim() );
 			vec.setRandom();
 			
-			lie::coalgebra<G> res = group.coalg().zero();
-			group.coalg().set(res, vec);
+			lie::coalgebra<G> res = coalg.zero();
+			coalg.set(res, vec);
 			
 			return res;
 		}
