@@ -56,6 +56,7 @@
 #include <math0x/array.h>
 
 #include <math0x/test/push.h>
+#include <math0x/test/func.h>
 
 
 int main(int, char** ) {
@@ -232,11 +233,10 @@ int main(int, char** ) {
   
   auto dexp = func::d(ryan.exp())(ryan.alg().zero());
 
-
-  RR error = test::push( func::norm2<vec3>(), 1e-5 );
-   
-  debug("exp error:", error);
-
+  test::func( func::norm2<vec3>() );
+  test::func( so3.exp() );
+  test::func( so3.log() );
+  
   return z == E.zero();
 
 

@@ -3,21 +3,46 @@
 
 #include <utility>
 
-// meta-programming
-namespace meta {
+#include <string>
 
-	// some short-hands because we don't like writing typename all the
-	// time
-  template<class F>
-  using decay = typename std::decay<F>::type;
+#ifdef __GNUC__
+#include <cxxabi.h>
+#endif
 
-  template<class F>
-  using remove_pointer = typename std::remove_pointer<F>::type;
+namespace math0x {
+	// meta-programming
+	namespace meta {
+
+		// some short-hands because we don't like writing typename all the
+		// time
+		template<class F>
+		using decay = typename std::decay<F>::type;
+
+		template<class F>
+		using remove_pointer = typename std::remove_pointer<F>::type;
   
-	// does nothing :-) use it to remove unused variables warnings
-  template<class ... Args>
-  inline void noop(Args&& ... ) { }
-	
-}
+		// does nothing :-) use it to remove unused variables warnings
+		template<class ... Args>
+		inline void noop(Args&& ... ) { }
 
+		// type name
+		template<class F>
+		std::string name() {
+#ifdef __GNUC__
+			int     status;
+			char   *realname;
+			
+			realname = abi::__cxa_demangle(typeid(F).name(), 0, 0, &status);
+			std::string res( realname );
+			std::free(realname);
+			
+			return res;
+#else
+			return typeid(F).name();
+#endif
+			
+		}
+		
+	}
+}
 #endif

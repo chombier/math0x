@@ -27,10 +27,10 @@ namespace math0x {
 			// random tangent vector
 			lie::algebra< func::domain<F> > v = random_tangent(dmn);
 
+			using namespace func;			
 			auto num = d( make_num(f, step) )(at);
 			auto df = d(f)(at);
-			
-			using namespace func;
+
 			auto diff = make_sum(rng.alg()) << 	make_tie( df, make_minus(rng.alg()) <<  num );
 			
 			return std::sqrt( (make_norm2(rng.alg()) << diff)(v) );

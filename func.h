@@ -81,8 +81,8 @@ namespace math0x {
 			                                   lie::algebra< func::range<F> >,
 			                                   std::logic_error > {
 				default_push(const F&, const func::domain<F>& )
-					: default_push::base{ std::logic_error(typeid(F).name()) }  {
-	
+					: default_push::base{ std::logic_error( meta::name<F>() + " has no pushforward") }  {
+					
 				}      
       
 			};
@@ -92,7 +92,7 @@ namespace math0x {
 			                                   lie::coalgebra< func::domain<F> >,
 			                                   std::logic_error > {
 				default_pull(const F&, const func::domain<F>& )
-					: default_pull::base{ std::logic_error(typeid(F).name() ) } {
+					: default_pull::base{ std::logic_error( meta::name<F>() + " has no pullback") } {
 					
 				}      
       
