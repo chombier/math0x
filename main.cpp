@@ -57,7 +57,32 @@
 
 #include <math0x/test/push.h>
 #include <math0x/test/func.h>
+#include <math0x/func/num.h>
 
+#include <math0x/func/tags.h>
+
+namespace michel {
+	
+	template<bool b>
+	using enable_if = typename std::enable_if<b>::type;
+
+	template<class F, class = void> 
+	struct get_push {
+		typedef math0x::func::impl::default_push<F> type;
+	};
+	
+
+	template<class F>
+	struct get_push<F, enable_if< !std::is_same<typename F::push, F>::value> > {
+		typedef typename F::push type;
+	};
+	
+
+	template<class F>
+	using push = typename get_push<F>::type;
+
+
+}
 
 int main(int, char** ) {
   using namespace math0x;
@@ -233,9 +258,22 @@ int main(int, char** ) {
   
   auto dexp = func::d(ryan.exp())(ryan.alg().zero());
 
-  test::func( func::norm2<vec3>() );
-  test::func( so3.exp() );
-  test::func( so3.log() );
+  typedef func::num< func::id<vec3> > taiste_type;
+ 
+  debug( meta::name< func::pull< taiste_type > >() );
+  debug( meta::name< func::pull< func::pull< taiste_type > > >() );
+  
+  { 
+	  using namespace michel;
+	  using namespace meta;
+	  
+	  // debug( name< push<  taiste_type >  >() );
+	  // debug( name< push< push<  taiste_type > > >() );
+  }
+
+  // test::func( func::norm2<vec3>() );
+  // test::func( so3.exp() );
+  // test::func( so3.log() );
   
   return z == E.zero();
 

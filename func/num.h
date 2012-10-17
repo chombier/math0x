@@ -24,6 +24,7 @@ namespace math0x {
 		
 			
 			struct push {
+				typedef push base;
 				
 				F of;
 				domain<F> at;
@@ -68,6 +69,7 @@ namespace math0x {
 			
 			// TODO find more efficient ?
 			struct pull {
+				typedef pull base;
 				
 				push df;
 

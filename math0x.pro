@@ -23,6 +23,6 @@ QMAKE_CXXFLAGS_RELEASE += -DNDEBUG
 
 SOURCES = \
     main.cpp \
-#    test.cpp \
+    test.cpp \
     
 # CONFIG += debug

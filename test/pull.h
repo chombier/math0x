@@ -32,8 +32,11 @@ namespace math0x {
 			auto num = dT( make_num(f, step) )(at);
 			auto dTf = dT(f)(at);
 			
-			throw std::logic_error("broken lol");
-			// auto diff = make_sum(*dmn.alg()) << make_tie( dTf, make_minus(*dmn.alg()) << num );
+			typedef decltype( num ) num_type;
+			typedef decltype( dTf ) dTf_type;
+
+			// auto zob = make_tie( dTf, (make_minus(*dmn.alg()) << num) );
+			// auto diff = make_sum(*dmn.alg()) << 
 			
 			// return std::sqrt( (make_norm2(rng.alg()) << diff)(v) );
 		}

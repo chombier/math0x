@@ -5,35 +5,35 @@
 #include <math0x/lie.h>
 
 namespace math0x { 
-  namespace func {
+	namespace func {
 
-    // throw an error
-    template<class Domain, class Range, class What >
-    struct error {
-      typedef error base;
+		// throw an error
+		template<class Domain, class Range, class What >
+		struct error {
+			typedef error base;
     
-      What what;
+			What what;
     
-      Range operator()(const Domain& ) const { 
-	throw what;
-      }
+			Range operator()(const Domain& ) const { 
+				throw what;
+			}
     
     
-      struct push : error< lie::algebra<Domain>, lie::algebra<Range>, What > {
+			struct push : error< lie::algebra<Domain>, lie::algebra<Range>, What > {
       
-	push(const error& of, const Domain& ) : push::base{of.what} { }
+				push(const error& of, const Domain& ) : push::base{of.what} { }
       
-      };
+			};
 
 
-      struct pull : error< lie::coalgebra<Range>, lie::coalgebra<Domain>, What > {
-	pull(const error& of, const Domain& ) : pull::base{of.what} { }
-      };
+			struct pull : error< lie::coalgebra<Range>, lie::coalgebra<Domain>, What > {
+				pull(const error& of, const Domain& ) : pull::base{of.what} { }
+			};
 
-    };
+		};
 
 
-  };
+	};
 
 }
 #endif

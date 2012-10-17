@@ -34,7 +34,7 @@ namespace math0x {
 		struct minus<E>::pull : minus< euclid::dual<E> > {
     
 			pull(const minus& of, const E& ) : pull::base{ *of.space } {  }
-    
+			
 		};
   
 		template<class E>
