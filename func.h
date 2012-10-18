@@ -36,19 +36,19 @@ namespace math0x {
 			
 			// lower priority
 			template<class Range, class G, class Domain>
-			meta::decay<Range> range(Range (G::*)(const Domain&) const, ...  );
+			meta::decay<Range> range(Range (G::*)(const Domain&) const, meta::priority<0>  );
 
 			// higher priority
 			template<class Range, class G, class Domain>
-			meta::decay<Range> range(Range (G::*)(Domain&&) const, G* );
-
+			meta::decay<Range> range(Range (G::*)(Domain&&) const, meta::priority<1> );
+			
 			// same here for domain type
 			template<class Range, class G, class Domain>
-			Domain domain(Range (G::*)(const Domain&) const, ... );
+			Domain domain(Range (G::*)(const Domain&) const, meta::priority<0> );
 
 			template<class Range, class G, class Domain>
-			Domain domain(Range (G::*)(Domain&&) const, G* );
- 
+			Domain domain(Range (G::*)(Domain&&) const, meta::priority<1> );
+			
 			// push/pull types
 			
 			// due to c++ name injection rules, if your typename F::push
@@ -56,24 +56,31 @@ namespace math0x {
 			// equal to A, otherwise push<push<F>> will refer to push<F>
 			// instead of push<A>
 
-			// template<class F>
-			// using base = typename F::base;
-      
-			// lower priority overload
-			template<class F>
-			typename F::push push(F*, ...);
-			
-			// higher priority overload
-			template<class F>
-			typename F::base::push push(F*, F*);
-			
-			// same story for pull
-			template<class F>
-			typename F::pull pull(F*, ... );
+			template<class F> struct default_push;
+			template<class F> struct default_pull;
 
 			template<class F>
-			typename F::base::pull pull(F*, F*);
+			default_push<F> push( meta::priority<0> );
+			
+			// this fails when we try to get push::push
+			template<class F>
+			meta::enable_if< !std::is_same< typename F::push, F>::value, 
+			                 typename F::push> push( meta::priority<1> );
+		
+			template<class F>
+			typename F::base::push push( meta::priority<2> );
 
+			template<class F>
+			default_pull<F> pull( meta::priority<0> );
+
+			// this fails when we try to get pull::pull
+			template<class F>
+			meta::enable_if< !std::is_same< typename F::pull, F>::value, 
+			                 typename F::pull> pull( meta::priority<1> );
+			
+			template<class F>
+			typename F::base::pull pull( meta::priority<2> );
+			
 
 			// default pushforward/pullback
 			template<class F>
@@ -97,28 +104,19 @@ namespace math0x {
 				}      
       
 			};
-
-			// lowest priority overloads
-
-			// default pushforward
-			template<class F>
-			default_push<F> push( ... );
-
-			// default pullback
-			template<class F>
-			default_pull<F> pull( ... );
-    
+			
 		}
 
 		template<class F>
 		struct traits<F> // <F, decltype( requires<F>() ) >
 		{
- 
-			typedef decltype( impl::range( &F::operator(), 0) ) range;
-			typedef decltype( impl::domain(&F::operator(), 0) ) domain;
-      
-			typedef decltype( impl::push<F>( 0, 0 )) push;
-			typedef decltype( impl::pull<F>( 0, 0 )) pull;
+			static meta::priority<8> priority(); 
+			
+			typedef decltype( impl::range( &F::operator(), priority() ) ) range;
+			typedef decltype( impl::domain(&F::operator(), priority() ) ) domain;
+			
+			typedef decltype( impl::push<F>( priority() )) push;
+			typedef decltype( impl::pull<F>( priority() )) pull;
 		};
 
 	}

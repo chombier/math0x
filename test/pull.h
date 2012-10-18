@@ -35,10 +35,9 @@ namespace math0x {
 			typedef decltype( num ) num_type;
 			typedef decltype( dTf ) dTf_type;
 
-			// auto zob = make_tie( dTf, (make_minus(*dmn.alg()) << num) );
-			// auto diff = make_sum(*dmn.alg()) << 
+			auto diff = make_sum(*dmn.alg()) << make_tie( dTf, (make_minus(*dmn.alg()) << num) );
 			
-			// return std::sqrt( (make_norm2(rng.alg()) << diff)(v) );
+			return std::sqrt( (make_norm2(*dmn.alg()) << diff)(v) );
 		}
 		
 	}

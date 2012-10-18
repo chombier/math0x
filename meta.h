@@ -21,9 +21,26 @@ namespace math0x {
 		template<class F>
 		using remove_pointer = typename std::remove_pointer<F>::type;
   
+		template<bool b, class T>
+		using enable_if = typename std::enable_if<b, T>::type;
+		
+		
 		// does nothing :-) use it to remove unused variables warnings
 		template<class ... Args>
 		inline void noop(Args&& ... ) { }
+		
+		
+
+		// overload priority control
+		template<unsigned> struct priority;
+		
+		// lowest priority
+		template<> struct priority<0> { };
+
+		// higher priority = more specialized types
+		template<unsigned I> struct priority : priority<I - 1> { };
+		
+
 
 		// type name
 		template<class F>

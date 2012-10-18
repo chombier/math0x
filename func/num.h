@@ -13,7 +13,7 @@ namespace math0x {
 		template<class F>
 		struct num {
 			typedef num base;
-			
+
 			F of;
 			RR step;
 		
@@ -23,8 +23,7 @@ namespace math0x {
 			}		
 		
 			
-			struct push {
-				typedef push base;
+			struct push  {
 				
 				F of;
 				domain<F> at;
@@ -69,7 +68,6 @@ namespace math0x {
 			
 			// TODO find more efficient ?
 			struct pull {
-				typedef pull base;
 				
 				push df;
 

@@ -271,9 +271,9 @@ int main(int, char** ) {
 	  // debug( name< push< push<  taiste_type > > >() );
   }
 
-  // test::func( func::norm2<vec3>() );
-  // test::func( so3.exp() );
-  // test::func( so3.log() );
+  test::func( func::norm2<vec3>() );
+  test::func( so3.exp() );
+  test::func( so3.log() );
   
   return z == E.zero();
 
