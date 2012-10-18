@@ -36,14 +36,22 @@ namespace math0x {
     template<class G>
     using log = typename traits<G>::log;
   
-    // adjoint: alg<G> -> alg<G>
+    // group adjoint: alg<G> -> alg<G>
     template<class G>
     using Ad = typename traits<G>::Ad;
 
-    // coadjoint: coalg<G> -> coalg<G>
+    // group adjoint transpose: coalg<G> -> coalg<G>
     template<class G>
     using AdT = typename traits<G>::AdT;
-  
+
+	  // // algebra adjoint: alg<G> -> alg<G>
+	  // template<class G>
+	  // using ad = typename traits<G>::ad;
+
+	  // // algebra adjoint transpose: coalg<G> -> coalg<G>
+	  // template<class G>
+	  // using adT = typename traits<G>::adT;
+	  
   }
 
   namespace func {

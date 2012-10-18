@@ -64,27 +64,29 @@ namespace math0x {
 				return impl.alg();
 			}
     
-			// adjoint
+			// group adjoint
 			lie::Ad<G> Ad(const G& g) const { return {g}; }
 
-			// coadjoint
+			// group adjoint transpose
 			lie::AdT<G> AdT(const G& g) const { return {g}; }
-    
+
+			// // algebra adjoint
+			// lie::ad<G> ad(const lie::algebra<G>& x) const { return {x, *this}; }
+			
+			// // algebra adjoint transpose
+			// lie::adT<G> adT(const lie::algebra<G>& x) const { return {x, *this}; }
+		
+			lie::algebra<G> bracket(const lie::algebra<G>& x, 
+			                        const lie::algebra<G>& y) const { 
+				return impl.bracket(x, y); 
+			}
+			
+	
 			// exponential
 			lie::exp<G> exp() const { return {*this}; }
 
 			// logarithm
 			lie::log<G> log() const { return {*this}; }
-    
-			// lie bracket
-			algebra<G> bracket(const algebra<G>& x, const algebra<G>& y) const { 
-				return impl.bracket(x, y);
-			}
-
-			// lie cobracket
-			coalgebra<G> cobracket(const coalgebra<G>& x, const coalgebra<G>& y) const { 
-				return impl.cobracket(x, y);
-			}
     
 			// forward ctor
 			template<class ... Args>

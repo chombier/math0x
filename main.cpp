@@ -34,6 +34,7 @@
 
 #include <math0x/quaternion.h>
 #include <math0x/SO3.h>
+#include <math0x/SE3.h>
 #include <math0x/vector.h>
 
 #include <math0x/func/error.h>
@@ -83,7 +84,9 @@ namespace michel {
 }
 
 int main(int, char** ) {
-  using namespace math0x;
+	srand ( time(NULL) );
+
+	using namespace math0x;
   
   euclid::space<RR> E;
   
@@ -216,7 +219,7 @@ int main(int, char** ) {
   it([&] {
       return 0.1;
     });
-
+  
  
   vec3 ex = vec3::UnitX();
   vec3 ey = vec3::UnitY();
@@ -273,6 +276,14 @@ int main(int, char** ) {
   test::func( so3.exp() );
   test::func( so3.log() );
   
+  lie::group< SE<3> > se3;
+  
+  vec6 twist = 1.5 * test::random_tangent< SE<3> >() ;
+  
+  linear(twist) *= 10;
+
+  debug( twist.transpose(), (twist - se3.log()( se3.exp()(twist) )).norm() );
+
   return z == E.zero();
 
 

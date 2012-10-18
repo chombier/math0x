@@ -29,7 +29,7 @@ namespace math0x {
 
 		SO( const quaternion_type& quaternion = quaternion_type::Identity() ) 
 			: quaternion( quaternion ) {
-			// TODO precision
+			
 			assert( std::abs( quat().norm() -  1 ) < epsilon<U>() );
 		}
 		
@@ -86,7 +86,7 @@ namespace math0x {
 		template<class U>
 		struct traits< SO<3, U> > {
 
-			// TODO make so<3, U> and wrap skew-symmetric matrices
+			// TODO make so<3, U> and wrap skew-symmetric matrices ?
 			typedef vector<U, 3> algebra;
 			typedef covector<U, 3> coalgebra;
     
@@ -129,7 +129,7 @@ namespace math0x {
 			struct exp {
 				typedef exp base;
       
-				exp(const group<G>& = group<G>() ) { }
+				exp(const group<G>& = {} ) { }
 
 				G operator()(const lie::algebra<G>& w) const { 
 					U theta = 0.5 * w.norm();
@@ -143,7 +143,6 @@ namespace math0x {
 				 
 				
 				class push {
-	
 					algebra x;
 					U theta2;
 					U theta;
@@ -151,8 +150,10 @@ namespace math0x {
 					bool origin;
 					
 					G qT;
-					
 				public:
+					const G& value_inv() const { return qT; }
+					
+
 					push(const exp& of, const algebra& at) 
 						: x(at),
 						  theta2(x.squaredNorm()),
@@ -232,7 +233,7 @@ namespace math0x {
 			struct log {
 				typedef log base;
       
-				log(const group<G>& = group<G>() ) { }
+				log(const group<G>& = {} ) { }
       
 				lie::algebra<G> operator()(const G& g) const { 
 					quaternion<U> q = g.quat();
@@ -248,13 +249,16 @@ namespace math0x {
 					return q.vec() / sinc;
 				}
 			
-				struct push {
+				class push {
 					
 					G at;
 					algebra x;
 					U theta2, theta;
 					bool origin;
 					U scale;
+					
+				public:
+					const algebra& value() const { return x; }
 					
 					push( const log& of, const G& at) 
 						: at(at),
