@@ -213,7 +213,7 @@ namespace math0x {
 						algebra fTw = x.cross(fTv) / theta2;
 						
 						// f pulled on dx
-						algebra fTdx = fTw + x * x.dot( fTu - fTw ) / theta2; 
+						algebra fTdx = fTw + x * (x.dot( fTu - fTw ) / theta2); 
 						
 						// and back into shape
 						return fTdx.transpose();
@@ -271,7 +271,7 @@ namespace math0x {
 						// w = (I - R^T).v
 						const algebra w = h - u;
 						
-						// obtain v
+						// obtain v: invert complex number 1 - e^{-i theta}
 						const algebra v = scale * (w - at(w));
 						
 						return u + x.cross(v);
@@ -279,6 +279,51 @@ namespace math0x {
 
 
 				};
+
+
+				struct pull {
+					
+					G atT;
+					algebra x;
+					U theta2, theta, scale;
+					
+					pull( const log& of, const G& at) 
+						: atT(at.inv()),
+						  x(of(at)),
+						  theta2( x.squaredNorm() ),
+						  theta( std::sqrt( theta2 ) ),
+						  scale( 1 / ( 2 * (1 - std::cos( theta ) ) ) )
+					{
+						
+					}
+					
+					coalgebra operator()(const coalgebra& f) const {
+						
+						// easy peasy
+						if( theta < epsilon<U>()) return f;
+      
+						// convenience
+						algebra fT = f.transpose();
+						
+						// f pulled on u 
+						algebra fTu = fT;
+						
+						// f pulled on v
+						algebra fTv = -x.cross(fT);
+						
+						// f pulled on w
+						algebra fTw = scale * (fTv - atT(fTv));
+
+						// f pulled on dg
+						algebra fTdg = fTw + x * (x.dot( fTu - fTw ) / theta2); 
+						
+						return fTdg.transpose();
+
+					}
+
+
+				};
+
 			
 			};
     

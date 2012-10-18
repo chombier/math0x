@@ -16,7 +16,7 @@ namespace math0x {
 		void func(const F& f, 
 		          const lie::group< func::domain<F> >& dmn = {},
 		          const lie::group< func::range<F> >& rng = {},
-		          RR epsilon = 1e-7, RR step = 1e-5) {
+		          RR epsilon = 1e-8, RR step = 1e-5) {
 			
 			debug("testing",meta::name<F>());
 			
