@@ -148,6 +148,8 @@ namespace math0x {
 					U theta2;
 					U theta;
 
+					bool origin;
+					
 					G qT;
 					
 				public:
@@ -155,13 +157,14 @@ namespace math0x {
 						: x(at),
 						  theta2(x.squaredNorm()),
 						  theta( std::sqrt(theta2) ),
-						  qT( of(-at) )
+						  origin( theta < epsilon<U>() ),
+						  qT( origin ? G() : of(-at) )
 					{ }
 					
 					algebra operator()(const algebra& h) const {
 						
 						// easy peasy
-						if( theta < epsilon<U>()) return h;
+						if( origin ) return h;
       
 						// we decompose h = u + ad(x).v, with u in ker(ad(x))
 						const algebra u = x * ( x.dot(h) / theta2 );
@@ -180,11 +183,11 @@ namespace math0x {
       
 
 				class pull {
-	  
 					algebra x;
 					
 					U theta2;
 					U theta;
+					bool origin;
 					
 					G q;
 				public:
@@ -193,12 +196,13 @@ namespace math0x {
 						: x( at),
 						  theta2( x.squaredNorm() ),
 						  theta( std::sqrt( theta2 ) ),
-						  q( of(at) )
+						  origin( theta < epsilon<U>() ),
+						  q( origin ? G() : of(at) )
 					{ }
 					
 					coalgebra operator()(const coalgebra& f) const {
 						// easy peasy
-						if( theta < epsilon<U>() ) return f;
+						if( origin ) return f;
 						
 						// convenience
 						algebra fT = f.transpose();
@@ -248,23 +252,26 @@ namespace math0x {
 					
 					G at;
 					algebra x;
-					U theta2, theta, scale;
+					U theta2, theta;
+					bool origin;
+					U scale;
 					
 					push( const log& of, const G& at) 
 						: at(at),
 						  x(of(at)),
 						  theta2( x.squaredNorm() ),
 						  theta( std::sqrt( theta2 ) ),
-						  scale( 1 / ( 2 * (1 - std::cos( theta ) ) ) )
+						  origin( theta < epsilon<U>() ),
+						  scale( origin ? 0 : 1 / ( 2 * (1 - std::cos( theta ) ) ) )
 					{
-
+						
 					}
 					
 					algebra operator()(const algebra& h) const {
 						
 						// easy peasy
-						if( theta < epsilon<U>()) return h;
-      
+						if( origin ) return h;
+						
 						// we decompose h = u + (I - R^T).v, with u in ker(I - R^T) ~ x
 						const algebra u = x * ( x.dot(h) / theta2 );
 						
@@ -285,14 +292,17 @@ namespace math0x {
 					
 					G atT;
 					algebra x;
-					U theta2, theta, scale;
+					U theta2, theta;
+					bool origin;
+					U scale;
 					
 					pull( const log& of, const G& at) 
 						: atT(at.inv()),
 						  x(of(at)),
 						  theta2( x.squaredNorm() ),
 						  theta( std::sqrt( theta2 ) ),
-						  scale( 1 / ( 2 * (1 - std::cos( theta ) ) ) )
+						  origin( theta < epsilon<U>() ),
+						  scale( origin ? 0 : 1 / ( 2 * (1 - std::cos( theta ) ) ) )
 					{
 						
 					}
@@ -300,7 +310,7 @@ namespace math0x {
 					coalgebra operator()(const coalgebra& f) const {
 						
 						// easy peasy
-						if( theta < epsilon<U>()) return f;
+						if( origin ) return f;
       
 						// convenience
 						algebra fT = f.transpose();
