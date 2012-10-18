@@ -132,8 +132,8 @@ namespace math0x {
 				exp(const group<G>& = group<G>() ) { }
 
 				G operator()(const lie::algebra<G>& w) const { 
-					const U theta = 0.5 * w.norm();
-					const U sinc = 0.5 * boost::math::sinc_pi(theta);
+					U theta = 0.5 * w.norm();
+					U sinc = 0.5 * boost::math::sinc_pi(theta);
 					
 					return quaternion<U>( std::cos(theta), 
 					                      sinc * w.x(),
@@ -167,13 +167,13 @@ namespace math0x {
 						if( origin ) return h;
       
 						// we decompose h = u + ad(x).v, with u in ker(ad(x))
-						const algebra u = x * ( x.dot(h) / theta2 );
+						algebra u = x * ( x.dot(h) / theta2 );
 
 						// w = ad(x).v
-						const algebra w = h - u;
+						algebra w = h - u;
 						
 						// obtain v
-						const algebra v = w.cross(x) / theta2;
+						algebra v = w.cross(x) / theta2;
 						
 						// general result is u + (I - Ad(exp(-x))).v
 						return u + v - qT(v);
@@ -239,11 +239,11 @@ namespace math0x {
 					if( q.w() < 0 ) q.coeffs() = - q.coeffs();
 					
 					// sanity clamp
-					const U w = std::min(1.0, q.w());
+					U w = std::min(1.0, q.w());
 					assert( w >= 0 );
 
-					const U theta = std::acos( w );
-					const U sinc = 0.5 * boost::math::sinc_pi(theta);
+					U theta = std::acos( w );
+					U sinc = 0.5 * boost::math::sinc_pi(theta);
 					
 					return q.vec() / sinc;
 				}
