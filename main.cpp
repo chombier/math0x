@@ -59,8 +59,6 @@
 #include <math0x/test/func.h>
 #include <math0x/func/num.h>
 
-#include <math0x/func/tags.h>
-
 namespace michel {
 	
 	template<bool b>

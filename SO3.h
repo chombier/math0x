@@ -163,7 +163,7 @@ namespace math0x {
 						// easy peasy
 						if( theta < epsilon<U>()) return h;
       
-						// we decompose dx = u + ad(x).v, with u in ker(ad(x))
+						// we decompose h = u + ad(x).v, with u in ker(ad(x))
 						const algebra u = x * ( x.dot(h) / theta2 );
 
 						// w = ad(x).v
@@ -172,8 +172,7 @@ namespace math0x {
 						// obtain v
 						const algebra v = w.cross(x) / theta2;
 						
-						// general result is Ad(exp(-x)).u + (I - Ad(exp(-x))).v, but here
-						// Ad(exp(-x)) = qT which leaves u invariant
+						// general result is u + (I - Ad(exp(-x))).v
 						return u + v - qT(v);
 					}
 	
@@ -226,7 +225,7 @@ namespace math0x {
 		
 
 
-		struct log {
+			struct log {
 				typedef log base;
       
 				log(const group<G>& = group<G>() ) { }
@@ -244,10 +243,43 @@ namespace math0x {
 					
 					return q.vec() / sinc;
 				}
+			
+				struct push {
+					
+					G at;
+					algebra x;
+					U theta2, theta, scale;
+					
+					push( const log& of, const G& at) 
+						: at(at),
+						  x(of(at)),
+						  theta2( x.squaredNorm() ),
+						  theta( std::sqrt( theta2 ) ),
+						  scale( 1 / ( 2 * (1 - std::cos( theta ) ) ) )
+					{
+
+					}
+					
+					algebra operator()(const algebra& h) const {
+						
+						// easy peasy
+						if( theta < epsilon<U>()) return h;
       
-				// struct push { push(const log&, const G&) { } };
-				// struct pull { pull( const log&, const G& ) { } }; 
-      
+						// we decompose h = u + (I - R^T).v, with u in ker(I - R^T) ~ x
+						const algebra u = x * ( x.dot(h) / theta2 );
+						
+						// w = (I - R^T).v
+						const algebra w = h - u;
+						
+						// obtain v
+						const algebra v = scale * (w - at(w));
+						
+						return u + x.cross(v);
+					}
+
+
+				};
+			
 			};
     
     
