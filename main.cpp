@@ -256,7 +256,6 @@ int main(int, char** ) {
 	   return lie::Ad<RR>(0.0);
   });
   
-  
   auto dexp = func::d(ryan.exp())(ryan.alg().zero());
 
   typedef func::num< func::id<vec3> > taiste_type;
@@ -281,7 +280,7 @@ int main(int, char** ) {
   vec6 twist = 1.5 * test::random_tangent< SE<3> >() ;
   
   linear(twist) *= 10;
-
+  
   debug( twist.transpose(), (twist - se3.log()( se3.exp()(twist) )).norm() );
 
   return z == E.zero();

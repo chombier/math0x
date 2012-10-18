@@ -1,25 +1,22 @@
 
+* general formula for exponential/logarithm derivative
+	- pullback ?
+
 * lie brackets/cobrackets
-** it should actually be:
-
-for x,y in algebra
-
-   ad(x)(y);
-   adT(x)(y); => 
-
-
+	- ad(x) alg -> alg
+	- adT(x) coalg -> coalg
+	 
 * harmonize make_ ... and friends
 	
+	- in progress, almost done
+		
 * SO3
-  - exp/log
-	- derivatives ?
-	- pullbacks ?  
-
-* dual quaternions (?), rigid transforms
+	- ad, adT
 
 * SE3
-  - se3
-  - se3T
+	- implement rigid transform on RR3, and apply<SE3>
+	- exp/log push/pull ? use general formula ?
+	- Ad, AdT, ad, adT
 
 * SL3
   - sl3
@@ -27,18 +24,18 @@ for x,y in algebra
 
 * complex numbers ?
   - CC 
-
+	- is this useful ?
+		
 * rigid body kinematics
-  
+
 * splines 
+ - mmhhh...
   
 * lambdas ?
 
 * get rid of the nasty ::base member type ?
-** used to get nested push::push types right  
-  
-** does not seem possible, we need to flag base class one way or another :-/
-   
+	- does not seem possible :-/
+		
 * modules ?
   to include parts of the lib directly
 
