@@ -22,8 +22,8 @@ namespace math0x {
 			struct push : comp< minus< lie::algebra<G> >, lie::Ad<G> > {
 
 				push(const inv& of,
-				     const G& at) : push::base( minus< lie::algebra<G> >{of.group.alg()},
-				                                lie::Ad<G>{at} ) {
+				     const G& at) : push::base{ make_minus(of.group.alg()),
+						lie::Ad<G>{at} } {
 
 				}
 
@@ -32,8 +32,8 @@ namespace math0x {
 			struct pull : comp< minus< lie::coalgebra<G> >, lie::AdT<G> > {
        
 				pull(const inv& of,
-				     const G& at) : pull::base( minus< lie::coalgebra<G> >{of.group.coalg()},
-				                                lie::AdT<G>{at} ) {
+				     const G& at) : pull::base{ make_minus(*of.group.alg()),
+						lie::AdT<G>{at} } {
 	 
 				}
        

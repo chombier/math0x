@@ -9,6 +9,7 @@
 #include <math0x/vector.h>
 #include <math0x/covector.h>
 #include <math0x/matrix.h>
+#include <math0x/so3.h>
 
 #include <math0x/error.h>
 #include <math0x/epsilon.h>
@@ -60,6 +61,8 @@ namespace math0x {
 
 			}
 
+			push(const SO& of) : push::base(of) { }
+			
 		};
 
 		struct pull {
@@ -70,6 +73,8 @@ namespace math0x {
 				: of_inv(of.inv()) {
 	
 			}
+
+			pull(const SO& of) : pull::base(of) { }
       
 			lie::coalgebra<vec_type> operator()(const lie::coalgebra<vec_type>& f) const {
 				return of_inv(f.transpose()).transpose();
@@ -354,11 +359,12 @@ namespace math0x {
 		struct apply< SO<3, U> > {
 			
 			typedef SO<3, U> G;
+			
+			typedef std::tuple<G, func::domain<G> > domain;
+			typedef func::range<G> range;
+			
+			apply( const lie::group<G>& = {} ) { }
 
-
-			typedef std::tuple<G, vector<U, 3> > domain;
-			typedef vector<U, 3> range;
-      
 			range operator()(const domain& x) const {
 				return std::get<0>(x)(std::get<1>(x));
 			}
@@ -367,18 +373,31 @@ namespace math0x {
 			struct push {
 
 				domain at;
-				lie::group<G> group;
-	
+				
 				push( const apply&, const domain& at) : at(at) { }
+				
+				lie::algebra<range> operator()(const lie::algebra<domain>& v) const {
+					return std::get<0>(at)( std::get<0>(v).cross(std::get<1>(at)) + std::get<1>(v) );
+				}
+				
+			};
+			
+			struct pull {
+				
+				domain at;
+				
+				pull( const apply&, const domain& at) : at(at) { }
+				
+				lie::coalgebra<domain> operator()(const lie::coalgebra<range>& p) const {
+					lie::algebra<range> fT = p.transpose();
 
-				lie::algebra<range> operator()(const lie::algebra<domain>& dx) const {
-					return std::get<0>(at)( group.bracket(std::get<0>(dx), std::get<1>(at)) + std::get<1>(dx) );
+					lie::algebra<range> RTfT = std::get<0>(at).inv()(fT);
+					
+					return lie::coalgebra<domain>{std::get<1>(at).cross(RTfT).transpose(), RTfT.transpose()};
 				}
 	
 			};
 
-			// TODO pull
-      
 
 		};
 

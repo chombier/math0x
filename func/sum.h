@@ -15,8 +15,10 @@ namespace math0x {
     
 			euclid::space<E> space;
 			sum( const euclid::space<E>& space = {}) : space(space) { }
-    
-			E operator()(const std::tuple<E, E>& x) const {
+			
+			typedef std::tuple<E, E> domain;
+
+			E operator()(const domain& x) const {
 				return space.sum( std::get<0>(x), std::get<1>(x) );
 			}
     
@@ -29,7 +31,7 @@ namespace math0x {
 
 		template<class E>
 		struct sum<E>::push : sum {
-			push(const sum& of, const E& ) : push::base(of) { }
+			push(const sum& of, const domain& ) : push::base(of) { }
 		};
 
 
@@ -38,7 +40,7 @@ namespace math0x {
 		struct sum<E>::pull : tie< id< euclid::dual<E> >,
 		                           id< euclid::dual<E> > > {
 
-			pull(const sum&, const E& )  { }
+			pull(const sum&, const domain& )  { }
 
 		}; 
 

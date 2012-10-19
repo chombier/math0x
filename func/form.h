@@ -55,6 +55,7 @@ namespace math0x {
 		template<class E>
 		struct form<E>::push : form {
 			push(const form& of, const E& ) : form(of) { }
+			push(const form& of) : form(of) { }
 		};
 
 
@@ -64,6 +65,8 @@ namespace math0x {
 			pull( const form& of, const E& )
 				: pull::base(of.value) { }
       
+			pull(const form& of) : pull::base(of.value) { } 
+			
 		};
 		
 		template<class E>

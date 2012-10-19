@@ -7,12 +7,11 @@ DEPENDPATH += . ..
 
 headers.path = $$PREFIX/include/math0x
 headers.files = *.h tuple func
-header.depends = distclean
+header.depends = clean
 
-QMAKE_DISTCLEAN += tuple/*~ func/*~
+QMAKE_CLEAN += tuple/*~ func/*~
 
 INSTALLS += headers
-
 
 # QMAKE_CXX = /usr/lib/gcc-snapshot/bin/g++
 # QMAKE_CXX = clang++

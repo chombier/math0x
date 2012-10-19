@@ -30,7 +30,7 @@ namespace math0x {
 
 				push(const prod& of, const domain& at)
 					: alg(of.group.alg()), 
-					  Ad(of.group.ad( of.group.inv(std::get<1>(at) ) ) )
+					  Ad(of.group.Ad( of.group.inv(std::get<1>(at) ) ) )
 				{
 	
 				}
@@ -48,7 +48,7 @@ namespace math0x {
 				lie::AdT<G> AdT;
 
 				pull(const prod& of, const domain& at) 
-					: AdT(of.group.ad( of.group.inv(std::get<1>(at) ) ) )  {
+					: AdT(of.group.AdT( of.group.inv(std::get<1>(at) ) ) )  {
 	
 				}
 
@@ -57,7 +57,6 @@ namespace math0x {
 				}
       
 			};
-
     
 
 		};

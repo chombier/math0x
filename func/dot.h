@@ -10,48 +10,63 @@
 #include <math0x/func/form.h>
 
 namespace math0x { 
-  namespace func {
+	namespace func {
 
-    // dot product, given metric M: (x, y) -> x^T M y
-    template<class E, class Metric = id<E> > 
-    struct dot {
-      typedef dot base;
+		// dot product, given metric M: (x, y) -> x^T M y
+		template<class E, class Metric = id<E> > 
+		struct dot {
+			typedef dot base;
     
-      riesz<E, Metric> impl;
+			riesz<E, Metric> impl;
     
-      dot(const euclid::space<E>& space = {},
-	  const Metric& metric = {}) 
-	: impl(space, metric) { }
+			dot(const euclid::space<E>& space = {},
+			    const Metric& metric = {}) 
+				: impl(space, metric) { }
     
+			typedef std::tuple<E, E> domain;
+			euclid::field<E> operator()(const domain& x) const {
+				return form<E>( impl( std::get<0>(x)) )( std::get<1>(x));
+			};
     
-      euclid::field<E> operator()(const std::tuple<E, E>& x) const {
-	return form<E>( impl( std::get<0>(x)) )( std::get<1>(x));
-      };
-    
-    
-      struct push {
+			struct push {
       
-	riesz<E, Metric> impl;
-	form<E> lhs, rhs;
+				riesz<E, Metric> impl;
+				func::push< form<E> > lhs, rhs;
       
-	push(const dot& of, const E& at)
-	  : impl(of.impl),
-	    lhs( impl( std::get<1>(at) ) ),
-	    rhs( impl( std::get<0>(at) ) ) {
+				push(const dot& of, const domain& at)
+					: impl(of.impl),
+					  lhs( impl( std::get<1>(at) ) ),
+					  rhs( impl( std::get<0>(at) ) ) {
 	
-	}
+				}
       
-	euclid::field<E> operator()(const std::tuple<E, E>& dx) const {
-	  return lhs( std::get<0>(dx) ) + rhs( std::get<1>(dx) );
-	}
+				euclid::field<E> operator()(const domain& dx) const {
+					return lhs( std::get<0>(dx) ) + rhs( std::get<1>(dx) );
+				}
       
-      };
+			};
     
-      // TODO pull
-  
-    };
+			struct pull {
 
-  }
+				riesz<E, Metric> impl;
+				func::pull< form<E> > lhs, rhs;
+				
+				pull(const dot& of, const domain& at)
+					: impl(of.impl),
+					  lhs( impl( std::get<1>(at) ) ),
+					  rhs( impl( std::get<0>(at) ) ) {
+					
+				}
+
+				euclid::dual<domain> operator()(const euclid::field<E>& f) const {
+					return std::make_tuple(lhs(f), rhs(f));
+				}
+			
+			};
+  
+		};
+
+	}
 
 }
 #endif

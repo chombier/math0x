@@ -10,6 +10,8 @@
 #include <math0x/func/norm2.h>
 #include <math0x/func/minus.h>
 
+#include <math0x/error.h>
+
 namespace math0x {
 
 	namespace test {
@@ -32,8 +34,15 @@ namespace math0x {
 			auto df = d(f)(at);
 
 			auto diff = make_sum(rng.alg()) << 	make_tie( df, make_minus(rng.alg()) <<  num );
+
+			try {
+				return std::sqrt( (make_norm2(rng.alg()) << diff)(v) );
+			} 
+			catch( const math0x::error& e ){
+				std::cerr << "exception caught: " << e.what() << std::endl;
+				return -1;
+			}
 			
-			return std::sqrt( (make_norm2(rng.alg()) << diff)(v) );
 		}
 		
 	}

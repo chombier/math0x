@@ -37,7 +37,13 @@ namespace math0x {
 
 			auto diff = make_sum(*dmn.alg()) << make_tie( dTf, (make_minus(*dmn.alg()) << num) );
 			
-			return std::sqrt( (make_norm2(*dmn.alg()) << diff)(v) );
+			try {
+				return std::sqrt( (make_norm2(*dmn.alg()) << diff)(v) );
+			} 
+			catch( const math0x::error& e ){
+				std::cerr << "exception caught: " << e.what() << std::endl;
+				return -1;
+			}
 		}
 		
 	}

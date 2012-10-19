@@ -12,6 +12,8 @@ namespace math0x {
     
 			euclid::space<E> space;
 
+			minus(const euclid::space<E>& space = {} ) : space(space) { }
+
 			E operator()(const E& x) const {
 				return space.minus(x);
 			}

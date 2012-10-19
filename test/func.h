@@ -13,12 +13,12 @@ namespace math0x {
 
 		
 		template<class F>
-		void func(const F& f, 
+		void func(const F& f = {}, 
 		          const lie::group< func::domain<F> >& dmn = {},
 		          const lie::group< func::range<F> >& rng = {},
 		          RR epsilon = 1e-8, RR step = 1e-5) {
 			
-			debug("testing",meta::name<F>());
+			debug("testing", meta::name<F>());
 			
 			// pushforward
 			{

@@ -11,6 +11,8 @@ namespace math0x {
 	// 3-dimensional euclidean group
 	template<class U>
 	struct SE<3, U> {
+		typedef SE base;
+
 		typedef vector<U, 3> translation_type;
 		translation_type translation;
 
@@ -34,6 +36,39 @@ namespace math0x {
 			return { -rot_inv(translation), rot_inv};
 		}
 		
+		typedef translation_type domain;
+		domain operator()(const domain& x) const {
+			return rotation(x) + translation;
+		}
+
+		struct push {
+			
+			func::push<rotation_type> rot;
+			
+			push(const SE& of, const domain& at) : rot(of.rotation, at) { }
+			push(const SE& of) : rot(of.rotation) { }
+			
+			domain operator()(const domain& v) const { 
+				return rot(v);
+			}
+
+		};
+
+		struct pull {
+			
+			func::pull<rotation_type> rotT;
+			
+			pull(const SE& of, const domain& at) : rotT(of.rotation, at) { }
+			
+			euclid::dual<domain> operator()(const euclid::dual<domain>& f) const { 
+				return rotT(f);
+			}
+
+		};
+
+	
+		
+
 	};
 
 	template<class Array6>
@@ -76,7 +111,7 @@ namespace math0x {
 				}
 
 				algebra operator()(const algebra& x) const {
-
+					throw error("not implemented");
 				}
 				
 			};
@@ -87,7 +122,7 @@ namespace math0x {
 				}
 
 				coalgebra operator()(const coalgebra& x) const {
-					
+					throw error("not implemented");
 				}
 				
 			};
@@ -114,7 +149,7 @@ namespace math0x {
 					push(const exp& of, const algebra& at) { }
 
 					algebra operator()(const algebra& h) const {
-
+						throw error("not implemented");
 					}
 
 				};
@@ -124,7 +159,7 @@ namespace math0x {
 					pull(const exp& of, const algebra& at) { }
 					
 					coalgebra operator()(const coalgebra& h) const {
-						
+						throw error("not implemented");
 					}
 					
 				};
@@ -154,9 +189,7 @@ namespace math0x {
 					push(const log& of, const G& at) { }
 					
 					algebra operator()(const algebra& h) const {
-					
-
-						
+						throw error("not implemented");						
 					}
 					
 				};
@@ -166,7 +199,7 @@ namespace math0x {
 					pull(const log& of, const G& at) { }
 					
 					coalgebra operator()(const coalgebra& h) const {
-						
+						throw error("not implemented");						
 					}
 					
 				};
@@ -178,7 +211,43 @@ namespace math0x {
 
 	}
 
+	namespace func {
 
+		template<class U>
+		struct apply< SE<3, U> > {
+			
+			typedef SE<3, U> G;
+			
+			typedef std::tuple<G, func::domain<G> > domain;
+			typedef func::range<G> range;
+		
+			apply( const lie::group<G>& = {} ) { }
+
+			range operator()(const domain& x) const {
+				return std::get<0>(x)(std::get<1>(x));
+			}
+      
+
+			struct push {
+
+				domain at;
+				
+				push( const apply&, const domain& at) : at(at) { }
+				
+				lie::algebra<range> operator()(const lie::algebra<domain>& dx) const {
+					return std::get<0>(at).rotation( angular( std::get<0>(dx)).cross( std::get<1>(at)) 
+					                                 + linear( std::get<0>(dx) + std::get<1>(dx) ) );
+				}
+				
+			};
+			
+			// TODO pull
+      
+
+		};
+
+
+	}
 
 
 }

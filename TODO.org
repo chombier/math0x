@@ -14,7 +14,7 @@
 	- ad, adT
 
 * SE3
-	- implement rigid transform on RR3, and apply<SE3>
+	- apply<SE3>
 	- exp/log push/pull ? use general formula ?
 	- Ad, AdT, ad, adT
 
