@@ -56,9 +56,9 @@
 #include <math0x/levmar.h>
 #include <math0x/array.h>
 
-
 #include <math0x/test/func.h>
 #include <math0x/test/lie.h>
+#include <math0x/test/euclid.h>
 
 #include <math0x/func/num.h>
 #include <math0x/func/apply.h>
@@ -92,46 +92,32 @@ int main(int, char** ) {
 	using namespace math0x;
 	using namespace func;
 
-	typedef SO<3> SO3;
+	lie::group< SO<3> > SO3;
+	lie::group< SE<3> > SE3;
+
+	euclid::space<vec3> RR3e;
+	lie::group<vec3> RR3g;
 	
-	// vectors
-	{
-		typedef vec3 space;
-		typedef euclid::dual<space> dual;
-		typedef euclid::field<space> field;
-		
-		space x = test::random<space>();
-		dual f = test::random<dual>();
-		
-		field lambda = test::random<field>();
-		
-		test::func< line<space> > (x);
-		test::func< form<space> > (f);
-		test::func< scal<space> > (lambda); 
-		
-		test::func< sum<space> > ();
-		test::func< minus<space> > ();
-		test::func< dot<space> > (); 
-		test::func< norm2<space> > (); 
-
-	}
-
+	euclid::space< std::tuple<vec3, vec3> > RR3xRR3e;
+	lie::group< std::tuple<SO<3>, SE<3>> > SO3xSE3;
+	
+	// TODO dynamic sized vectors
+	
+	// 3-vectors
+	test::euclid( RR3e );
+	
 	// rotations
-	{
-		typedef SO3 G;
-
-		lie::group<G> group;
-		
-		test::lie( group );
-		test::func( make_apply(group));
-	}
+	test::lie( SO3 );
+	test::func( make_apply( SO3 ));
 	
-	lie::group< SE<3> > se3;
-  vec6 twist = 1.5 * test::random_tangent< SE<3> >() ;
-  
-  linear(twist) *= 10;
-  
-  debug( twist.transpose(), (twist - se3.log()( se3.exp()(twist) )).norm() );
-
+	// rigids
+	test::lie( SE3 );
+	test::func( make_apply( SE3 ));
+	
+	// tuples
+	test::euclid( RR3xRR3e );
+	test::lie( SO3xSE3 );
+	
+	
   return 0;
 }

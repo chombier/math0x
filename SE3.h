@@ -100,7 +100,7 @@ namespace math0x {
 			traits() {  }
 
 			G id() const { return {}; }
-			G inv(const G& g) { return g.inv(); }
+			G inv(const G& g) const { return g.inv(); }
 			G prod( const G& a, const G& b) const { return a * b; }
 			
 			euclid::space< algebra > alg() const { return {}; }
@@ -130,8 +130,6 @@ namespace math0x {
 
 			struct exp {
 				exp(const group<G>& = {}) { }
-				
-			
 				
 				G operator()( const algebra& x ) const {
 					typedef lie::exp< SO3 > sub_type;
@@ -236,7 +234,7 @@ namespace math0x {
 				
 				lie::algebra<range> operator()(const lie::algebra<domain>& dx) const {
 					return std::get<0>(at).rotation( angular( std::get<0>(dx)).cross( std::get<1>(at)) 
-					                                 + linear( std::get<0>(dx) + std::get<1>(dx) ) );
+					                                 + linear( std::get<0>(dx) ) + std::get<1>(dx) );
 				}
 				
 			};

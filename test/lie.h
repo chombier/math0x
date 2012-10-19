@@ -13,6 +13,7 @@ namespace math0x {
 		void lie( const math0x::lie::group<G>& group) {
 			
 			debug("testing Lie group structure for", meta::name<G>());
+			debug();
 			
 			G h = test::random( group );		
 			math0x::lie::algebra<G> v = test::random_tangent( group );
@@ -33,6 +34,9 @@ namespace math0x {
 			test::func( group.exp(), alg, group );
 			test::func( group.log(), group, alg );
 			
+			// TODO exp/log reciprocity, dexp/dlog reciprocity
+			
+			// TODO ad(x).y = dAd(e).x.y 
 		};
 		
 	}

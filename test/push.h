@@ -40,7 +40,7 @@ namespace math0x {
 			} 
 			catch( const math0x::error& e ){
 				std::cerr << "exception caught: " << e.what() << std::endl;
-				return -1;
+				return 42;
 			}
 			
 		}
