@@ -4,6 +4,8 @@
 #include <math0x/lie.h>
 
 #include <math0x/func/minus.h>
+#include <math0x/func/comp.h>
+
 
 namespace math0x { 
 	namespace func {

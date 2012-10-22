@@ -56,9 +56,6 @@ namespace math0x {
 			// equal to A, otherwise push<push<F>> will refer to push<F>
 			// instead of push<A>
 
-			template<class F> struct default_push;
-			template<class F> struct default_pull;
-
 			template<class F>
 			default_push<F> push( meta::priority<0> );
 			
@@ -80,31 +77,6 @@ namespace math0x {
 			
 			template<class F>
 			typename F::base::pull pull( meta::priority<2> );
-			
-
-			// default pushforward/pullback
-			template<class F>
-			struct default_push : func::error< lie::algebra< func::domain<F> >,
-			                                   lie::algebra< func::range<F> >,
-			                                   std::logic_error > {
-				default_push(const F&, const func::domain<F>& )
-					: default_push::base{ std::logic_error( meta::name<F>() + " has no pushforward") }  {
-					
-				}      
-      
-			};
-
-			template<class F>
-			struct default_pull : func::error< lie::coalgebra< func::range<F> >,
-			                                   lie::coalgebra< func::domain<F> >,
-			                                   std::logic_error > {
-				default_pull(const F&, const func::domain<F>& )
-					: default_pull::base{ std::logic_error( meta::name<F>() + " has no pullback") } {
-					
-				}      
-      
-			};
-			
 		}
 
 		template<class F>

@@ -3,7 +3,7 @@
 
 #include <math0x/func.h>
 #include <math0x/lie.h>
-
+#include <math0x/func/form.h>
 
 namespace math0x {
 
@@ -21,7 +21,6 @@ namespace math0x {
 			range<F> operator()(const domain<F>& x) const {
 				return of(x);
 			}		
-		
 			
 			struct push  {
 				

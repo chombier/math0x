@@ -2,6 +2,11 @@
 #define MATH0X_TEST_EUCLID_H
 
 // TODO includes !
+#include <math0x/func/scal.h>
+#include <math0x/func/line.h>
+#include <math0x/func/sum.h>
+#include <math0x/func/minus.h>
+#include <math0x/func/dot.h>
 
 namespace math0x {
 	namespace test {

@@ -3,8 +3,11 @@
 
 #include <math0x/test/func.h>
 
-// TODO includes !
 #include <math0x/func/subgroup.h>
+#include <math0x/func/prod.h>
+#include <math0x/func/inv.h>
+#include <math0x/func/trans.h>
+#include <math0x/func/tuple.h>
 
 namespace math0x {
 	namespace test {

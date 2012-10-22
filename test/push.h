@@ -9,8 +9,12 @@
 #include <math0x/func/num.h>
 #include <math0x/func/norm2.h>
 #include <math0x/func/minus.h>
+#include <math0x/func/sum.h>
+#include <math0x/func/push.h>
 
 #include <math0x/error.h>
+
+#include <iostream>
 
 namespace math0x {
 

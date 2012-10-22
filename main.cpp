@@ -1,90 +1,73 @@
 
-#include <math0x/euclid.h>
-#include <math0x/real.h>
+// #include <math0x/euclid.h>
+// #include <math0x/real.h>
 
-#include <math0x/tuple.h>
-#include <math0x/tuple/stream.h>
+// #include <math0x/tuple.h>
+// #include <math0x/tuple/stream.h>
 
-#include <math0x/debug.h>
-#include <math0x/lie.h>
+// #include <math0x/debug.h>
+// #include <math0x/lie.h>
 
-#include <math0x/vector.h>
-#include <math0x/covector.h>
+// #include <math0x/vector.h>
+// #include <math0x/covector.h>
 
-#include <math0x/func/push.h>
-#include <math0x/func/pull.h>
-#include <math0x/func/line.h>
-#include <math0x/func/form.h>
-#include <math0x/func/comp.h>
+// #include <math0x/func/push.h>
+// #include <math0x/func/pull.h>
+// #include <math0x/func/line.h>
+// #include <math0x/func/form.h>
+// #include <math0x/func/comp.h>
 
-#include <math0x/func/norm2.h>
-#include <math0x/func/dot.h>
+// #include <math0x/func/norm2.h>
+// #include <math0x/func/dot.h>
 
-#include <math0x/func/tie.h>
-#include <math0x/func/tuple.h>
-#include <math0x/func/sum.h>
-#include <math0x/func/minus.h>
+// #include <math0x/func/tie.h>
+// #include <math0x/func/tuple.h>
+// #include <math0x/func/sum.h>
+// #include <math0x/func/minus.h>
 
-#include <math0x/func/any.h>
-#include <math0x/func/val.h>
-#include <math0x/func/ref.h>
+// #include <math0x/func/any.h>
+// #include <math0x/func/val.h>
+// #include <math0x/func/ref.h>
 
-#include <math0x/func/scal.h>
-#include <math0x/func/poly.h>
+// #include <math0x/func/scal.h>
+// #include <math0x/func/poly.h>
 
-#include <math0x/quaternion.h>
-#include <math0x/SO3.h>
-#include <math0x/SE3.h>
-#include <math0x/vector.h>
+// #include <math0x/quaternion.h>
+// #include <math0x/SO3.h>
+// #include <math0x/SE3.h>
+// #include <math0x/vector.h>
 
-#include <math0x/func/error.h>
+// #include <math0x/func/error.h>
 
-#include <math0x/func/trans.h>
-#include <math0x/func/inv.h>
-#include <math0x/func/prod.h>
+// #include <math0x/func/trans.h>
+// #include <math0x/func/inv.h>
+// #include <math0x/func/prod.h>
 
-// #include <math0x/func/ops.h>
-#include <math0x/func/val.h>
+// // #include <math0x/func/ops.h>
+// #include <math0x/func/val.h>
 
-#include <math0x/iter.h>
-#include <math0x/minres.h>
+// #include <math0x/iter.h>
+// #include <math0x/minres.h>
 
-#include <math0x/func/part.h>
-#include <math0x/func/get.h>
+// #include <math0x/func/part.h>
+// #include <math0x/func/get.h>
 
-#include <math0x/func/jacobian.h>
-#include <math0x/levmar.h>
-#include <math0x/array.h>
+// #include <math0x/func/jacobian.h>
+// #include <math0x/levmar.h>
+// #include <math0x/array.h>
 
 #include <math0x/test/func.h>
 #include <math0x/test/lie.h>
 #include <math0x/test/euclid.h>
 
-#include <math0x/func/num.h>
 #include <math0x/func/apply.h>
+#include <math0x/func/default.h>
 
-namespace michel {
-	
-	template<bool b>
-	using enable_if = typename std::enable_if<b>::type;
-
-	template<class F, class = void> 
-	struct get_push {
-		typedef math0x::func::impl::default_push<F> type;
-	};
-	
-
-	template<class F>
-	struct get_push<F, enable_if< !std::is_same<typename F::push, F>::value> > {
-		typedef typename F::push type;
-	};
-	
-
-	template<class F>
-	using push = typename get_push<F>::type;
-
-
-}
+#include <math0x/SO3.h>
+#include <math0x/SE3.h>
+#include <math0x/vector.h>
+#include <math0x/tuple.h>
+#include <math0x/real.h>
 
 int main(int, char** ) {
 	srand ( time(NULL) );

@@ -8,6 +8,7 @@
 #include <math0x/tuple/find.h>
 
 #include <cassert>
+
 namespace math0x { 
 	namespace euclid {
   

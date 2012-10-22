@@ -2,6 +2,8 @@
 #define MATH0X_ARRAY_H
 
 #include <math0x/types.h>
+#include <math0x/tuple/range.h>
+
 #include <array>
 #include <vector>
 

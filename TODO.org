@@ -1,4 +1,7 @@
 
+* function operators
+	- return types requires, mostly
+
 * general formula for exponential/logarithm derivative
 	- pullback ?
 
