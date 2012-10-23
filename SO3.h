@@ -74,7 +74,7 @@ namespace math0x {
 	
 			}
 
-			pull(const SO& of) : pull::base(of) { }
+			pull(const SO& of) : of_inv(of.inv()) { }
       
 			lie::coalgebra<vec_type> operator()(const lie::coalgebra<vec_type>& f) const {
 				return of_inv(f.transpose()).transpose();

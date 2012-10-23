@@ -1,4 +1,8 @@
 
+* performances tests ?
+
+* func::any copies ?
+
 * function operators
 	- return types requires, mostly
 
@@ -17,7 +21,6 @@
 	- ad, adT
 
 * SE3
-	- apply<SE3>
 	- exp/log push/pull ? use general formula ?
 	- Ad, AdT, ad, adT
 

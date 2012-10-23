@@ -239,7 +239,28 @@ namespace math0x {
 				
 			};
 			
-			// TODO pull
+			struct pull {
+				domain at;
+				func::pull< SO<3, U> > RT;
+				
+				pull( const apply&, const domain& at) 
+					: at(at), RT( std::get<0>(at).rotation ) { }
+				
+				lie::coalgebra<domain> operator()(const lie::coalgebra<range>& f) const {
+					lie::coalgebra<range> RTf = RT(f);
+					
+					lie::coalgebra<domain> res;
+
+					linear( std::get<0>(res) ) = RTf;
+					std::get<1>(res) = RTf;
+					
+					angular( std::get<0>(res) ) = std::get<1>(at).cross(RTf.transpose()).transpose();
+				
+					return res;
+				}
+				
+				
+			};
       
 
 		};
