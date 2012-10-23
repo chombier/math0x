@@ -41,9 +41,9 @@ namespace math0x {
 			return rotation(x) + translation;
 		}
 
-		struct push {
-			
+		class push {
 			func::push<rotation_type> rot;
+		public:
 			
 			push(const SE& of, const domain& at) : rot(of.rotation, at) { }
 			push(const SE& of) : rot(of.rotation) { }
@@ -54,11 +54,12 @@ namespace math0x {
 
 		};
 
-		struct pull {
-			
+		class pull {
 			func::pull<rotation_type> rotT;
+		public:
 			
 			pull(const SE& of, const domain& at) : rotT(of.rotation, at) { }
+			pull(const SE& of) : rotT(of.rotation) { }
 			
 			euclid::dual<domain> operator()(const euclid::dual<domain>& f) const { 
 				return rotT(f);
@@ -105,24 +106,34 @@ namespace math0x {
 			
 			euclid::space< algebra > alg() const { return {}; }
 
-			struct Ad {
-				Ad(const G& at) {
-
-				}
-
+			struct Ad { 
+				G at;
+				Ad(const G& at) : at(at) { }
+				
 				algebra operator()(const algebra& x) const {
-					throw error("not implemented");
+					algebra res;
+					
+					angular(res) = at.rotation( angular(x));
+					linear(res) = at.translation.cross( angular(res)) + at.rotation(linear(x));
+					
+					return res;
 				}
 				
 			};
 
-			struct AdT {
-				AdT(const G& at) {
-
-				}
-
+			class AdT {
+				func::pull< SO3 > RT;
+				vector<U, 3> t;
+			public:
+				AdT(const G& at) : RT(at.rotation), t(at.translation) { }
+				
 				coalgebra operator()(const coalgebra& x) const {
-					throw error("not implemented");
+					coalgebra res;
+
+					linear(res) = RT(linear(x));
+					angular(res) = RT(angular(x) - t.cross(linear(x).transpose()).transpose());
+
+					return res;
 				}
 				
 			};
@@ -239,10 +250,10 @@ namespace math0x {
 				
 			};
 			
-			struct pull {
+			class pull {
 				domain at;
 				func::pull< SO<3, U> > RT;
-				
+			public:
 				pull( const apply&, const domain& at) 
 					: at(at), RT( std::get<0>(at).rotation ) { }
 				

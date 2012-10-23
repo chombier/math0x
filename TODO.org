@@ -1,4 +1,6 @@
 
+* link Ad to AdT using pullback ?
+
 * performances tests ?
 
 * func::any copies ?

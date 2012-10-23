@@ -116,18 +116,29 @@ namespace math0x {
 				Ad(const G& at) : G(at) { }
 			};
     
-			// TODO better ?
-			struct AdT { 
-				typedef AdT base;
-      
-				G at;
-      
-				AdT( const G& g ) : at( g.inv() ) { }
-      
+			class AdT { 
+				func::pull<G> atT;
+			public:
+				
+				AdT( const G& g ) : atT( g ) { }
+				
 				lie::coalgebra<G> operator()(const lie::coalgebra<G>& f) const {
-					return at(f.transpose()).transpose();
+					return atT(f);
 				}
-      
+				
+			};
+
+
+			struct ad {
+				
+				algebra x;
+				
+				ad(const algebra& x, const group<G>& = {} ) : x(x) { }
+
+				algebra operator()(const algebra& y) const {
+					return x.cross(y);
+				}
+				
 			};
 
 
@@ -297,7 +308,7 @@ namespace math0x {
 				};
 
 
-				struct pull {
+				class pull {
 					
 					G atT;
 					algebra x;
@@ -305,6 +316,7 @@ namespace math0x {
 					bool origin;
 					U scale;
 					
+				public:
 					pull( const log& of, const G& at) 
 						: atT(at.inv()),
 						  x(of(at)),
