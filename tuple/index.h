@@ -8,16 +8,22 @@
 namespace math0x { 
 	namespace tuple {
 
+		template<class F, int ... I>
+		struct michel {
+			typedef std::tuple< decltype( std::declval<F>().template operator()<I>() )... > type;
+		};
+		
+
 		// indices for static access
 		template<int ... I>
 		struct index {
     
-			static constexpr int N = sizeof...(I);
-    
+			static constexpr unsigned N = sizeof...(I);
+			
 			// maps fun.operator<I>() for all values of I to a tuple. called
 			// in reverse order (at least on gcc)
 			template<class F>
-			static auto map(const F& fun) -> std::tuple< decltype( fun.template operator()<I>() )... > {
+			static typename michel<F, I...>::type  map(const F& fun) {
 				return std::make_tuple( fun.template operator()<I>()... );
 			}
     

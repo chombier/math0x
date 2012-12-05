@@ -35,10 +35,7 @@ namespace math0x {
 			return twist.cross(x);
 		}
 
-		struct push : so {
-			push(const so& of, const domain& ) : push::base(of) { }
-			push(const so& of) : push::base(of) { }
-		};
+		struct push;
 
 		struct pull {
 			twist_type twist;
@@ -50,6 +47,13 @@ namespace math0x {
 				return -twist.cross(f.transpose()).transpose();
 			}
 		};
+
+	};
+
+	template<class U>
+	struct so<3, U>::push : so {
+		push(const so& of, const domain& ) : push::base(of) { }
+		push(const so& of) : push::base(of) { }
 	};
 
 }

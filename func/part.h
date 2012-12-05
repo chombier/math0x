@@ -1,20 +1,17 @@
 #ifndef MATH0X_FUNC_PART_H
 #define MATH0X_FUNC_PART_H
 
+#include <math0x/types.h>
 #include <math0x/tuple.h>
-#include <math0x/func/get.h>
 
 namespace math0x {
 
 	namespace func {
-    
-		template<int I, class> struct partial;
-		template<int I, class> struct get;
-
+		
 		// partial function on a tuple
-		template<int I, class ... Args>
-		struct partial<I, std::tuple<Args...> > {
-      
+		template<class ... Args, int I>
+		struct partial<std::tuple<Args...>, I> {
+			
 			typedef partial base;
 
 			typedef std::tuple<Args...> range;
@@ -35,7 +32,7 @@ namespace math0x {
 			}
 
 
-			struct push : partial<I, lie::algebra<range> > {
+			struct push : partial<lie::algebra<range>, I> {
 
 				push(const partial& of, const domain&) 
 					: push::base{ lie::group<range>(of.at).alg().zero() }
@@ -45,7 +42,7 @@ namespace math0x {
 
 			};
 
-			struct pull : get<I, lie::coalgebra<range> > {
+			struct pull : get<lie::coalgebra<range>, I> {
 
 				pull(const partial& of, const domain&) 
 					: pull::base{ lie::group<range>(of.at).alg().zero() }
@@ -59,17 +56,17 @@ namespace math0x {
 		};
 
 		template<int I, class ... Args>
-		partial<I, std::tuple<Args...> > part(const std::tuple<Args...>& at) {
+		partial<std::tuple<Args...>, I> part(const std::tuple<Args...>& at) {
 			return {at};
 		}
 
 		template<int I, class ... Args>
-		partial<I, std::tuple<Args...> > part(std::tuple<Args...>&& at) {
+		partial<std::tuple<Args...>, I > part(std::tuple<Args...>&& at) {
 			return {std::move(at)};
 		}
 
 		template<int I, class ... Args>
-		partial<I, std::tuple<meta::decay<Args>...> > part(Args&&... args) {
+		partial<std::tuple<meta::decay<Args>...>, I> part(Args&&... args) {
 			return { std::make_tuple(std::forward<Args>(args)...) };
 		}
     

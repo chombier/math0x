@@ -18,7 +18,7 @@ namespace math0x {
 			typedef std::tuple<Args...> args_type;
 			args_type args;
 
-			typedef math0x::tuple::range<Args...> each;
+			typedef math0x::tuple::range< sizeof...(Args) > each;
     
 			typedef std::tuple< func::domain<Args>... > domain_type;
 			typedef std::tuple< func::range<Args>... > range_type;

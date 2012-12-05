@@ -60,9 +60,8 @@ namespace math0x {
 			default_push<F> push( meta::priority<0> );
 			
 			// this fails when we try to get push::push
-			template<class F>
-			meta::enable_if< !std::is_same< typename F::push, F>::value, 
-			                 typename F::push> push( meta::priority<1> );
+			template<class F, class = meta::enable_if< !std::is_same< typename F::push, F>::value > >
+			typename F::push  push( meta::priority<1> );
 		
 			template<class F>
 			typename F::base::push push( meta::priority<2> );
@@ -71,9 +70,8 @@ namespace math0x {
 			default_pull<F> pull( meta::priority<0> );
 
 			// this fails when we try to get pull::pull
-			template<class F>
-			meta::enable_if< !std::is_same< typename F::pull, F>::value, 
-			                 typename F::pull> pull( meta::priority<1> );
+			template<class F, class = meta::enable_if< !std::is_same< typename F::pull, F>::value> >
+			typename F::pull pull( meta::priority<1> );
 			
 			template<class F>
 			typename F::base::pull pull( meta::priority<2> );

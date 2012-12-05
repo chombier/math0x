@@ -9,6 +9,9 @@
 
 namespace math0x {
 
+	// array container, possibly fixed size. initialize with a function
+	// f: NN -> U
+
 	// array container, fixed size:
 	template<class U, int M = -1> 
 	class array {

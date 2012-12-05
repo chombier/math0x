@@ -21,7 +21,7 @@ namespace math0x {
 		template<class F>
 		using remove_pointer = typename std::remove_pointer<F>::type;
   
-		template<bool b, class T>
+		template<bool b, class T = void>
 		using enable_if = typename std::enable_if<b, T>::type;
 		
 		
@@ -41,6 +41,10 @@ namespace math0x {
 		template<unsigned I> struct priority : priority<I - 1> { };
 		
 
+		// address
+		template<class F>
+		decay<F>* addr(F&& f) { return &f; }
+		
 
 		// type name
 		template<class F>

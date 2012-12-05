@@ -35,16 +35,21 @@ namespace math0x {
 
 		}
 
+	
 		template<class ... Args>
 		struct traits< std::tuple<Args...> > {
     
 			// iterator type
-			typedef tuple::range<Args...> each;
-    
+			typedef tuple::range< sizeof...(Args) > each;
+			
+			static_assert( (each::N == sizeof...(Args)) , "derp" );
+			
 			typedef std::tuple< space<Args>... > impl_type;
 			impl_type impl;
     
-			typedef tuple::repeat<NN, sizeof...(Args) > offset_type;
+			static constexpr int size = sizeof...(Args);
+
+			typedef tuple::repeat<NN, size > offset_type;
 			offset_type offset;
     
 			NN dimension;
@@ -123,7 +128,7 @@ namespace math0x {
 				struct zero {
 	
 					const impl_type& impl;
-	
+					
 					template<int I>
 					type<I> operator()() const {
 						return std::get<I>(impl).zero();
@@ -200,7 +205,7 @@ namespace math0x {
 			typedef std::tuple<Args...> G;
 
 			// iterator type
-			typedef tuple::range<Args...> each;
+			typedef tuple::range< sizeof...(Args) > each;
     
 			typedef std::tuple< group<Args>... > args_type;
 			args_type args;

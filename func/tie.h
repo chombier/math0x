@@ -23,11 +23,13 @@ namespace math0x {
 			typedef func::domain< type<0> > domain;
 			typedef std::tuple< func::range<Args> ... > range;
     
-			static_assert( std::is_same< math0x::tuple::repeat< domain, sizeof...(Args) >,
+			static constexpr int size = sizeof...(Args);
+
+			static_assert( std::is_same< math0x::tuple::repeat< domain, size  >,
 			                             std::tuple< func::domain<Args>... > >::value,
 				"functions should share domain" );
 
-			typedef math0x::tuple::range<Args...> each;
+			typedef math0x::tuple::range< sizeof...(Args) > each;
     
 			struct call {
       

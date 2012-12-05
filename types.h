@@ -43,6 +43,9 @@ namespace math0x {
     template<class ... > struct tuple;
 
     template<class G> struct apply;  
+
+	  template<class, int I = -1> struct get;
+	  template<class, int I = -1> struct partial;
   }
 
 
@@ -79,10 +82,10 @@ namespace math0x {
 
   // special orthogonal
   template<int, class = RR> class SO;
-  template<int, class = RR> class so;
+  template<int, class = RR> struct so;
 	
   // special euclidean
-  template<int, class = RR> class SE;
+  template<int, class = RR> struct SE;
   template<int, class = RR> class se;
 
   // special linear

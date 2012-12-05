@@ -22,11 +22,11 @@ namespace math0x {
 			};
 		}
 
-		template<class ... Args>
-		using range = typename impl::range< sizeof...(Args) >::type;
-  
+		template<int I>
+		using range = typename impl::range< I >::type;
+		
 		template<class ...Args>
-		range<Args...> make_range(const std::tuple<Args...>& ) { return {}; }
+		range< sizeof...(Args) > make_range(const std::tuple<Args...>& ) { return {}; }
   
 	}
 

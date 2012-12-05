@@ -32,8 +32,8 @@ namespace math0x {
 			auto num = dT( make_num(f, step) )(at);
 			auto dTf = dT(f)(at);
 			
-			typedef decltype( num ) num_type;
-			typedef decltype( dTf ) dTf_type;
+			// typedef decltype( num ) num_type;
+			// typedef decltype( dTf ) dTf_type;
 
 			auto diff = make_sum(*dmn.alg()) << make_tie( dTf, (make_minus(*dmn.alg()) << num) );
 			

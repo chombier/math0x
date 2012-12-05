@@ -1,4 +1,8 @@
 
+* pca, svd ?
+
+* ccsk/cckf ?
+
 * link Ad to AdT using pullback ?
 
 * performances tests ?
@@ -38,9 +42,11 @@
 
 * splines 
  - mmhhh...
-  
+ - lambdas would be great for hermite functions
+
 * lambdas ?
 
+* coords ?
 * get rid of the nasty ::base member type ?
 	- does not seem possible :-/
 		

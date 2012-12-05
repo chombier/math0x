@@ -69,11 +69,17 @@
 #include <math0x/tuple.h>
 #include <math0x/real.h>
 
+
+#include <math0x/func/lambda.h>
+
+using namespace math0x;
+using namespace func;
+
+// math0x_lambda( test, [] { return id<RR>(); } );
+
+
 int main(int, char** ) {
 	srand ( time(NULL) );
-
-	using namespace math0x;
-	using namespace func;
 
 	lie::group< SO<3> > SO3;
 	lie::group< SE<3> > SE3;
@@ -102,5 +108,7 @@ int main(int, char** ) {
 	test::lie( SO3xSE3 );
 	
 	
+	
+
   return 0;
 }

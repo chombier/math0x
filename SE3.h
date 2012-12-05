@@ -107,6 +107,7 @@ namespace math0x {
 			euclid::space< algebra > alg() const { return {}; }
 
 			struct Ad { 
+				typedef Ad base;
 				G at;
 				Ad(const G& at) : at(at) { }
 				
@@ -125,11 +126,15 @@ namespace math0x {
 				func::pull< SO3 > RT;
 				vector<U, 3> t;
 			public:
-				AdT(const G& at) : RT(at.rotation), t(at.translation) { }
+				typedef AdT base;
+				
+				AdT(const G& at)  : RT(at.rotation),
+				                    t(at.translation) 
+				{ }
 				
 				coalgebra operator()(const coalgebra& x) const {
 					coalgebra res;
-
+					
 					linear(res) = RT(linear(x));
 					angular(res) = RT(angular(x) - t.cross(linear(x).transpose()).transpose());
 

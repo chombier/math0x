@@ -54,16 +54,7 @@ namespace math0x {
 			return quat().toRotationMatrix();
 		}
 		
-		struct push : SO {
-      
-			push(const SO& of, const vec_type& ) 
-				: push::base(of) {
-
-			}
-
-			push(const SO& of) : push::base(of) { }
-			
-		};
+		struct push;
 
 		struct pull {
       
@@ -83,6 +74,18 @@ namespace math0x {
 		};
   
 
+	};
+
+	template<class U>
+	struct SO<3, U>::push : SO {
+      
+		push(const SO& of, const vec_type& ) 
+			: push::base(of) {
+
+		}
+
+		push(const SO& of) : push::base(of) { }
+			
 	};
 
 
