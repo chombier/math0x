@@ -29,8 +29,8 @@ namespace math0x {
   // some functions
   namespace func {
   
-	  template<class F> struct default_push;
-	  template<class F> struct default_pull;
+    template<class F> struct default_push;
+    template<class F> struct default_pull;
 
     template<class G> struct id;
 
@@ -44,8 +44,8 @@ namespace math0x {
 
     template<class G> struct apply;  
 
-	  template<class, int I = -1> struct get;
-	  template<class, int I = -1> struct part;
+    template<class, int I = -1> struct get;
+    template<class, int I = -1> struct part;
   }
 
 

@@ -16,26 +16,26 @@ namespace math0x {
       Metric metric;
     
       riesz(const euclid::space<E>& primal = {},
-	    const Metric& metric = {} )
-	: primal(primal),
-	  dual( *primal ),
-	  metric( metric ) {
+						const Metric& metric = {} )
+				: primal(primal),
+					dual( *primal ),
+					metric( metric ) {
 
       }
     
       euclid::dual<E> operator()(const E& x) const {
 
-	const E& Mx = metric(x);
+				const E& Mx = metric(x);
       
-	euclid::dual<E> res = dual.zero();
+				euclid::dual<E> res = dual.zero();
       
-	NN i = 0;
-	dual.each(res, [&](euclid::field<E>& res_i) {
-	    res_i = primal.coord(i, Mx);
-	    ++i;
-	  });
+				NN i = 0;
+				dual.each(res, [&](euclid::field<E>& res_i) {
+						res_i = primal.coord(i, Mx);
+						++i;
+					});
       
-	return res;
+				return res;
       }
     
 

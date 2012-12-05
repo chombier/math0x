@@ -56,6 +56,7 @@
 // #include <math0x/levmar.h>
 // #include <math0x/array.h>
 
+
 #include <math0x/test/func.h>
 #include <math0x/test/lie.h>
 #include <math0x/test/euclid.h>
@@ -70,14 +71,14 @@
 #include <math0x/real.h>
 
 
-#include <math0x/func/lambda.h>
 
 #include <math0x/func/get.h>
 #include <math0x/func/part.h>
+// #include <math0x/extern.h>
 
 using namespace math0x;
 using namespace func;
-
+ 
 // math0x_lambda( test, [] { return id<RR>(); } );
 
 
@@ -89,7 +90,7 @@ int main(int, char** ) {
 
 	euclid::space<vec3> RR3e;
 	lie::group<vec3> RR3g;
-	
+ 	
 	euclid::space< std::tuple<vec3, vec3> > RR3xRR3e;
 	lie::group< std::tuple<SO<3>, SE<3>> > SO3xSE3;
 	

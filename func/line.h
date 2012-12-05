@@ -19,12 +19,12 @@ namespace math0x {
     
       line(const E& dir) 
       : dir(dir),
-	space(dir) {
+				space(dir) {
       
       }
     
       E operator()(const euclid::field<E>& alpha) const {
-	return space.scal(alpha, dir);
+				return space.scal(alpha, dir);
       }
     
       struct push;
@@ -44,7 +44,7 @@ namespace math0x {
     struct line<E>::pull: form< euclid::dual<E> > {
       
       pull(const line& of, const euclid::field<E>& ) 
-	: pull::base(of.dir) { }
+				: pull::base(of.dir) { }
       
     };
   

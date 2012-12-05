@@ -49,17 +49,17 @@ namespace math0x {
 			struct pull {
 
 				riesz<E, Metric> impl;
-				func::pull< form<E> > lhs, rhs;
+				line< euclid::dual<domain> > res;
 				
 				pull(const dot& of, const domain& at)
 					: impl(of.impl),
-					  lhs( impl( std::get<1>(at) ) ),
-					  rhs( impl( std::get<0>(at) ) ) {
-					
+					  res( std::make_tuple(impl( std::get<1>(at) ),
+																 impl( std::get<0>(at) ) ) ) {
+								 
 				}
-
+				
 				euclid::dual<domain> operator()(const euclid::field<E>& f) const {
-					return std::make_tuple(lhs(f), rhs(f));
+					return res(f);
 				}
 			
 			};
