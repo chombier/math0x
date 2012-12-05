@@ -72,6 +72,9 @@
 
 #include <math0x/func/lambda.h>
 
+#include <math0x/func/get.h>
+#include <math0x/func/part.h>
+
 using namespace math0x;
 using namespace func;
 
@@ -107,8 +110,13 @@ int main(int, char** ) {
 	test::euclid( RR3xRR3e );
 	test::lie( SO3xSE3 );
 	
-	
-	
+	// some more tuple tests
+	test::func( get< std::tuple<SO<3>, SE<3> >, 0 >{} );
+	test::func( get< vec3 >{0} );
 
+	test::func( part< std::tuple<SO<3>, SE<3> >, 0 >{SO3xSE3.id()} );
+	test::func( part< vec3 >{vec3::Zero(), 0} );
+	
+	
   return 0;
 }

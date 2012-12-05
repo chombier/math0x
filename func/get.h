@@ -4,6 +4,8 @@
 #include <math0x/types.h>
 #include <math0x/lie.h>
 #include <math0x/tuple.h>
+#include <math0x/vector.h>
+#include <math0x/covector.h>
 #include <math0x/func/part.h>
 
 namespace math0x {
@@ -28,6 +30,9 @@ namespace math0x {
 
 			range operator()(domain&& x) const {
 				return std::move( std::get<I>(x) );
+				
+				// TODO is it ok to move here ?
+				// return std::get<I>(x);
 			}
       
       
@@ -36,14 +41,91 @@ namespace math0x {
 			};
 
 
-			struct pull : partial<lie::coalgebra<domain>, I> {
+			struct pull : part<lie::coalgebra<domain>, I> {
 				pull(const get&, const domain& at)
-					: pull::base( lie::group<domain>(at).coalg().zero() ) { 
+					: pull::base( (*lie::group<domain>(at).alg()).zero() ) { 
 					
 				}
 			};
       
 		};
+
+
+		// ith-element from a vector
+		template<class U, int M >
+		struct get< vector<U, M> > {
+			typedef get base;
+
+			NN i;
+			
+			get(NN i) : i(i) {
+				assert( M == -1 || i < M );
+			}
+			
+			typedef vector<U, M> domain;
+
+			const U& operator()(const domain& x) const {
+				return x(i);
+			}
+
+			U operator()(domain&& x) const {
+				// TODO is it safe to move here ?
+				return std::move( x(i) );
+			}
+
+			
+			struct push : get<lie::algebra<domain> > {
+				push(const get& of, const domain& ) : push::get(of.i){ }
+			};
+			
+
+			struct pull : part<lie::coalgebra<domain> > {
+				pull(const get& of, const domain& at)
+					: pull::base( (*lie::group<domain>(at).alg()).zero(), of.i ) { 
+					
+				}
+			};
+
+		};
+
+		// TODO remove copypasta with base class
+		template<class U, int M >
+		struct get< covector<U, M> > {
+			typedef get base;
+			
+			NN i;
+			
+			get(NN i) : i(i) {
+				assert( M == -1 || i < M );
+			}
+			
+			typedef covector<U, M> domain;
+
+			const U& operator()(const domain& x) const {
+				return x(i);
+			}
+
+			U operator()(domain&& x) const {
+				// TODO is it safe to move here ?
+				return std::move( x(i) );
+			}
+
+			
+			struct push : get<lie::algebra<domain> > {
+				push(const get& of, const domain& ) : push::get(of.i){ }
+			};
+			
+
+			struct pull : part<lie::coalgebra<domain> > {
+				pull(const get& of, const domain& at)
+					: pull::base( (*lie::group<domain>(at).alg()).zero(), i ) { 
+					
+				}
+			};
+
+		};
+
+
 
 	}
 }

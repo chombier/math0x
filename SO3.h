@@ -122,6 +122,7 @@ namespace math0x {
 			class AdT { 
 				func::pull<G> atT;
 			public:
+				typedef AdT base;
 				
 				AdT( const G& g ) : atT( g ) { }
 				

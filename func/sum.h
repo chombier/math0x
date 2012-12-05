@@ -39,7 +39,6 @@ namespace math0x {
 		template<class E>
 		struct sum<E>::pull : tie< id< euclid::dual<E> >,
 		                           id< euclid::dual<E> > > {
-
 			pull(const sum&, const domain& )  { }
 
 		}; 

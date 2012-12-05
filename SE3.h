@@ -135,8 +135,8 @@ namespace math0x {
 				coalgebra operator()(const coalgebra& x) const {
 					coalgebra res;
 					
-					linear(res) = RT(linear(x));
-					angular(res) = RT(angular(x) - t.cross(linear(x).transpose()).transpose());
+					// linear(res) = RT(linear(x));
+					// angular(res) = RT(angular(x) - t.cross(linear(x).transpose()).transpose());
 
 					return res;
 				}

@@ -51,14 +51,24 @@ namespace math0x {
 			G inv(const G& x) const { 
 				return impl.inv(x); 
 			}
+
+			// G inv(G&& x) const { 
+			// 	return impl.inv(std::move(x)); 
+			// }
     
 			// product
 			G prod(const G& x, const G& y) const { 
 				return impl.prod(x, y); 
 			}
 
-			// TODO rvalue overloads for efficiency ?
-    
+			// G prod(G&& x, const G& y) const { 
+			// 	return impl.prod(std::move(x), y); 
+			// }
+
+			// G prod(const G& x, G&& y) const { 
+			// 	return impl.prod(x, std::move(y)); 
+			// }
+
 			// algebra euclidean structure
 			euclid::space< lie::algebra<G> > alg() const { 
 				return impl.alg();

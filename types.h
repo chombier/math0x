@@ -45,7 +45,7 @@ namespace math0x {
     template<class G> struct apply;  
 
 	  template<class, int I = -1> struct get;
-	  template<class, int I = -1> struct partial;
+	  template<class, int I = -1> struct part;
   }
 
 

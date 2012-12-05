@@ -28,19 +28,19 @@ namespace math0x {
 		template<class E>
 		struct minus<E>::push : minus {
       
-			push(const minus& of, const E& ) : push::base(of) { }
-    
+			push(const minus& of, const E& ) : push::base( of.space ) { }
+			
 		};
 
 		template<class E>
 		struct minus<E>::pull : minus< euclid::dual<E> > {
     
-			pull(const minus& of, const E& ) : pull::base{ *of.space } {  }
+			pull(const minus& of, const E& ) : pull::base( *of.space ) {  }
 			
 		};
   
 		template<class E>
-		minus<E> make_minus(const euclid::space<E>& space) { return {space}; }
+		minus<E> make_minus(const euclid::space<E>& space = {}) { return {space}; }
 		
 	}
 
