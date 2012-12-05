@@ -18,7 +18,7 @@ INSTALLS += headers
 
 QMAKE_CXXFLAGS += -std=c++11
 
-QMAKE_CXXFLAGS_RELEASE += -DNDEBUG -frepo
+QMAKE_CXXFLAGS_RELEASE += -DNDEBUG
 
 SOURCES = \
     main.cpp \
