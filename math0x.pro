@@ -1,10 +1,26 @@
+# place customizations in .qmake.cache
 
 TEMPLATE = app
 TARGET = bin/test
 
-INCLUDEPATH += .. /usr/include/eigen3
+# depends
+CONFIG -= qt
+CONFIG += link_pkgconfig
+PKGCONFIG += eigen3
+
+# compiler flags
+DEFINES = 
+QMAKE_CXXFLAGS += -std=c++11
+QMAKE_CXXFLAGS_RELEASE += -DNDEBUG
+
+# sources, headers
+INCLUDEPATH += ..
 DEPENDPATH += . .. 
 
+SOURCES = \
+    main.cpp \
+
+# install targets
 headers.path = $$PREFIX/include/math0x
 headers.files = *.h tuple func
 header.depends = clean
@@ -12,16 +28,3 @@ header.depends = clean
 QMAKE_CLEAN += tuple/*~ func/*~
 
 INSTALLS += headers
-
-# QMAKE_CXX = /usr/lib/gcc-snapshot/bin/g++
-# QMAKE_CXX = clang++
-
-QMAKE_CXXFLAGS += -std=c++11
-
-QMAKE_CXXFLAGS_RELEASE += -DNDEBUG
-
-SOURCES = \
-    main.cpp \
-#    test.cpp \
-    
-# CONFIG += debug
