@@ -88,7 +88,7 @@ namespace math0x {
 			}
     
 			space< dual > operator*() const {
-				return { n, *sub };
+				return space<dual>(n, *sub);
 			}
     
 
@@ -154,7 +154,7 @@ namespace math0x {
 			}
 
 			euclid::space< lie::algebra<G> > alg() const { 
-				return { n, sub.alg() }; 
+				return euclid::space<lie::algebra<G> >(n, sub.alg() ); 
 			}
 			
 

@@ -4,6 +4,8 @@
 #include <math0x/types.h>
 #include <math0x/comma.h>
 
+#include <functional>
+
 namespace math0x {
 
 	// control structure for iterative algorithms
@@ -18,6 +20,10 @@ namespace math0x {
 		iter(NN bound = 0, RR epsilon = -1.0) 
 			: bound(bound), epsilon(epsilon) { }
     
+		// iteration callback (for graph plotting, etc)
+		typedef std::function< void(NN, RR) > cb_type;
+		cb_type cb;
+		
 		// performs iteration with given function object. @f may or may
 		// not return current precision. returns actual iteration
 		// performed and last precision.
@@ -30,6 +36,8 @@ namespace math0x {
 			for(i = 0; i < bound; ++i) {
 				eps = ( std::forward<F>(f)(), on_void<RR>(0.0) ).value; 
 	
+				if( cb ) cb(i, eps);
+				
 				if( eps <= epsilon ) break;
 			}
       

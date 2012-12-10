@@ -147,7 +147,7 @@ namespace math0x {
     
 			// dual geometry
 			space< dual > operator*() const {
-				return { each::map( typename helper::dual{impl} ) };
+				return space<dual>{ each::map( typename helper::dual{impl} ) };
 			}
     
 			// coordinate access
@@ -228,7 +228,7 @@ namespace math0x {
 			};
 
 			euclid::space< algebra > alg() const { 
-				return { each::map( get_alg{args} ) };
+				return euclid::space<algebra>( each::map( get_alg{args} ) );
 			}
 
 			struct get_id {

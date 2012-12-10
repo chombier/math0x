@@ -13,10 +13,12 @@ namespace math0x {
 
 		
 		template<class F>
-		void func(const F& f = {}, 
+		bool func(const F& f = {}, 
 		          const lie::group< func::domain<F> >& dmn = {},
 		          const lie::group< func::range<F> >& rng = {},
 		          RR epsilon = 1e-7, RR step = 1e-4) {
+			
+			bool res = true;
 			
 			debug("testing", meta::name<F>());
 			
@@ -26,6 +28,7 @@ namespace math0x {
 				
 				if( error > epsilon ) {
 					debug("push error:", error);
+					res = false;
 				} else {
 					debug("push ok");
 				}
@@ -37,11 +40,13 @@ namespace math0x {
 				
 				if( error > epsilon ) {
 					debug("pull error:", error);
+					res = false;
 				} else {
 					debug("pull ok");
 				}
 			}
 			
+			return res;
 		}
 
 

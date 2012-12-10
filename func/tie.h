@@ -30,7 +30,7 @@ namespace math0x {
 
 			static_assert( std::is_same< math0x::tuple::repeat< domain, size  >,
 			                             std::tuple< func::domain<Args>... > >::value,
-				"functions should share domain" );
+			               "functions should share domain" );
 
 			typedef math0x::tuple::range< sizeof...(Args) > each;
     

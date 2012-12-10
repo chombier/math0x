@@ -100,13 +100,19 @@ namespace math0x {
     
 			// forward ctor
 			template<class ... Args>
-			group(Args&& ... args) : impl(std::forward<Args>(args)...) {  }
+			explicit group(Args&& ... args) : impl(std::forward<Args>(args)...) {  }
     
 			// 
 			group(const group& ) = default;
 			group(group&& ) = default;
     
+			// impl must provide this ctor
+			group(const G& g) : impl(g) { }
 		};
+
+
+		template<class G>
+		group<G> group_of(const G& of) { return {of}; }
 
 	}
 }

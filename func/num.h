@@ -108,7 +108,7 @@ namespace math0x {
 		};
 
 		template<class F>
-		num< meta::decay<F> > make_num(F&& of, RR step) { return { std::forward<F>(of), step}; }
+		num< meta::decay<F> > make_num(F&& of, RR step = 1e-4) { return { std::forward<F>(of), step}; }
 		
 	}
 }

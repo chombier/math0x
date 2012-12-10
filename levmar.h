@@ -13,6 +13,8 @@
 #include <math0x/func/push.h>
 #include <math0x/func/pull.h>
 
+#include <math0x/debug.h>
+
 namespace math0x {
 
 	// levenberg-marquardt
@@ -162,7 +164,8 @@ namespace math0x {
 			};
 			
 			return outer( [&] ()-> RR  {
-	  
+					debug( "derp" );
+					
 					auto A = JTJ(x);
 					
 					rng_alg.get(rng_tmp, r);

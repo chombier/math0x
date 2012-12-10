@@ -35,12 +35,13 @@ namespace math0x {
 			}
       
 			template<class...Args>
-			space(Args&& ... args) 
+			explicit space(Args&& ... args) 
 				: impl(std::forward<Args>(args)...) { }
     
 			space(const space& ) = default;
 			space(space&& ) = default;
-    
+			space(const E& x) : impl(x) { }
+
 			// dual geometry
 			space< dual<E> > operator*() const { 
 				return *impl;
@@ -166,7 +167,10 @@ namespace math0x {
 			}
 
 		};
-  
+
+		template<class E>
+		space<E> space_of(const E& of) { return {of}; }
+		
 	}
 }
 

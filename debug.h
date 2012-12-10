@@ -1,6 +1,7 @@
-#ifndef MATH0X_LOG_H
-#define MATH0X_LOG_H
+#ifndef MATH0X_DEBUG_H
+#define MATH0X_DEBUG_H
 
+#warning debug header included lol
 #include <iostream>
 
 void debug() { std::cout << std::endl; }
