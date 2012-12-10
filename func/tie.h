@@ -17,6 +17,9 @@ namespace math0x {
 			typedef std::tuple< Args... > args_type;
 			args_type args;
 
+			tie(const args_type& args) : args(args) { }
+			tie(args_type&& args) : args(std::move(args)) { }
+			
 			template<int I>
 			using type = math0x::tuple::element<I, args_type>;
 
@@ -44,16 +47,31 @@ namespace math0x {
 			};
     
 			range operator()(const domain& x) const {
-				return each::map(call{args, x} );
+				return each::map( call{args, x} );
 			}
     
     
 			struct push : tie< func::push<Args>... > {
       
+				struct get_push {
+					
+					const tie::args_type& args;
+					const domain& at;
+					
+					template<int I>
+					func::push< type<I> > operator()() const {
+						return {std::get<I>(args), at};
+					}
+					
+				};
+				
+				
+
 				push( const tie& of,
 				      const domain& at ) 
-					: push::base{ func::push<Args>(of.args, at)... } {
-
+					: push::base( each::map( get_push{of.args, at} ) )
+				{
+					
 				}
 
 			};
@@ -61,7 +79,7 @@ namespace math0x {
 			struct pull  {
 
 				typedef euclid::space< lie::coalgebra<domain> > space_type;
-				space_type space ;
+				space_type space;
       
 				typedef std::tuple< func::pull<Args> ... > args_type;
 				args_type args;
@@ -74,14 +92,14 @@ namespace math0x {
 					const args_type& args;
 					const lie::coalgebra<range>& fx;
 	
-	
 					template<int I>
 					void operator()() const {
-						res = space.sum(res, std::get<I>(args)(fx) );
+						res = space.sum(res, std::get<I>(args)( std::get<I>(fx) ) );
 					}
-	
+					
 				};
 
+				
 				lie::coalgebra<domain> operator()(const lie::coalgebra<range>& fx) const {
 					lie::coalgebra<domain> res = space.zero();
 	
@@ -90,12 +108,25 @@ namespace math0x {
 					return res;
 				};
 
+
+				struct get_pull {
+					
+					const tie::args_type& args;
+					const domain& at;
+					
+					template<int I>
+					func::pull< type<I> > operator()() const {
+						return {std::get<I>(args), at};
+					}
+					
+				};
+
       
-				// pull(const tuple_tie& of, const domain& at)
-				// 	: space( *euclid::space<domain>(at) ),
-				// 	  args( func::pull<Args>(of.args, at)... ) {
-	
-				// }
+				pull(const tie& of, const domain& at)
+					: space( *lie::group<domain>(at).alg() ),
+					  args( each::map(get_pull{of.args, at}) ) {
+					
+				}
       
 			};
 

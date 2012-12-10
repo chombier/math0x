@@ -351,8 +351,9 @@ namespace math0x {
       
 			};
 
+
 			struct AdT : func::tuple< lie::AdT<Args>... > {
-      
+				
 				struct get {
 					const G& at;
 	
@@ -365,6 +366,7 @@ namespace math0x {
 				AdT( const G& at) : AdT::base{ each::map( get{at} ) } { }
       
 			};
+
     
 			struct exp : func::tuple< lie::exp<Args>... >  {
 				struct get {
@@ -381,6 +383,7 @@ namespace math0x {
       
       
 			};
+
 
 			struct log : func::tuple< lie::log<Args>... >  {
 				struct get {

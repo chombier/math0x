@@ -64,8 +64,8 @@ namespace math0x {
 			}
     
 			// dual space: swaps dimensions
-			typedef Eigen::Matrix<U, N, M> dual;
-
+			typedef Eigen::Matrix< euclid::dual<U>, N, M> dual;
+			
 			NN dim() const { return n * sub.dim(); }
     
 			E zero() const {

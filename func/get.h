@@ -118,7 +118,7 @@ namespace math0x {
 
 			struct pull : part<lie::coalgebra<domain> > {
 				pull(const get& of, const domain& at)
-					: pull::base( (*lie::group<domain>(at).alg()).zero(), i ) { 
+					: pull::base( (*lie::group<domain>(at).alg()).zero(), of.i ) { 
 					
 				}
 			};
