@@ -25,6 +25,8 @@
 
 #include <math0x/test/func.h>
 
+#include <math0x/debug.h>
+
 namespace math0x {
 	struct se3_fit {
 	
@@ -198,26 +200,25 @@ namespace math0x {
 			                           fit<0>{}, fit<1>{} );
 			typedef decltype(full) full_type;
 
-			if( !test::func(full, lie::group_of(res), lie::group_of(full(res)) ) ) {
-				throw std::logic_error("derp !");
-			}
+			// test::func(full, lie::group_of(res), lie::group_of(full(res)) ) )
 			
 			auto rhs = func::range< full_type >( vec3::Zero(), vec3::Zero(), 
 			                                     se3_n.id(), 
 			                                     ai, bi );
-			levmar opt;
+			levmar opt(2);
 
 			opt.outer.bound = 50;
-			opt.inner.bound = -1;
-			opt.inner.epsilon = 1e-3;
+			opt.inner.bound = 10000;
+			opt.inner.epsilon = 1e-5;
 			
+			debug("search space dim:", lie::group_of(res).alg().dim() );
 
 			opt.outer.cb = [&](NN i, RR eps) {
 				std::cout << "outer: " << i << " eps: " << eps << std::endl;
 			};
 
 			opt.inner.cb = [&](NN i, RR eps) {
-				std::cout << "inner: " << i << " eps: " << eps << std::endl;
+				// std::cout << "inner: " << i << " eps: " << eps << std::endl;
 			};
 
 			

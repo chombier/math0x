@@ -136,6 +136,7 @@ namespace math0x {
 			auto rng_alg = rng.alg();
 			
 			// functions
+			// residual = log( inv(y) * f(x) )
 			auto residual = rng.log() << func::L( rng.inv(y) ) << f;
 			auto exp = dmn.exp();
 			
@@ -151,7 +152,7 @@ namespace math0x {
 			rng_tmp.resize( rng_alg.dim() );
 			
 			// tangent normal equations
-			minres< euclid::space<domain_algebra>::static_dim > normal;
+			minres< euclid::space<domain_algebra>::static_dim > normal(-lambda);
 			normal.iter = inner;
 			
 			// FIXME g++-4.7 chokes when this is defined inside the lambda
@@ -164,16 +165,14 @@ namespace math0x {
 			};
 			
 			return outer( [&] ()-> RR  {
-					debug( "derp" );
-					
 					auto A = JTJ(x);
 					
 					rng_alg.get(rng_tmp, r);
 					
-					// TODO
-					rhs.noalias() = -func::make_coords(dT(f)(x),  *rng_alg, *dmn_alg)(rng_tmp);
+					rhs = -func::make_coords(dT(f)(x), *rng_alg, *dmn_alg)(rng_tmp);
 					
 					normal.solve(dx, A, rhs);
+					
 					dmn_alg.set(delta, dx);
 					
 					x = dmn.prod(x, exp( delta ) );

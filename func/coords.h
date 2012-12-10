@@ -31,9 +31,10 @@ namespace math0x {
 				range res; res.resize( rng.dim() );
 				rng.get(res, of(xx) );
 			
-				return res;
+				return res; 
 
 			}
+
 
 			// TODO push/pull ?
 		
