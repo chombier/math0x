@@ -20,6 +20,7 @@
 
 #include <math0x/func/prod.h>
 #include <math0x/func/inv.h>
+#include <math0x/func/scal.h>
 
 #include <math0x/each.h>
 
@@ -31,8 +32,9 @@ namespace math0x {
 	struct se3_fit {
 	
 		typedef vector<vec3> samples_type;
-		typedef std::tuple< vec3, vec3, vector<SE<3>> > result_type;
+		typedef std::tuple< RR, RR, vector<SE<3>> > result_type;
 		
+		levmar opt;
 
 		struct delta {
 			
@@ -43,8 +45,7 @@ namespace math0x {
 				range res; res.resize( x.size() );
 				
 				each(res, [&](NN i) {
-						if( !i ) res(i) = x(i);
-						else {
+						if(i) {
 							res(i) = x(i-1).inv() * x(i); 
 						}
 					});
@@ -64,7 +65,7 @@ namespace math0x {
 					lie::algebra<range> res; res.resize(v.size());
 					
 					each(res, [&](NN i) {
-							if( !i ) res(i) = v(i);
+							if( !i ) res(i).setZero();
 							else {
 								auto fun = func::prod< SE<3> >{} << func::make_tuple( func::inv< SE<3> >{},
 								                                                      func::id< SE<3> > {} );
@@ -91,8 +92,7 @@ namespace math0x {
 					res = euclid::space_of(res).zero();
 					
 					each(res, [&](NN i) {
-							if( !i ) res(i) = p(i);
-							else {
+							if(i) {
 								auto fun = func::prod< SE<3> >{} << func::make_tuple( func::inv< SE<3> >{},
 								                                                      func::id< SE<3> > {} );
 								std::tuple<SE<3>, SE<3> > at(x(i-1), x(i));
@@ -119,11 +119,12 @@ namespace math0x {
 			range operator()(const domain& x) const {
 				range res;
 				res.resize( std::get<2>(x).size() );
-				func::apply< SE<3> > apply;
-				
+
+				auto fun = func::apply<SE<3> >{} << func::make_tuple( func::id< SE<3> >{},
+				                                                      func::line<vec3>{vec3::UnitY()} );
 				each(res, [&](NN i) {
-						res(i) = apply( std::make_tuple(std::get<2>(x)(i),
-						                                std::get<I>(x)) );
+						res(i) = fun( std::make_tuple(std::get<2>(x)(i),
+						                              std::get<I>(x)) );
 					});
 				return res;
 			}
@@ -140,12 +141,13 @@ namespace math0x {
 					lie::algebra<range> res;
 					res.resize( std::get<2>(v).size() );
 
-					func::apply< SE<3> > apply;
-					
+					auto fun = func::apply<SE<3> >{} << func::make_tuple( func::id< SE<3> >{},
+					                                                      func::line<vec3>{vec3::UnitY()} );
+		
 					// derp when @each is used
 					for(unsigned i = 0, n = res.size(); i < n; ++i) {
 						auto at = std::make_tuple(std::get<2>(x)(i), std::get<I>(x));
-						res(i) = d(apply)(at)( std::make_tuple( std::get<2>(v)(i), std::get<I>(v)));
+						res(i) = d(fun)(at)( std::make_tuple( std::get<2>(v)(i), std::get<I>(v)));
 					}
 					
 					return res;
@@ -163,12 +165,13 @@ namespace math0x {
 					
 					res = euclid::space_of(res).zero();
 					
-					func::apply< SE<3> > apply;
-					
+					auto fun = func::apply<SE<3> >{} << func::make_tuple( func::id< SE<3> >{},
+					                                                      func::line<vec3>{ vec3::UnitY() } );
+		
 					for( unsigned i = 0, n = p.size(); i < n; ++i) {
 						auto at = std::make_tuple(std::get<2>(x)(i), std::get<I>(x));
 
-						auto pp = dT(apply)(at)(p(i));
+						auto pp = dT(fun)(at)(p(i));
 							
 						std::get<2>(res)(i) += std::get<0>(pp);
 						std::get<I>(res) += std::get<1>(pp);
@@ -196,32 +199,29 @@ namespace math0x {
 			result_type res;
 			std::get<2>(res) = se3_n.id();
 		
-			auto full = func::make_tie(a, b, delta{} << g,
-			                           fit<0>{}, fit<1>{} );
+			// first guess for translation
+			for(NN i = 0; i < n; ++i) {
+				std::get<2>(res)(i).translation = 0.5 * (ai(i) + bi(i));
+			}
+
+
+			real small = 1;
+			auto full = func::make_tie( func::scal<RR>(small)<< a,  
+			                            func::scal<RR>(small)<< b,  
+			                            // func::get< vector<SE<3> > >{0} << g, 
+			                            // delta{} << g,
+			                            fit<0>{}, fit<1>{} );
 			typedef decltype(full) full_type;
 
-			// test::func(full, lie::group_of(res), lie::group_of(full(res)) ) )
+			// test::func(full, lie::group_of(res), lie::group_of(full(res)));
 			
-			auto rhs = func::range< full_type >( vec3::Zero(), vec3::Zero(), 
-			                                     se3_n.id(), 
+			auto rhs = func::range< full_type >( 0.0, 0.0,
+			                                     // se3_n.id(), 
 			                                     ai, bi );
-			levmar opt(2);
-
-			opt.outer.bound = 50;
-			opt.inner.bound = 10000;
-			opt.inner.epsilon = 1e-5;
-			
+		
+	
 			debug("search space dim:", lie::group_of(res).alg().dim() );
 
-			opt.outer.cb = [&](NN i, RR eps) {
-				std::cout << "outer: " << i << " eps: " << eps << std::endl;
-			};
-
-			opt.inner.cb = [&](NN i, RR eps) {
-				// std::cout << "inner: " << i << " eps: " << eps << std::endl;
-			};
-
-			
 			opt.sparse(res, full, rhs);
 						
 			return res;

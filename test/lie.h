@@ -21,7 +21,7 @@ namespace math0x {
 			G h = test::random( group );		
 			math0x::lie::algebra<G> v = test::random_tangent( group );
 			
-			math0x::lie::group< std::tuple<G, G> > pair = std::make_tuple( group, group );
+			math0x::lie::group< std::tuple<G, G> > pair(std::make_tuple( group, group ));
 
 			using namespace func;
 			test::func( make_prod(group), pair, group );

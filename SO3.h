@@ -17,7 +17,7 @@
 #include <boost/math/special_functions/sinc.hpp>
 
 namespace math0x { 
-
+	
 	// 3-dimensional rotation group
 	template<class U>
 	class SO<3, U> {
@@ -73,7 +73,18 @@ namespace math0x {
 			
 		};
   
-
+		// decompose h = u + ad(x).v, with u \in ker(ad(x))
+		static void ad_proj(vec_type& u, vec_type& v, const vec_type& x, const vec_type& h) {
+			U theta2 = x.squaredNorm();
+			if( std::sqrt(theta2) < epsilon<U>() ) {
+				u = h;
+				v = vec_type::Zero();
+			} else {
+				v = -x.cross( h ) / theta2;
+				u = h - x.cross(v);
+			}
+		}
+		
 	};
 
 	template<class U>
@@ -137,7 +148,7 @@ namespace math0x {
 				
 				algebra x;
 				
-				ad(const algebra& x, const group<G>& = {} ) : x(x) { }
+				ad(const algebra& x) : x(x) { }
 
 				algebra operator()(const algebra& y) const {
 					return x.cross(y);
@@ -173,7 +184,7 @@ namespace math0x {
 				public:
 					const G& value_inv() const { return qT; }
 					
-
+					
 					push(const exp& of, const algebra& at) 
 						: x(at),
 						  theta2(x.squaredNorm()),
@@ -188,13 +199,8 @@ namespace math0x {
 						if( origin ) return h;
       
 						// we decompose h = u + ad(x).v, with u in ker(ad(x))
-						algebra u = x * ( x.dot(h) / theta2 );
-
-						// w = ad(x).v
-						algebra w = h - u;
-						
-						// obtain v
-						algebra v = w.cross(x) / theta2;
+						algebra v = -x.cross( h ) / theta2;
+						algebra u = h - x.cross(v);
 						
 						// general result is u + (I - Ad(exp(-x))).v
 						return u + v - qT(v);
@@ -228,17 +234,11 @@ namespace math0x {
 						// convenience
 						algebra fT = f.transpose();
 						
-						// f pulled on u 
-						algebra fTu = fT;
-
 						// f pulled on v
 						algebra fTv = fT - q(fT);
 						
-						// f pulled on w
-						algebra fTw = x.cross(fTv) / theta2;
-						
-						// f pulled on dx
-						algebra fTdx = fTw + x * (x.dot( fTu - fTw ) / theta2); 
+						// f pulled on dx 
+						algebra fTdx = fT + (x.cross(fTv + x.cross(fT)) ) / theta2;
 						
 						// and back into shape
 						return fTdx.transpose();

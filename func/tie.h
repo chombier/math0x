@@ -18,7 +18,7 @@ namespace math0x {
 			args_type args;
 
 			tie(const args_type& args) : args(args) { }
-			tie(args_type&& args) : args(std::move(args)) { }
+			tie(args_type&& args = {}) : args(std::move(args)) { }
 			
 			template<int I>
 			using type = math0x::tuple::element<I, args_type>;

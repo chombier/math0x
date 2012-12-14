@@ -102,11 +102,13 @@ int main(int, char** ) {
 	// rotations
 	test::lie( SO3 );
 	test::func( make_apply( SO3 ));
-	
+
 	// rigids
 	test::lie( SE3 );
 	test::func( make_apply( SE3 ));
 	
+	return 0;
+
 	// tuples
 	test::euclid( RR3xRR3e );
 	test::lie( SO3xSE3 );

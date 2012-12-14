@@ -8,6 +8,20 @@
 
 namespace math0x { 
 
+	// some handy twist/wrench accessors
+	template<class Array6>
+	auto angular(Array6&& x) -> decltype( std::forward<Array6>(x).template head<3>() ) {
+		static_assert( meta::decay<Array6>::SizeAtCompileTime == 6, "only for 6 dimensional" );
+		return std::forward<Array6>(x).template head<3>();
+	}
+	
+	template<class Array6>
+	auto linear(Array6&& x) -> decltype( std::forward<Array6>(x).template tail<3>() ) {
+		static_assert( meta::decay<Array6>::SizeAtCompileTime == 6, "only for 6 dimensional" );
+		return std::forward<Array6>(x).template tail<3>();
+	}
+	
+
 	// 3-dimensional euclidean group
 	template<class U>
 	struct SE<3, U> {
@@ -41,6 +55,43 @@ namespace math0x {
 			return rotation(x) + translation;
 		}
 
+		// TODO cleaner ? move to traits ?
+		typedef vector<U, 6> algebra;
+		static void ad_proj(algebra& u, algebra& vv, const algebra& x, const algebra& h) {
+			auto omega = angular(x);
+			auto v = linear(x);
+						
+			auto a = angular(h);
+			auto b = linear(h);
+
+			algebra res;
+			
+			typedef vector<U, 3> vec3;
+			typedef SO<3, U> SO3;
+			
+			U theta2 = omega.squaredNorm();
+			
+			if( std::sqrt( theta2 ) < epsilon<U> ()) {
+				// TODO
+				throw error("not implemented");
+				
+			} else {
+				vec3 v_x, v_y, tmp;
+				SO3::ad_proj(tmp, v_x, omega, a);
+				
+				U alpha = omega.dot(a) / theta2;
+				SO<3, U>::ad_proj(tmp, v_y, omega, b - v.cross(v_x) - alpha * v);
+				
+				angular(vv) = v_x;
+				linear(vv) = v_y;
+				
+				// TODO
+				u = h - typename lie::traits<SE>::ad(x)(vv);
+			}
+			
+		}
+
+
 		class push {
 			func::push<rotation_type> rot;
 		public:
@@ -72,18 +123,7 @@ namespace math0x {
 
 	};
 
-	template<class Array6>
-	auto angular(Array6&& x) -> decltype( std::forward<Array6>(x).template head<3>() ) {
-		static_assert( meta::decay<Array6>::SizeAtCompileTime == 6, "only for 6 dimensional" );
-		return std::forward<Array6>(x).template head<3>();
-	}
-	
-	template<class Array6>
-	auto linear(Array6&& x) -> decltype( std::forward<Array6>(x).template tail<3>() ) {
-		static_assert( meta::decay<Array6>::SizeAtCompileTime == 6, "only for 6 dimensional" );
-		return std::forward<Array6>(x).template tail<3>();
-	}
-	
+
 	namespace lie {
 
 		template<class U>
@@ -144,6 +184,23 @@ namespace math0x {
 			};
 			
 
+			struct ad {
+				algebra x;
+				
+				ad(const algebra& x) : x(x) { }
+				
+				algebra operator()(const algebra& y) const {
+					algebra res;
+					
+					angular(res) = angular(x).cross( angular(y) );
+					linear(res) = linear(x).cross(angular(y)) + angular(x).cross(linear(y));
+					
+					return res;
+				}
+				
+			};
+
+
 			struct exp {
 				exp(const group<G>& = {}) { }
 				
@@ -159,11 +216,19 @@ namespace math0x {
 				}
 				
 				struct push {
-
-					push(const exp& of, const algebra& at) { }
-
+					algebra x;
+					Ad Ad_exp_inv;
+					
+					push(const exp& of, const algebra& at) 
+						: x(at),
+						  Ad_exp_inv( of(-at) )
+					{ }
+					
 					algebra operator()(const algebra& h) const {
-						throw error("not implemented");
+						
+						algebra u, v;
+						G::ad_proj(u, v, x, h);
+						return u + v - Ad_exp_inv(v);
 					}
 
 				};
