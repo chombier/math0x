@@ -31,7 +31,7 @@ namespace math0x {
 		SO( const quaternion_type& quaternion = quaternion_type::Identity() ) 
 			: quaternion( quaternion ) {
 			
-			assert( std::abs( quat().norm() -  1 ) < epsilon<U>() );
+			// assert( std::abs( quat().norm() -  1 ) < epsilon<U>() );
 		}
 		
 		SO operator*(const SO& other) const {

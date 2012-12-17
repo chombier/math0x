@@ -132,7 +132,7 @@ namespace math0x {
 			typedef typename data_type<F>::domain_coords domain_coords;
 			domain_coords dmn_tmp, rhs, dx;
 			
-			typename data_type<F>::range_coords rng_tmp;
+			typename data_type<F>::range_coords rng_tmp = vec::Zero( data.rng_alg.dim() );
 			
 			// tangent normal equations
 			minres< data_type<F>::domain_dim > normal;
@@ -182,9 +182,8 @@ namespace math0x {
 
 
 
-		// without jacobian matrices assembly, only homogeneous
-		// damping. needs both dlog/dlogT on range space, but should be
-		// faster.
+		// without jacobian matrices assembly, but needs both dlog/dlogT on
+		// range space. 
 		template<class F>
 		iter sparse(func::domain<F>& x,
 		            const F& f,
@@ -198,16 +197,19 @@ namespace math0x {
 			
 			auto r = data.residual(x);
 			auto delta = data.dmn_alg.zero();
+
+			auto unit = data.dmn_alg.zero();
 			
 			real best = data.rng_alg.norm( r );
 			real last = best;
 			
 			// temporaries
-			typename data_type<F>::domain_coords dmn_tmp, rhs, dx;
+			typename data_type<F>::domain_coords dmn_tmp, rhs, dx, diag;
 			typename data_type<F>::range_coords rng_tmp;
 			
 			rhs.resize( data.dmn_alg.dim() );
 			rng_tmp.resize( data.rng_alg.dim() );
+			diag.resize( data.dmn_alg.dim() );
 			
 			// tangent normal equations
 			minres< data_type<F>::domain_dim > normal;
@@ -222,13 +224,30 @@ namespace math0x {
 				
 			};
 			
+			
+			auto update = [&] {
+				if(!llamba) return;
+				
+				auto df = d(data.residual)(x);
+
+				parallel_each(diag, [unit, df, &diag, &data](natural i) mutable {
+						data.dmn_alg.coord(i, unit) = 1;
+						diag(i) = data.rng_alg.norm2( df(unit) );
+						data.dmn_alg.coord(i, unit) = 0;
+					});
+				
+			};
+
 			return outer( [&] ()-> RR  {
+					update();
+
 					auto A = JTJ(x);
 					
 					vec storage;
 					
+					// TODO alloc
 					auto AA = [&] (const vec& x) -> const vec& {
-						storage = A(x) + llambda * x;
+						storage = A(x) + llambda * diag.cwiseProduct(x);
 						return storage;
 					};
 					

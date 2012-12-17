@@ -21,8 +21,8 @@ namespace math0x {
       typedef lie::algebra<of_domain> domain_algebra;
 
       static_assert( std::is_same<euclid::field<range_algebra>,
-				  euclid::field<domain_algebra> >::value, 
-		     "field mismatch" );
+																	euclid::field<domain_algebra> >::value, 
+										 "field mismatch" );
 
       typedef euclid::field<domain_algebra> field;
 
@@ -40,51 +40,53 @@ namespace math0x {
       
       typedef of_domain domain;
       typedef matrix< field, 
-		      euclid::space< domain_algebra >::static_dim, 
-		      euclid::space< range_algebra >::static_dim > range;
+											euclid::space< domain_algebra >::static_dim, 
+											euclid::space< range_algebra >::static_dim > range;
       
-      range operator()(const domain& x) const {
+		range operator()(const domain& x) const {
 
-	range res; res.resize( rng_alg.dim(), dmn_alg.dim() );
+			range res; res.resize( rng_alg.dim(), dmn_alg.dim() );
 
-	domain_algebra delta = dmn_alg.zero();
+			domain_algebra delta = dmn_alg.zero();
 	
-	func::push<F> df_x(of, x);
+			func::push<F> df(of, x);
 	
-	// TODO parallelize ?
-	for(NN i = 0, n = dmn_alg.dim(); i < n; ++i) {
-	  dmn_alg.coord(i, delta) = 1;
-	  
-	  rng_alg.get( res.col(i), df_x(delta) );
-	  
-	  dmn_alg.coord(i, delta) = 0;
+			auto task = [delta, df, this, &res](NN i) mutable {
+				dmn_alg.coord(i, delta) = 1;
+				rng_alg.get( res.col(i), df(delta) );
+				dmn_alg.coord(i, delta) = 0;
+			};
+			
+			NN n = dmn_alg.dim();
+
+#pragma omp parallel for firstprivate(task)
+			for(NN i = 0; i < n; ++i) task(i);
+			
+			return res;
+		}
+      
 	};
-	
-	return res;
-      }
-      
-    };
 
 
-    template<class F>
-    jacobian< meta::decay<F> > J(F&& f, 
-				 const euclid::space< lie::algebra< func::domain< meta::decay<F> > > >& dmn = {},
-				 const euclid::space< lie::algebra< func::range< meta::decay<F> > > > & rng = {} ) {
-      return {std::forward<F>(f), dmn, rng};
-    }
+	template<class F>
+	jacobian< meta::decay<F> > J(F&& f, 
+															 const euclid::space< lie::algebra< func::domain< meta::decay<F> > > >& dmn = {},
+															 const euclid::space< lie::algebra< func::range< meta::decay<F> > > > & rng = {} ) {
+		return {std::forward<F>(f), dmn, rng};
+	}
     
-    // convenience
-    template<class F>
-    jacobian< meta::decay<F> > J(F&& f, 
-				 const lie::group< func::domain< meta::decay<F> > >& dmn = {},
-				 const lie::group< func::range< meta::decay<F> > >& rng = {} ) {
-      return {std::forward<F>(f), dmn.alg(), rng.alg()};
-    }
+	// convenience
+	template<class F>
+	jacobian< meta::decay<F> > J(F&& f, 
+															 const lie::group< func::domain< meta::decay<F> > >& dmn = {},
+															 const lie::group< func::range< meta::decay<F> > >& rng = {} ) {
+		return {std::forward<F>(f), dmn.alg(), rng.alg()};
+	}
 
-
-  }
 
 }
+
+	}
 
 
 #endif

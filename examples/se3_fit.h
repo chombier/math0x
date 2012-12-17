@@ -297,7 +297,7 @@ namespace math0x {
 			auto full = func::make_tie( // func::scal<RR>(small) << a,
 			                            // func::scal<RR>(small)<< b,  
 			                            // func::get< vector<SE<3> > >{0} << g, 
-			                            // delta{} << g,
+			                            delta{} << g,
 			                            func::scal<vector<vec3> >(big, RR3_n) << fit<0>{}, 
 			                            func::scal<vector<vec3> >(big, RR3_n) << fit<1>{} );
 			
@@ -306,15 +306,15 @@ namespace math0x {
 			// test::func(full, lie::group_of(res), lie::group_of(full(res)));
 			
 			auto rhs = func::range< full_type >( // 0.0, // 0.0,
-			                                     // se3_n.id(), 
+			                                     se3_n.id(), 
 			                                     func::scal<vector<vec3> >(big, RR3_n)(ai), 
 			                                     func::scal<vector<vec3> >(big, RR3_n)(bi) );
 			
 			
 			debug("search space dim:", lie::group_of(res).alg().dim() );
 
-			// opt.sparse(res, full, rhs);
-			opt.dense(res, full, rhs);
+			opt.sparse(res, full, rhs);
+			// opt.dense(res, full, rhs);
 						
 			debug("length:", 2 * std::get<0>(res),  "should be approx.", (ai(0) - bi(0)).norm());
 			
