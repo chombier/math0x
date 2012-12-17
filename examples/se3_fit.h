@@ -45,16 +45,16 @@ namespace math0x {
 			typedef std::tuple< rigid_type, vec_type > domain;
 			typedef vec_type range;
 			
-			static const get<domain, 0> rigid;
-			static const get<domain, 1> point;
+			static get<domain, 0> rigid() { return {};}
+			static get<domain, 1> point() { return {}; }
 			
-			static const get<rigid_type, 0> translation;
-			static const get<rigid_type, 1> rotation;
+			static get<rigid_type, 0> translation() { return {};} 
+			static get<rigid_type, 1> rotation() { return {}; }
 
 			range operator()(const domain& x) const {
 				const rigid_type& g = std::get<0>(x);
 
-				return translation(g) + rotation(g)( std::get<1>(x) );
+				return translation()(g) + rotation()(g)( std::get<1>(x) );
 			}
 
 
@@ -66,9 +66,9 @@ namespace math0x {
 
 				range operator()(const lie::algebra<domain>& v) const {
 
-					auto fun = sum<RR3>{} << make_tie( translation << rigid,
-					                                   apply<SO3>{} << make_tie( rotation << rigid,
-					                                                             point ));
+					auto fun = sum<RR3>{} << make_tie( translation() << rigid(),
+					                                   apply<SO3>{} << make_tie( rotation() << rigid(),
+					                                                             point() ));
 					return d(fun)(at)(v);
 					
 				}
@@ -82,9 +82,9 @@ namespace math0x {
 				
 				lie::coalgebra<domain> operator()(const lie::coalgebra<range>& f) const {
 					
-					auto fun = sum<RR3>{} << make_tie( translation << rigid,
-					                                   apply<SO3>{} << make_tie( rotation << rigid,
-					                                                             point ));
+					auto fun = sum<RR3>{} << make_tie( translation() << rigid(),
+					                                   apply<SO3>{} << make_tie( rotation() << rigid(),
+					                                                             point() ));
 					return dT(fun)(at)(f);
 				}
 				
