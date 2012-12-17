@@ -21,6 +21,8 @@
 #include <math0x/func/prod.h>
 #include <math0x/func/inv.h>
 #include <math0x/func/scal.h>
+#include <math0x/func/val.h>
+// #include <math0x/func/ops.h>
 
 #include <math0x/each.h>
 
@@ -28,25 +30,100 @@
 
 #include <math0x/debug.h>
 
+
 namespace math0x {
+
+
+	namespace func {
+
+		template<>
+		struct apply< std::tuple<RR3, SO3> > {
+
+			typedef RR3 vec_type;
+			typedef std::tuple<vec_type, SO3> rigid_type;
+
+			typedef std::tuple< rigid_type, vec_type > domain;
+			typedef vec_type range;
+			
+			static const get<domain, 0> rigid;
+			static const get<domain, 1> point;
+			
+			static const get<rigid_type, 0> translation;
+			static const get<rigid_type, 1> rotation;
+
+			range operator()(const domain& x) const {
+				const rigid_type& g = std::get<0>(x);
+
+				return translation(g) + rotation(g)( std::get<1>(x) );
+			}
+
+
+			struct push {
+				
+				domain at;
+				push(const apply&, const domain& at) : at(at)  { }
+
+
+				range operator()(const lie::algebra<domain>& v) const {
+
+					auto fun = sum<RR3>{} << make_tie( translation << rigid,
+					                                   apply<SO3>{} << make_tie( rotation << rigid,
+					                                                             point ));
+					return d(fun)(at)(v);
+					
+				}
+			};
+
+			struct pull {
+				
+				domain at;
+				pull(const apply&, const domain& at) : at(at)  { }
+				
+				
+				lie::coalgebra<domain> operator()(const lie::coalgebra<range>& f) const {
+					
+					auto fun = sum<RR3>{} << make_tie( translation << rigid,
+					                                   apply<SO3>{} << make_tie( rotation << rigid,
+					                                                             point ));
+					return dT(fun)(at)(f);
+				}
+				
+			};
+
+		};
+			
+
+
+	}
+
+
+
 	struct se3_fit {
 	
 		typedef vector<vec3> samples_type;
-		typedef std::tuple< RR, RR, vector<SE<3>> > result_type;
+
+		typedef vec3 RR3;
+
+		// typedef SE3 rigid_type;
+		typedef std::tuple<RR3, SO3> rigid_type;
+		typedef std::tuple< RR, vector< rigid_type > > result_type;
 		
 		levmar opt;
 
 		struct delta {
 			
-			typedef vector<SE<3>> domain;
-			typedef vector<SE<3>> range;
+			typedef vector< rigid_type> domain;
+			typedef vector< rigid_type> range;
 			
 			range operator()(const domain& x) const {
 				range res; res.resize( x.size() );
 				
+				auto fun = func::prod< rigid_type >{} << func::make_tuple( func::inv< rigid_type >{},
+				                                                           func::id< rigid_type > {} );
+						
 				each(res, [&](NN i) {
 						if(i) {
-							res(i) = x(i-1).inv() * x(i); 
+							res(i) = fun( std::make_tuple(x(i-1), x(i))); 
 						}
 					});
 				
@@ -65,12 +142,12 @@ namespace math0x {
 					lie::algebra<range> res; res.resize(v.size());
 					
 					each(res, [&](NN i) {
-							if( !i ) res(i).setZero();
+							if( !i ) res(i) = lie::group<rigid_type>{}.alg().zero();
 							else {
-								auto fun = func::prod< SE<3> >{} << func::make_tuple( func::inv< SE<3> >{},
-								                                                      func::id< SE<3> > {} );
-								std::tuple<SE<3>, SE<3> > at(x(i-1), x(i));
-								std::tuple<vec6, vec6> vv(v(i-1), v(i));
+								auto fun = func::prod< rigid_type >{} << func::make_tuple( func::inv< rigid_type >{},
+								                                                           func::id< rigid_type > {} );
+								std::tuple<rigid_type, rigid_type > at(x(i-1), x(i));
+								std::tuple< lie::algebra<rigid_type>, lie::algebra<rigid_type> > vv(v(i-1), v(i));
 								res(i) = d(fun)(at)(vv);
 							}
 						});
@@ -93,13 +170,15 @@ namespace math0x {
 					
 					each(res, [&](NN i) {
 							if(i) {
-								auto fun = func::prod< SE<3> >{} << func::make_tuple( func::inv< SE<3> >{},
-								                                                      func::id< SE<3> > {} );
-								std::tuple<SE<3>, SE<3> > at(x(i-1), x(i));
+								auto fun = func::prod< rigid_type >{} << func::make_tuple( func::inv< rigid_type >{},
+								                                                           func::id< rigid_type > {} );
+								std::tuple<rigid_type, rigid_type > at(x(i-1), x(i));
 
+								auto coalg = *lie::group<rigid_type>{}.alg();
+								
 								auto pp = dT(fun)(at)(p(i));
-								res(i - 1) += std::get<0>(pp);
-								res(i) += std::get<1>(pp);
+								res(i - 1) = coalg.sum(res(i - 1), std::get<0>(pp));
+								res(i) = coalg.sum( res(i), std::get<1>(pp));
 							}
 						});
 					
@@ -110,27 +189,27 @@ namespace math0x {
 		};
  
 
-		template<int I>
+		template<bool flip>
 		struct fit {
-
+			
 			typedef result_type domain;
 			typedef samples_type range;
 
+			static RR sign() { return flip ? -1 : 1; }
+			
 			range operator()(const domain& x) const {
 				range res;
-				res.resize( std::get<2>(x).size() );
+				res.resize( std::get<1>(x).size() );
 
-				auto fun = func::apply<SE<3> >{} << func::make_tuple( func::id< SE<3> >{},
-				                                                      func::line<vec3>{vec3::UnitY()} );
+				auto fun = func::apply< rigid_type >{} << func::make_tuple( func::id< rigid_type >{},
+				                                                            func::line<vec3>{ sign() * vec3::UnitY()} );
 				each(res, [&](NN i) {
-						res(i) = fun( std::make_tuple(std::get<2>(x)(i),
-						                              std::get<I>(x)) );
+						res(i) = fun( std::make_tuple(std::get<1>(x)(i),
+						                              std::get<0>(x)) );
 					});
 				return res;
 			}
 
-
-			
 			struct push {
 				domain x;
 				
@@ -139,43 +218,47 @@ namespace math0x {
 				lie::algebra<range> operator()(const lie::algebra<domain>& v) const {
 
 					lie::algebra<range> res;
-					res.resize( std::get<2>(v).size() );
+					res.resize( std::get<1>(v).size() );
 
-					auto fun = func::apply<SE<3> >{} << func::make_tuple( func::id< SE<3> >{},
-					                                                      func::line<vec3>{vec3::UnitY()} );
-		
+					auto fun = func::apply< rigid_type >{} << func::make_tuple( func::id< rigid_type >{},
+					                                                            func::line<vec3>{ sign() * vec3::UnitY()} );
+					
 					// derp when @each is used
 					for(unsigned i = 0, n = res.size(); i < n; ++i) {
-						auto at = std::make_tuple(std::get<2>(x)(i), std::get<I>(x));
-						res(i) = d(fun)(at)( std::make_tuple( std::get<2>(v)(i), std::get<I>(v)));
+						auto at = std::make_tuple(std::get<1>(x)(i), std::get<0>(x));
+						res(i) = d(fun)(at)( std::make_tuple( std::get<1>(v)(i), std::get<0>(v)));
 					}
 					
 					return res;
 				}
 			};
-
-
+			
+			
 			struct pull {
 				domain x;
 				pull(const fit&, const domain& x) : x(x) { }
 				
 				lie::coalgebra<domain> operator()(const lie::coalgebra<range>& p) const {
 					lie::coalgebra<domain> res;
-					std::get<2>(res).resize( p.size() );
+					std::get<1>(res).resize( p.size() );
 					
 					res = euclid::space_of(res).zero();
 					
-					auto fun = func::apply<SE<3> >{} << func::make_tuple( func::id< SE<3> >{},
-					                                                      func::line<vec3>{ vec3::UnitY() } );
-		
-					for( unsigned i = 0, n = p.size(); i < n; ++i) {
-						auto at = std::make_tuple(std::get<2>(x)(i), std::get<I>(x));
+					auto fun = func::apply<rigid_type>{} << func::make_tuple( func::id< rigid_type >{},
+					                                                          func::line<vec3>{ sign() * vec3::UnitY() } );
 
+					lie::group< rigid_type > g;
+					auto g_star = *g.alg();
+					
+					for( unsigned i = 0, n = p.size(); i < n; ++i) {
+						auto at = std::make_tuple(std::get<1>(x)(i), std::get<0>(x));
+						
 						auto pp = dT(fun)(at)(p(i));
-							
-						std::get<2>(res)(i) += std::get<0>(pp);
-						std::get<I>(res) += std::get<1>(pp);
+						
+						std::get<1>(res)(i) = g_star.sum( std::get<1>(res)(i), std::get<0>(pp));
+						std::get<0>(res) += std::get<1>(pp);
 					}
+				
 					return res;
 				}
 			};
@@ -191,41 +274,52 @@ namespace math0x {
 			NN n = ai.size();
 
 			func::get<result_type, 0> a;
-			func::get<result_type, 1> b;
-			func::get<result_type, 2> g;
+			func::get<result_type, 1> g;
 			
-			lie::group< vector<SE<3> > > se3_n( n );
+			lie::group< vector< rigid_type > > se3_n( n );
 			
 			result_type res;
-			std::get<2>(res) = se3_n.id();
-		
+			std::get<1>(res) = se3_n.id();
+			
 			// first guess for translation
 			for(NN i = 0; i < n; ++i) {
-				std::get<2>(res)(i).translation = 0.5 * (ai(i) + bi(i));
+				// std::get<2>(res)(i).translation = 0.5 * (ai(i) + bi(i));
+				std::get<0>(std::get<1>(res)(i)) = 0.5 * (ai(i) + bi(i));
 			}
 
-
-			real small = 1;
-			auto full = func::make_tie( func::scal<RR>(small)<< a,  
-			                            func::scal<RR>(small)<< b,  
+			std::get<0>(res) = 0.5 * (ai(0) - bi(0)).norm();
+			
+			real small = 0.01;
+			real big = 1;
+			
+			euclid::space< vector<vec3> > RR3_n(n);
+			
+			auto full = func::make_tie( // func::scal<RR>(small) << a,
+			                            // func::scal<RR>(small)<< b,  
 			                            // func::get< vector<SE<3> > >{0} << g, 
 			                            // delta{} << g,
-			                            fit<0>{}, fit<1>{} );
+			                            func::scal<vector<vec3> >(big, RR3_n) << fit<0>{}, 
+			                            func::scal<vector<vec3> >(big, RR3_n) << fit<1>{} );
+			
 			typedef decltype(full) full_type;
 
 			// test::func(full, lie::group_of(res), lie::group_of(full(res)));
 			
-			auto rhs = func::range< full_type >( 0.0, 0.0,
+			auto rhs = func::range< full_type >( // 0.0, // 0.0,
 			                                     // se3_n.id(), 
-			                                     ai, bi );
-		
-	
+			                                     func::scal<vector<vec3> >(big, RR3_n)(ai), 
+			                                     func::scal<vector<vec3> >(big, RR3_n)(bi) );
+			
+			
 			debug("search space dim:", lie::group_of(res).alg().dim() );
 
-			opt.sparse(res, full, rhs);
+			// opt.sparse(res, full, rhs);
+			opt.dense(res, full, rhs);
 						
+			debug("length:", 2 * std::get<0>(res),  "should be approx.", (ai(0) - bi(0)).norm());
+			
 			return res;
 		}
 
 	};
-}
+} 

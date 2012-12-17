@@ -11,11 +11,11 @@ namespace math0x {
 			       Eigen::Matrix<U, Rows, 1>::MaxColsAtCompileTime>;
 
 	// shorthand
-  typedef vector<RR, 2> vec2;
-  typedef vector<RR, 3> vec3;
-  typedef vector<RR, 4> vec4;
-  typedef vector<RR, 6> vec6;
-
+  typedef vector<RR, 2> vec2; 	typedef vec2 RR2;
+	typedef vector<RR, 3> vec3;   typedef vec3 RR3;
+	typedef vector<RR, 4> vec4;   typedef vec3 RR4;
+	typedef vector<RR, 6> vec6;   typedef vec6 RR6;
+	
 	typedef vector<RR> vec;
 }
 #endif

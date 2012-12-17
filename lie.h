@@ -102,6 +102,9 @@ namespace math0x {
 			template<class ... Args>
 			explicit group(Args&& ... args) : impl(std::forward<Args>(args)...) {  }
     
+			// default ctor in case it exists
+			group() {} 
+
 			// 
 			group(const group& ) = default;
 			group(group&& ) = default;

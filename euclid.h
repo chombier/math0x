@@ -37,6 +37,8 @@ namespace math0x {
 			template<class...Args>
 			explicit space(Args&& ... args) 
 				: impl(std::forward<Args>(args)...) { }
+
+			space() { }
     
 			space(const space& ) = default;
 			space(space&& ) = default;

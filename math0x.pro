@@ -18,8 +18,8 @@ INCLUDEPATH += ..
 DEPENDPATH += . .. 
 
 SOURCES = \
-    main.cpp \
-#		test.cpp 
+#    main.cpp \
+		test.cpp 
 
 # install targets
 headers.path = $$PREFIX/include/math0x

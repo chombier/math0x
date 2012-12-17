@@ -82,11 +82,15 @@ namespace math0x {
 
   // special orthogonal
   template<int, class = RR> class SO;
+	typedef SO<3> SO3;
+	
   template<int, class = RR> struct so;
 	
   // special euclidean
   template<int, class = RR> struct SE;
-  template<int, class = RR> class se;
+	typedef SE<3> SE3;
+	
+	template<int, class = RR> class se;
 
   // special linear
   template<int, class = RR> class SL;

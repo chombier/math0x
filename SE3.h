@@ -74,8 +74,9 @@ namespace math0x {
 			if( std::sqrt( theta2 ) < epsilon<U> ()) {
 				// TODO
 				throw error("not implemented");
-				
 			} else {
+				// TODO optimize theta2 (re)computations 
+				
 				vec3 v_x, v_y, tmp;
 				SO3::ad_proj(tmp, v_x, omega, a);
 				
@@ -85,7 +86,7 @@ namespace math0x {
 				angular(vv) = v_x;
 				linear(vv) = v_y;
 				
-				// TODO
+				// TODO cleaner 
 				u = h - typename lie::traits<SE>::ad(x)(vv);
 			}
 			

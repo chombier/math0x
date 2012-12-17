@@ -14,34 +14,74 @@
 namespace math0x { 
   namespace func {
   
+
+	  // TODO requirement checks !
+	  
+	  namespace impl {
+
+
+		  template<class Arg>
+		  struct unary_traits {
+			  
+			  typedef func::range<Arg> range_type;
+
+			  typedef comp< minus<range_type>, Arg > minus_type;
+			  typedef comp< scal<range_type>, Arg > scal_type;
+			  
+		  };
+
+		  template<class LHS, class RHS>
+		  struct binary_traits {
+			  typedef func::range<LHS> range_type;
+			  // TODO assert range type is consistent ?
+
+			  typedef comp< sum< range_type >, tie<LHS, RHS> > sum_type;
+			  typedef comp< sum< range_type >, tie<LHS, typename unary_traits<RHS>::minus_type > > diff_type;
+			  
+		  };
+		  
+		  
+	  }
+
+
+
     template<class LHS, class RHS>
-    auto operator+(LHS&& lhs, RHS&& rhs) -> 
-      macro_auto( (sum< func::range< meta::decay<RHS> > >{}) << make_tie( std::forward<LHS>(lhs), 
-									  std::forward<RHS>(rhs)) );
-    template<class Arg>
-    auto operator-(Arg&& arg) ->
-      macro_auto( minus< func::range< meta::decay<Arg> > >{} << std::forward<Arg>(arg) );
+    meta::enable_if< typename binary_traits< meta::decay<LHS>, meta::decay<RHS> >::sum_type,
+                     decltype( func::requires< meta::decay<LHS>, meta::decay<RHS> >() ) > 
+    operator+(LHS&& lhs, RHS&& rhs) {
+	    return sum< func::range< meta::decay<RHS> > >{} << make_tie( std::forward<LHS>(lhs), 
+	                                                                 std::forward<RHS>(rhs));
+    }
+
+    // auto operator+(LHS&& lhs, RHS&& rhs) -> 
+    //   macro_auto( (sum< func::range< meta::decay<RHS> > >{}) << make_tie( std::forward<LHS>(lhs), 
+		// 							  std::forward<RHS>(rhs)) );
+
+	  
+    // template<class Arg>
+    // auto operator-(Arg&& arg) ->
+    //   macro_auto( minus< func::range< meta::decay<Arg> > >{} << std::forward<Arg>(arg) );
   
-    template<class LHS, class RHS>
-    auto operator-(LHS&& lhs, RHS&& rhs) -> 
-      macro_auto( std::forward<LHS>(lhs) + (- std::forward<RHS>(rhs) ) );
+    // template<class LHS, class RHS>
+    // auto operator-(LHS&& lhs, RHS&& rhs) -> 
+    //   macro_auto( std::forward<LHS>(lhs) + (- std::forward<RHS>(rhs) ) );
 
 
-    template<class Arg>
-    auto operator*( euclid::field< func::range< meta::decay<Arg> > > lambda, Arg&& arg) ->
-      macro_auto( scal< func::range< meta::decay<Arg> > >{lambda} << std::forward<Arg>(arg) );
+    // template<class Arg>
+    // auto operator*( euclid::field< func::range< meta::decay<Arg> > > lambda, Arg&& arg) ->
+    //   macro_auto( scal< func::range< meta::decay<Arg> > >{lambda} << std::forward<Arg>(arg) );
 
-    template<class Arg>
-    auto operator*(  Arg&& arg, euclid::field< func::range< meta::decay<Arg> > > lambda) ->
-      macro_auto( lambda * std::forward<Arg>(arg) );
+    // template<class Arg>
+    // auto operator*(  Arg&& arg, euclid::field< func::range< meta::decay<Arg> > > lambda) ->
+    //   macro_auto( lambda * std::forward<Arg>(arg) );
   
-    template<class Arg>
-    auto operator/( Arg&& arg, euclid::field< func::range< meta::decay<Arg> > > lambda) ->
-      macro_auto( std::forward<Arg>(arg) * (1.0 / lambda) );
+    // template<class Arg>
+    // auto operator/( Arg&& arg, euclid::field< func::range< meta::decay<Arg> > > lambda) ->
+    //   macro_auto( std::forward<Arg>(arg) * (1.0 / lambda) );
   
-    template<class Arg>
-    auto operator^(  Arg&& arg, NN n) ->
-      macro_auto( poly< func::range< meta::decay<Arg> > >{n} <<  std::forward<Arg>(arg) );
+    // template<class Arg>
+    // auto operator^(  Arg&& arg, NN n) ->
+    //   macro_auto( poly< func::range< meta::decay<Arg> > >{n} <<  std::forward<Arg>(arg) );
   
   }
 

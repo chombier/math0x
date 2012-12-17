@@ -23,68 +23,126 @@ namespace math0x {
 		iter outer;			// iterations for gauss-newton (outer loop)
 		iter inner;			// iterations for minres (inner loop)
     
-		RR lambda;			// TODO template ?
-    
-		// defaults to vanilla gauss-newton
-		levmar(RR lambda = 0) 
-			: lambda(lambda) {
-      
+		RR lambda;			
+		RR nu;
+		
+		// if lambda = 0 then gauss-newton
+		// else if nu = 1 then fixed-damping levmar
+		// else adaptive-damping levmar 
+		levmar(RR lambda = 0, RR nu = 1) 
+			: lambda(lambda), nu(nu) {
+			
+			assert( nu >= 1);
+			
 		}
     
-		// TODO wrap sparse/dense common data in a struct
+		// return true when ok
+		bool adaptive(real& llambda, real last, real curr) const {
+			if( last > curr ) {
+				llambda /= nu;
+				return true;
+			}
+			else {
+				llambda *= nu;
+				return false;
+			}
+		}
 		
-		// assembling jacobian matrices
 		template<class F>
-		iter dense(func::domain< meta::decay<F> >& x,
-		           const F& f,
-		           const func::range< meta::decay<F> >& y) const {
-			typedef F f_type;
-      
-			typedef func::domain< f_type > domain;
-			typedef func::range< f_type > range;
+		struct data_type {
+
+			typedef func::domain< F > domain;
+			typedef func::range< F > range;
       
 			typedef lie::algebra< domain > domain_algebra;
 			typedef lie::algebra< range > range_algebra;
-      
+			
 			typedef euclid::coords<domain_algebra> domain_coords;
 			typedef euclid::coords<range_algebra> range_coords;
 			
-			// lie groups
-			lie::group< domain > dmn(x);
-			lie::group< range > rng(y);
-			
-			// lie algebras
-			auto dmn_alg = dmn.alg();
-			auto rng_alg = rng.alg();
-			
+			// structures
+			lie::group< domain > dmn;
+			lie::group< range > rng;
+
+			euclid::space< domain_algebra > dmn_alg;
+			euclid::space< range_algebra > rng_alg;
+
 			// functions
-			auto residual = rng.log() << func::L( rng.inv(y) ) << f;
-			auto exp = dmn.exp();
-			auto Jf = func::J(f, dmn_alg, rng_alg);
+			typedef func::comp< func::comp< lie::log<range>, func::left<range> >, F > residual_type;
+			residual_type residual;
+			
+			lie::exp<domain> exp;
 			
 			// vars
-			range_algebra r = residual( x );
-			domain_algebra delta = dmn_alg.zero();
+			data_type(const domain& x,
+			          const F& f,
+			          const range& y) 
+				: dmn(x),
+				  rng(y),
+				  dmn_alg(dmn.alg()),
+				  rng_alg(rng.alg()),
+				  residual{ rng.log() << func::L(rng.inv(y)), f},
+				  exp( dmn.exp() )
+				  
+			{
+
+			}
+
+			static constexpr NN domain_dim = euclid::space<domain_algebra>::static_dim;
+			
+			// convenience
+			void set(domain_algebra& delta, const vec& dx) const {
+				dmn_alg.set(delta, dx);
+			}
+
+			void get(vec& b, const range_algebra& r ) const {
+				rng_alg.get(b, r);
+			}
+
+			void step(domain& x, const domain_algebra& delta) const {
+				x = dmn.prod(x, exp(delta) );
+			}
+			
+		};
+
+
+		// assembling jacobian matrices, non-homogeneous damping
+		// needs only dlog on range space
+		template<class F>
+		iter dense(func::domain< F >& x,
+		           const F& f,
+		           const func::range< F >& y) const {
+			data_type<F> data(x, f, y);
+
+			real llambda = lambda;
+			
+			auto Jf = func::J(data.residual, data.dmn_alg, data.rng_alg);
+			
+			// vars
+			auto r = data.residual( x );
+			auto delta = data.dmn_alg.zero();
+			
+			real last = data.rng_alg.norm(r);
 			
 			// jacobian matrix and JTJ's diagonal
 			typename func::jacobian<F>::range J;
-			domain_coords diag;
+			typename data_type<F>::domain_coords diag;
 			
 			// temporaries
+			typedef typename data_type<F>::domain_coords domain_coords;
 			domain_coords dmn_tmp, rhs, dx;
-			range_coords rng_tmp;
+			
+			typename data_type<F>::range_coords rng_tmp;
 			
 			// tangent normal equations
-			minres< euclid::space<domain_algebra>::static_dim > normal;
+			minres< data_type<F>::domain_dim > normal;
 			normal.iter = inner;
 			
-			// FIXME g++-4.7 chokes when this is defined inside the lambda
-			// below
 			auto JTJ = [&](const domain_coords& u) -> const domain_coords& {
 				rng_tmp.noalias() = J * u;
 				dmn_tmp.noalias() = J.transpose() * rng_tmp;
-
-				if( this->lambda ) dmn_tmp.array() += lambda * (diag.array() * u.array());
+				
+				if( llambda ) dmn_tmp.array() += llambda * (diag.array() * u.array());
 				
 				return dmn_tmp;
 			};
@@ -92,100 +150,117 @@ namespace math0x {
 			return outer( [&] ()-> RR  {
 	  
 					J = Jf(x);
-					if( this->lambda ) diag = J.colwise().squaredNorm().transpose();					
+					if( llambda ) diag = J.colwise().squaredNorm().transpose();					
 					
-					rng_alg.get(rng_tmp, r);
+					data.get(rng_tmp, r);
 					rhs.noalias() = -J.transpose() * rng_tmp;
 	  
+					// don't forget to clear dx !
+					dx.setZero();
 					normal.solve(dx, JTJ, rhs);
-					dmn_alg.set(delta, dx);
 					
-					x = dmn.prod(x, exp( delta ) );
-					r = residual(x);
+					data.set(delta, dx);
+					
+					auto old = x;
+					data.step(x, delta );
+					r = data.residual(x);
 	  
-					return rng_alg.norm(r);
+					real norm = data.rng_alg.norm(r);
+					
+					if( !adaptive( llambda, last, norm ) ) {
+						x = old;
+					} else {
+						last = norm;
+					}
+
+					return std::min(norm, dx.norm());
 				});
-      
+			
+			
 		}
 
 
 
 
-		// without jacobian matrices assembly
+		// without jacobian matrices assembly, only homogeneous
+		// damping. needs both dlog/dlogT on range space, but should be
+		// faster.
 		template<class F>
-		iter sparse(func::domain< meta::decay<F> >& x,
+		iter sparse(func::domain<F>& x,
 		            const F& f,
-		            const func::range< meta::decay<F> >& y) const {
-			typedef F f_type;
-      
-			typedef func::domain< f_type > domain;
-			typedef func::range< f_type > range;
-      
-			typedef lie::algebra< domain > domain_algebra;
-			typedef lie::algebra< range > range_algebra;
-      
-			typedef euclid::coords<domain_algebra> domain_coords;
-			typedef euclid::coords<range_algebra> range_coords;
+		            const func::range<F>& y) const {
+
+			data_type<F> data(x, f, y);
+				
+			real llambda = lambda;
 			
-			// lie groups
-			lie::group< domain > dmn(x);
-			lie::group< range > rng(y);
+			auto res = x;
 			
-			// lie algebras
-			auto dmn_alg = dmn.alg();
-			auto rng_alg = rng.alg();
+			auto r = data.residual(x);
+			auto delta = data.dmn_alg.zero();
 			
-			// functions
-			// residual = log( inv(y) * f(x) )
-			auto residual = rng.log() << func::L( rng.inv(y) ) << f;
-			auto exp = dmn.exp();
-			
-			// vars
-			range_algebra r = residual( x );
-			domain_algebra delta = dmn_alg.zero();
+			real best = data.rng_alg.norm( r );
+			real last = best;
 			
 			// temporaries
-			domain_coords dmn_tmp, rhs, dx;
-			range_coords rng_tmp;
+			typename data_type<F>::domain_coords dmn_tmp, rhs, dx;
+			typename data_type<F>::range_coords rng_tmp;
 			
-			rhs.resize( dmn_alg.dim() );
-			rng_tmp.resize( rng_alg.dim() );
+			rhs.resize( data.dmn_alg.dim() );
+			rng_tmp.resize( data.rng_alg.dim() );
 			
 			// tangent normal equations
-			minres< euclid::space<domain_algebra>::static_dim > normal(-lambda);
+			minres< data_type<F>::domain_dim > normal;
 			normal.iter = inner;
 			
-			// FIXME g++-4.7 chokes when this is defined inside the lambda
-			// below
-			auto JTJ = [&](const domain& at) {
+			// TODO lots of allocs !
+			auto JTJ = [&](const func::domain<F>& at) {
 				using namespace func;
-				return 
-				func::make_coords(dT(f)(at), *rng_alg, *dmn_alg) << 
-				func::make_coords(d(f)(at), dmn_alg, rng_alg);
+				return  				
+				func::make_coords(dT( data.residual )(at), *data.rng_alg, *data.dmn_alg) << 
+				func::make_coords(d( data.residual )(at), data.dmn_alg, data.rng_alg);
+				
 			};
 			
 			return outer( [&] ()-> RR  {
 					auto A = JTJ(x);
 					
-					rng_alg.get(rng_tmp, r);
+					vec storage;
 					
-					rhs = -func::make_coords(dT(f)(x), *rng_alg, *dmn_alg)(rng_tmp);
+					auto AA = [&] (const vec& x) -> const vec& {
+						storage = A(x) + llambda * x;
+						return storage;
+					};
 					
-					normal.solve(dx, A, rhs);
+					data.get(rng_tmp, r);
+					rhs = -func::make_coords(dT( data.residual )(x), *data.rng_alg, *data.dmn_alg)(rng_tmp);
 					
-					dmn_alg.set(delta, dx);
+					dx.setZero();
+					normal.solve(dx, AA, rhs);
 					
-					x = dmn.prod(x, exp( delta ) );
-					r = residual(x);
-	  
-					return rng_alg.norm(r);
+					data.set(delta, dx);
+
+					auto old = x;
+					data.step(x, delta );
+					
+					r = data.residual(x);
+					
+					real norm = data.rng_alg.norm(r);
+					
+					if( !adaptive(llambda, last, norm) ) {
+						x = old;
+					} else {
+						last = norm;
+					}
+					
+					return std::min(norm, dx.norm());
 				});
-      
+			
 		}
 
 
 
-
+		// TODO provide quick and dirty one (without dlog, fixed damping)
 
 		
 
