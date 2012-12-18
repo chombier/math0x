@@ -88,7 +88,7 @@ namespace math0x {
 
 			}
 
-			static constexpr NN domain_dim = euclid::space<domain_algebra>::static_dim;
+			static constexpr int domain_dim = euclid::space<domain_algebra>::static_dim;
 			
 			// convenience
 			void set(domain_algebra& delta, const vec& dx) const {
@@ -226,7 +226,7 @@ namespace math0x {
 			
 			
 			auto update = [&] {
-				if(!llamba) return;
+				if(!llambda) return;
 				
 				auto df = d(data.residual)(x);
 
