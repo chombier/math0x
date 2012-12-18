@@ -289,17 +289,21 @@ namespace math0x {
 
 			std::get<0>(res) = 0.5 * (ai(0) - bi(0)).norm();
 			
-			real small = 0.01;
-			real big = 1;
-			
+			struct {
+				real fit;
+				real smooth;
+			} weight;
+
+			weight.fit = 1;
+
 			euclid::space< vector<vec3> > RR3_n(n);
 			
 			auto full = func::make_tie( // func::scal<RR>(small) << a,
 			                            // func::scal<RR>(small)<< b,  
 			                            // func::get< vector<SE<3> > >{0} << g, 
 			                            delta{} << g,
-			                            func::scal<vector<vec3> >(big, RR3_n) << fit<0>{}, 
-			                            func::scal<vector<vec3> >(big, RR3_n) << fit<1>{} );
+			                            func::scal<vector<vec3> >(weight.fit, RR3_n) << fit<0>{}, 
+			                            func::scal<vector<vec3> >(weight.fit, RR3_n) << fit<1>{} );
 			
 			typedef decltype(full) full_type;
 
@@ -307,14 +311,14 @@ namespace math0x {
 			
 			auto rhs = func::range< full_type >( // 0.0, // 0.0,
 			                                     se3_n.id(), 
-			                                     func::scal<vector<vec3> >(big, RR3_n)(ai), 
-			                                     func::scal<vector<vec3> >(big, RR3_n)(bi) );
+			                                     func::scal<vector<vec3> >(weight.fit, RR3_n)(ai), 
+			                                     func::scal<vector<vec3> >(weight.fit, RR3_n)(bi) );
 			
 			
 			debug("search space dim:", lie::group_of(res).alg().dim() );
 
-			opt.sparse(res, full, rhs);
-			// opt.dense(res, full, rhs);
+			// opt.sparse(res, full, rhs);
+			opt.dense(res, full, rhs);
 						
 			debug("length:", 2 * std::get<0>(res),  "should be approx.", (ai(0) - bi(0)).norm());
 			

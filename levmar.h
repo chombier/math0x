@@ -180,7 +180,19 @@ namespace math0x {
 		}
 
 
+		template<class F, class DF>
+		static void update(typename data_type<F>::domain_coords& res,
+		                   DF df,
+		                   const data_type<F>& data) {
+			typename data_type<F>::domain_algebra unit = data.dmn_alg.zero();
 
+			each(res, [unit, df, &res, &data](NN i) mutable {
+					data.dmn_alg.coord(i, unit) = 1;
+					res(i) = data.rng_alg.norm2( df(unit) );
+					data.dmn_alg.coord(i, unit) = 0;
+				});
+		};
+		                 
 
 		// without jacobian matrices assembly, but needs both dlog/dlogT on
 		// range space. 
@@ -198,7 +210,6 @@ namespace math0x {
 			auto r = data.residual(x);
 			auto delta = data.dmn_alg.zero();
 
-			auto unit = data.dmn_alg.zero();
 			
 			real best = data.rng_alg.norm( r );
 			real last = best;
@@ -224,30 +235,18 @@ namespace math0x {
 				
 			};
 			
+			typename data_type<F>::domain_algebra unit = data.dmn_alg.zero();
 			
-			auto update = [&] {
-				if(!llambda) return;
-				
-				auto df = d(data.residual)(x);
-
-				parallel_each(diag, [unit, df, &diag, &data](natural i) mutable {
-						data.dmn_alg.coord(i, unit) = 1;
-						diag(i) = data.rng_alg.norm2( df(unit) );
-						data.dmn_alg.coord(i, unit) = 0;
-					});
-				
-			};
-
 			return outer( [&] ()-> RR  {
-					update();
-
+					if(llambda) this->update(diag, d(data.residual)(x), data);
+					
 					auto A = JTJ(x);
 					
 					vec storage;
 					
 					// TODO alloc
 					auto AA = [&] (const vec& x) -> const vec& {
-						storage = A(x) + llambda * diag.cwiseProduct(x);
+						storage.noalias() = A(x) + llambda * diag.cwiseProduct(x);
 						return storage;
 					};
 					
