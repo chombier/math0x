@@ -17,7 +17,8 @@ namespace math0x {
 	template<class What, class F>
 	void omp_each(const What& v, F f) {
 		NN n = v.size();
-#pragma omp parallel for firstprivate(f)
+
+#pragma omp parallel for
 		for(NN i = 0; i < n; ++i) f(i);
 	};
 

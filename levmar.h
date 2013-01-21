@@ -218,6 +218,7 @@ namespace math0x {
 			typename data_type<F>::domain_coords dmn_tmp, rhs, dx, diag;
 			typename data_type<F>::range_coords rng_tmp;
 			
+			dx.resize( data.dmn_alg.dim() );
 			rhs.resize( data.dmn_alg.dim() );
 			rng_tmp.resize( data.rng_alg.dim() );
 			diag.resize( data.dmn_alg.dim() );

@@ -121,7 +121,7 @@ namespace math0x {
 				auto fun = func::prod< rigid_type >{} << func::make_tuple( func::inv< rigid_type >{},
 				                                                           func::id< rigid_type > {} );
 						
-				each(res, [&](NN i) {
+				omp_each(res, [&](NN i) {
 						if(i) {
 							res(i) = fun( std::make_tuple(x(i-1), x(i))); 
 						}
@@ -141,7 +141,7 @@ namespace math0x {
 			
 					lie::algebra<range> res; res.resize(v.size());
 					
-					each(res, [&](NN i) {
+					omp_each(res, [&](NN i) {
 							if( !i ) res(i) = lie::group<rigid_type>{}.alg().zero();
 							else {
 								auto fun = func::prod< rigid_type >{} << func::make_tuple( func::inv< rigid_type >{},
@@ -203,7 +203,7 @@ namespace math0x {
 
 				auto fun = func::apply< rigid_type >{} << func::make_tuple( func::id< rigid_type >{},
 				                                                            func::line<vec3>{ sign() * vec3::UnitY()} );
-				each(res, [&](NN i) {
+				omp_each(res, [&](NN i) {
 						res(i) = fun( std::make_tuple(std::get<1>(x)(i),
 						                              std::get<0>(x)) );
 					});
@@ -223,8 +223,11 @@ namespace math0x {
 					auto fun = func::apply< rigid_type >{} << func::make_tuple( func::id< rigid_type >{},
 					                                                            func::line<vec3>{ sign() * vec3::UnitY()} );
 					
-					// derp when @each is used
-					for(unsigned i = 0, n = res.size(); i < n; ++i) {
+					// compilation derp when @each is used
+					unsigned n = res.size();
+
+#pragma omp parallel for
+					for(unsigned i = 0; i < n; ++i) {
 						auto at = std::make_tuple(std::get<1>(x)(i), std::get<0>(x));
 						res(i) = d(fun)(at)( std::make_tuple( std::get<1>(v)(i), std::get<0>(v)));
 					}
@@ -317,8 +320,8 @@ namespace math0x {
 			
 			debug("search space dim:", lie::group_of(res).alg().dim() );
 
-			// opt.sparse(res, full, rhs);
-			opt.dense(res, full, rhs);
+			opt.sparse(res, full, rhs);
+			// opt.dense(res, full, rhs);
 						
 			debug("length:", 2 * std::get<0>(res),  "should be approx.", (ai(0) - bi(0)).norm());
 			
