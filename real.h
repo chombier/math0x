@@ -3,6 +3,7 @@
 
 #include <math0x/types.h>
 #include <math0x/func/id.h>
+#include <math0x/euclid.h>
 
 #include <cassert>
 

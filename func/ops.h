@@ -1,6 +1,7 @@
 #ifndef MATH0X_FUNC_OPS_H
 #define MATH0X_FUNC_OPS_H
 
+#include <math0x/func.h>
 #include <math0x/func/tie.h>
 #include <math0x/func/comp.h>
 
@@ -35,19 +36,18 @@ namespace math0x {
 			  typedef func::range<LHS> range_type;
 			  // TODO assert range type is consistent ?
 
-			  typedef comp< sum< range_type >, tie<LHS, RHS> > sum_type;
-			  typedef comp< sum< range_type >, tie<LHS, typename unary_traits<RHS>::minus_type > > diff_type;
+			  typedef func::comp< func::sum< range_type >, func::tie<LHS, RHS> > sum_type;
+			  typedef func::comp< func::sum< range_type >, func::tie<LHS, typename unary_traits<RHS>::minus_type > > diff_type;
 			  
 		  };
 		  
 		  
 	  }
-
-
+	  
 
     template<class LHS, class RHS>
-    meta::enable_if< typename binary_traits< meta::decay<LHS>, meta::decay<RHS> >::sum_type,
-                     decltype( func::requires< meta::decay<LHS>, meta::decay<RHS> >() ) > 
+    meta::second< decltype( func::requires< meta::decay<LHS>, meta::decay<RHS> >() ),
+                  typename impl::binary_traits< meta::decay<LHS>, meta::decay<RHS> >::sum_type > 
     operator+(LHS&& lhs, RHS&& rhs) {
 	    return sum< func::range< meta::decay<RHS> > >{} << make_tie( std::forward<LHS>(lhs), 
 	                                                                 std::forward<RHS>(rhs));

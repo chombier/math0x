@@ -320,8 +320,8 @@ namespace math0x {
 			
 			debug("search space dim:", lie::group_of(res).alg().dim() );
 
-			opt.sparse(res, full, rhs);
-			// opt.dense(res, full, rhs);
+			// opt.sparse(res, full, rhs);
+			opt.dense(res, full, rhs);
 						
 			debug("length:", 2 * std::get<0>(res),  "should be approx.", (ai(0) - bi(0)).norm());
 			

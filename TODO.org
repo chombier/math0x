@@ -7,8 +7,8 @@
 
 * performances tests ?
 
-* func::any copies ?
-
+* optimize func::any copies ?
+	
 * function operators
 	- return types requires, mostly
 
@@ -45,8 +45,9 @@
  - lambdas would be great for hermite functions
 
 * lambdas ?
-
+	- clang ?
 * coords ?
+
 * get rid of the nasty ::base member type ?
 	- does not seem possible :-/
 		

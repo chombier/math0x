@@ -18,16 +18,16 @@ namespace math0x {
 			// F qualifies as a function type if it has one of the following
 			// operators:
 			template<class Domain, class Range, class F>
-			bool requires(Range (F::*)(const Domain& ) const);
+			bool requires(Range (F::*)(const Domain& ) const, meta::priority<1> );
       
 			template<class Domain, class Range, class F>
-			bool requires(Range (F::*)(Domain&& ) const);
-
+			bool requires(Range (F::*)(Domain&& ) const, meta::priority<0> );
+						
 		}
   
 		// this one is only defined when each F qualifies as a function
 		template<class ... F>
-		auto requires() -> decltype( impl::to_void( impl::requires(&F::operator())...)  );
+		auto requires() -> decltype( impl::to_void( impl::requires(&F::operator(), meta::priority<2>{} )...)  );
 		
 		// default automatic function traits
 		namespace impl {

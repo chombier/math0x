@@ -15,7 +15,8 @@ namespace math0x {
   typedef matrix<RR, 3, 3> mat33;
   typedef matrix<RR, 4, 4> mat44;
   typedef matrix<RR, 6, 6> mat66;
-  
+
+	typedef matrix<RR> mat;
 }
 
 #endif

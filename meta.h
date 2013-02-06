@@ -25,6 +25,16 @@ namespace math0x {
 		using enable_if = typename std::enable_if<b, T>::type;
 		
 		
+		namespace impl { 
+			template<class, class T>
+			struct second { 
+				typedef T type;
+			};
+		}
+
+		template<class T1, class T2> using second = typename impl::second<T1, T2>::type;
+		
+		
 		// does nothing :-) use it to remove unused variables warnings
 		template<class ... Args>
 		inline void noop(Args&& ... ) { }
