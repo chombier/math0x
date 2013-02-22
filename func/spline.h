@@ -9,6 +9,7 @@
 namespace math0x {
 	namespace func {
 	
+		// some spline-related tools
 		template<class U = RR>
 		class spline {
 			static constexpr id<U> t = {};
@@ -29,15 +30,14 @@ namespace math0x {
 			static constexpr get<coeffs, 2> get2 = {};
 			static constexpr get<coeffs, 3> get3 = {};
 			
-
+			// rearrange hermite coefficients to obtain cardinal ones.
+			// alpha is (1 - tension) / (2 * width)
 			static auto hermite_to_cardinal(U alpha) -> 
 			macro_returns( make_tie( -alpha * get1,
 			                         get0 - alpha * get3,
 			                         get2 + alpha * get1,
 			                         alpha * get3 ) );
-			
-			typedef func::hermite<U> basis;
-
+	
 			// cumulative form conversion, see http://portal.acm.org/citation.cfm?id=218380.218486
 			static auto cumulative() ->
 				macro_returns( make_tie(get3,
@@ -59,6 +59,8 @@ namespace math0x {
 				                           subgroup<G>( log( group.prod( group.inv(g2), g3) ), group ) )				              
 				               );
 
+					
+			typedef func::hermite<U> basis;
 
 		public:
 
@@ -72,13 +74,13 @@ namespace math0x {
 				                         basis::h01(),
 				                         width(start, end) * basis::h11()) << scaling(start, end) );
 
-			// cardinal spline with tension, see TODO (UNEQUALLY spaced nodes !)
+			// cardinal spline with tension, see TODO (EQUALLY spaced nodes !)
 			static auto cardinal(U start = 0, U end = 1, U tension = 0) -> 
 				macro_returns( hermite_to_cardinal( (1.0 - tension) / (2 * width(start, end)) )
 				               << hermite(start, end) );
 			
-			// feed this with coefficients above to get a general lie group
-			// spline patch based on [Kim95] quaternion splines
+			// feed this with coefficients functions above to get a general
+			// lie group spline patch based on [Kim95] quaternion splines
 			template<class G>
 			static auto patch(const G& g0,
 			                  const G& g1,

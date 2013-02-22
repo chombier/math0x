@@ -10,14 +10,11 @@
 #include <math0x/func/scal.h>
 #include <math0x/func/poly.h>
 
-#include <math0x/macro.h>
-
 namespace math0x { 
   namespace func {
   
 
-	  // TODO requirement checks !
-	  
+	  // common operators for functions
 	  namespace impl {
 
 
@@ -34,8 +31,7 @@ namespace math0x {
 		  template<class LHS, class RHS>
 		  struct binary_traits {
 			  typedef func::range<LHS> range_type;
-			  // TODO assert range type is consistent ?
-
+			  
 			  typedef func::comp< func::sum< range_type >, func::tie<LHS, RHS> > sum_type;
 			  typedef func::comp< func::sum< range_type >, func::tie<LHS, typename unary_traits<RHS>::minus_type > > diff_type;
 			  
@@ -100,22 +96,6 @@ namespace math0x {
 		  return std::forward<LHS>(lhs) + (-std::forward<RHS>(rhs));
 	  }
 
-	
-
-
-    // template<class Arg>
-    // auto operator*( euclid::field< func::range< meta::decay<Arg> > > lambda, Arg&& arg) ->
-    //   macro_auto( scal< func::range< meta::decay<Arg> > >{lambda} << std::forward<Arg>(arg) );
-
-    // template<class Arg>
-    // auto operator*(  Arg&& arg, euclid::field< func::range< meta::decay<Arg> > > lambda) ->
-    //   macro_auto( lambda * std::forward<Arg>(arg) );
-  
-    // template<class Arg>
-    // auto operator/( Arg&& arg, euclid::field< func::range< meta::decay<Arg> > > lambda) ->
-    //   macro_auto( std::forward<Arg>(arg) * (1.0 / lambda) );
-  
-	
   }
 
 }

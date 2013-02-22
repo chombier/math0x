@@ -10,6 +10,7 @@
 namespace math0x {
 	namespace func {
 		
+		// hermite basis functions
 		template<class U = RR>
 		class hermite {
 			static constexpr id<U> t = {};

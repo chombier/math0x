@@ -1,58 +1,71 @@
 
-* pca, svd ?
-
-* ccsk/cckf ?
-
-* link Ad to AdT using pullback ?
 
 * performances tests ?
-
-* optimize func::any copies ?
-	
-* function operators
-	- return types requires, mostly
-
-* general formula for exponential/logarithm derivative
-	- pullback ?
-
-* lie brackets/cobrackets
-	- ad(x) alg -> alg
-	- adT(x) coalg -> coalg
-	 
-* harmonize make_ ... and friends
-	
-	- in progress, almost done
-		
-* SO3
-	- ad, adT
-
-* SE3
-	- exp/log push/pull ? use general formula ?
-	- Ad, AdT, ad, adT
-
-* SL3
-  - sl3
-  - sl3T
-
-* complex numbers ?
-  - CC 
-	- is this useful ?
-		
-* rigid body kinematics
-
-* splines 
- - mmhhh...
- - lambdas would be great for hermite functions
-
-* lambdas ?
-	- clang ?
-* coords ?
-
-* get rid of the nasty ::base member type ?
-	- does not seem possible :-/
-		
+		 
 * modules ?
-  to include parts of the lib directly
+  - to include parts of the lib directly
+
+* Functions
+** optimize func::any copies ?
+	 
+** harmonize make_ ... and friends
+	 - in progress, almost done
+
+
+** splines 
+	 - almost there, needs a node storage/selection class
+
+** lambdas ?
+	 - clang is doing a good job at the pythy synthax, but has trouble
+     when combined with tuple magic :-/
+
+** get rid of the nasty ::base member type trick ?
+	 - does not seem possible :-/
+
+** coords ?
+	 - convert between euclid/coordinates
+	
+** DONE function operators
+	 - return types requires, mostly
+
+* Lie group structure
+
+** lie brackets/cobrackets
+	 - ad(x) alg -> alg
+	 - adT(x) coalg -> coalg
+		 	
+** general formula for exponential/logarithm derivative
+	 - pullback ?
+
+
+** link Ad to AdT using pullback ?
+		
+** ccsk/ccfk
+** pga
+
+* actual Lie groups
+** SO3
+	 - ad, adT
+
+** SE3
+	 - exp/log push/pull ? use general formula ?
+	 - Ad, AdT, ad, adT
+	 - rigid body kinematics
+		 
+** SL3
+   - sl3
+   - sl3T
+
+** GL3
+	 - gl3 ? use mat33 as algebra/coalgebra ? seems logical
+	 - also, quick inverse ?
+
+** complex numbers ?
+   - CC 
+	 - is this useful ?
+
+* pca, svd ?
+	- and friends ?
 
 
 
