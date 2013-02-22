@@ -96,6 +96,13 @@ namespace math0x {
   template<int, class = RR> class SL;
   template<int, class = RR> class sl;
 	
+	// general linear
+	template<int, class = RR> class GL;
+	template<int, class = RR> class gl;
+	
+	typedef GL<3> GL3;
+	typedef gl<3> gl3;
+	
 }
 
 #endif

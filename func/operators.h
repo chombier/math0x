@@ -1,5 +1,5 @@
-#ifndef MATH0X_FUNC_OPS_H
-#define MATH0X_FUNC_OPS_H
+#ifndef MATH0X_FUNC_OPERATORS_H
+#define MATH0X_FUNC_OPERATORS_H
 
 #include <math0x/func.h>
 #include <math0x/func/tie.h>
@@ -26,9 +26,9 @@ namespace math0x {
 			  
 			  typedef func::range<Arg> range_type;
 
-			  typedef comp< minus<range_type>, Arg > minus_type;
-			  typedef comp< scal<range_type>, Arg > scal_type;
-			  
+			  typedef func::comp< func::minus<range_type>, Arg > minus_type;
+			  typedef func::comp< func::scal<range_type>, Arg > scal_type;
+			  typedef func::comp< func::poly< range_type >, Arg > pow_type;
 		  };
 
 		  template<class LHS, class RHS>
@@ -44,7 +44,31 @@ namespace math0x {
 		  
 	  }
 	  
+	  // unary
+	  template<class Arg>
+	  meta::second< decltype( func::requires< meta::decay<Arg> >() ),
+	                typename impl::unary_traits< meta::decay<Arg> >::scal_type >
+	  operator*( euclid::field< func::range< meta::decay<Arg> > > lambda, Arg&& arg ) {
+		  return  scal< func::range< meta::decay<Arg> > >{lambda} << std::forward<Arg>(arg);
+	  }
 
+	  template<class Arg>
+	  meta::second< decltype( func::requires< meta::decay<Arg> >() ),
+	                typename impl::unary_traits< meta::decay<Arg> >::minus_type >
+	  operator-(Arg&& arg ) {
+		  return minus< func::range< meta::decay<Arg> > >{} << std::forward<Arg>(arg);
+	  }
+	
+	  template<class Arg>
+	  meta::second< decltype( func::requires< meta::decay<Arg> >() ),
+	                typename impl::unary_traits< meta::decay<Arg> >::pow_type >
+	  operator^( Arg&& arg, NN n) {
+		  return  poly< func::range< meta::decay<Arg> > >{n} <<  std::forward<Arg>(arg);
+	  }
+
+
+
+	  // binary
     template<class LHS, class RHS>
     meta::second< decltype( func::requires< meta::decay<LHS>, meta::decay<RHS> >() ),
                   typename impl::binary_traits< meta::decay<LHS>, meta::decay<RHS> >::sum_type > 
@@ -53,18 +77,14 @@ namespace math0x {
 	                                                                 std::forward<RHS>(rhs));
     }
 
-    // auto operator+(LHS&& lhs, RHS&& rhs) -> 
-    //   macro_auto( (sum< func::range< meta::decay<RHS> > >{}) << make_tie( std::forward<LHS>(lhs), 
-		// 							  std::forward<RHS>(rhs)) );
+	  template<class LHS, class RHS>
+    meta::second< decltype( func::requires< meta::decay<LHS>, meta::decay<RHS> >() ),
+                  typename impl::binary_traits< meta::decay<LHS>, meta::decay<RHS> >::diff_type > 
+    operator-(LHS&& lhs, RHS&& rhs) {
+		  return std::forward<LHS>(lhs) + (-std::forward<RHS>(rhs));
+	  }
 
-	  
-    // template<class Arg>
-    // auto operator-(Arg&& arg) ->
-    //   macro_auto( minus< func::range< meta::decay<Arg> > >{} << std::forward<Arg>(arg) );
-  
-    // template<class LHS, class RHS>
-    // auto operator-(LHS&& lhs, RHS&& rhs) -> 
-    //   macro_auto( std::forward<LHS>(lhs) + (- std::forward<RHS>(rhs) ) );
+	
 
 
     // template<class Arg>
@@ -79,10 +99,7 @@ namespace math0x {
     // auto operator/( Arg&& arg, euclid::field< func::range< meta::decay<Arg> > > lambda) ->
     //   macro_auto( std::forward<Arg>(arg) * (1.0 / lambda) );
   
-    // template<class Arg>
-    // auto operator^(  Arg&& arg, NN n) ->
-    //   macro_auto( poly< func::range< meta::decay<Arg> > >{n} <<  std::forward<Arg>(arg) );
-  
+	
   }
 
 }

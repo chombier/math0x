@@ -1,10 +1,10 @@
-#ifndef GROUP_MACRO_H
-#define GROUP_MACRO_H
+#ifndef MATH0X_MACRO_H
+#define MATH0X_MACRO_H
 
-#define macro_auto(...)	       \
-  decltype( __VA_ARGS__ ) {    \
-  return __VA_ARGS__;	       \
+#define macro_returns(...)	  \
+	decltype( __VA_ARGS__ ) { \
+		return __VA_ARGS__; \
   }			       \
-  
+	
 
 #endif

@@ -13,6 +13,8 @@ namespace math0x {
 			typedef value base;
     
 			Range data;
+			value(const Range& data) : data(data) { }
+			value(Range&& data) : data(std::move(data) ) { }
 
 			const Range& operator()(const Domain& ) const { return data; }
     

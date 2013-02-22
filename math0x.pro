@@ -10,7 +10,7 @@ PKGCONFIG += eigen3
 
 # compiler flags
 DEFINES = 
-QMAKE_CXXFLAGS += -std=c++11
+QMAKE_CXXFLAGS += -std=c++11 
 QMAKE_CXXFLAGS_RELEASE += -DNDEBUG
 
 # sources, headers
