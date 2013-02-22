@@ -23,7 +23,8 @@ namespace math0x {
 			euclid::space< lie::algebra<G> > alg;
 			lie::exp< G > exp;
     
-			subgroup(const lie::algebra<G>& dir, const lie::group<G>& group = {}) 
+			subgroup(const lie::algebra<G>& dir, 
+			         const lie::group<G>& group = {}) 
 				: dir(dir), 
 				  group(group),
 				  alg(group.alg()),

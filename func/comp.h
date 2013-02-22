@@ -14,9 +14,9 @@ namespace math0x {
     
 			Outer outer;
 			Inner inner;
-  
+			
 			static_assert( std::is_same< domain<Outer>, range<Inner> >::value,
-			               "function domain/range must agree" );
+				               "function domain/range must agree" );
 
 			auto operator()(const domain<Inner>& x) const -> decltype( outer(inner( x ) ) ) {
 				return outer( inner( x ) );
