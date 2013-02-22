@@ -4,6 +4,7 @@
 #include <math0x/func/hermite.h>
 #include <math0x/func/get.h>
 #include <math0x/func/subgroup.h>
+#include <math0x/func/prod.h>
 
 namespace math0x {
 	namespace func {
@@ -84,7 +85,7 @@ namespace math0x {
 			                  const G& g2,
 			                  const G& g3,
 			                  const lie::group<G>& group = {} ) ->
-				macro_returns( subgroups(g0, g1, g2, g3, group, group.log()) << cumulative() );
+				macro_returns( prod<G, 4>(group) << subgroups(g0, g1, g2, g3, group, group.log()) << cumulative() );
 		};
 		
 		

@@ -48,8 +48,6 @@ namespace math0x {
 				
 				template< int I >
 				void operator()() const {
-					debug("called", I);
-					
 					if( I == 0 ) std::get<N - 1>(at) = group.id();
 					else if (I == 1) std::get<N - 2>(at) = group.inv(std::get<N-1>(x));
 					else {
