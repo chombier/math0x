@@ -7,6 +7,9 @@
 #include <stdexcept>
 #include <typeinfo>
 
+// this is to keep gcc happy
+#include <math0x/func/default.h>
+
 namespace math0x { 
 	namespace func {
 
@@ -88,7 +91,7 @@ namespace math0x {
 			typedef decltype( impl::push<F>( priority() )) push;
 			typedef decltype( impl::pull<F>( priority() )) pull;
 		};
-
+		
 	}
 }
 

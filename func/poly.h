@@ -3,7 +3,6 @@
 
 #include <math0x/types.h>
 
-
 namespace math0x { 
 	namespace func {
 

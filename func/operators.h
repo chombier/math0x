@@ -54,6 +54,22 @@ namespace math0x {
 
 	  template<class Arg>
 	  meta::second< decltype( func::requires< meta::decay<Arg> >() ),
+	                typename impl::unary_traits< meta::decay<Arg> >::scal_type >
+	  operator*( Arg&& arg, euclid::field< func::range< meta::decay<Arg> > > lambda ) {
+		  return lambda * std::forward<Arg>(arg);
+	  }
+
+	  template<class Arg>
+	  meta::second< decltype( func::requires< meta::decay<Arg> >() ),
+	                typename impl::unary_traits< meta::decay<Arg> >::scal_type >
+	  operator/( Arg&& arg, euclid::field< func::range< meta::decay<Arg> > > lambda ) {
+		  assert( lambda );
+		  return (1.0 / lambda) * std::forward<Arg>(arg);
+	  }
+
+
+	  template<class Arg>
+	  meta::second< decltype( func::requires< meta::decay<Arg> >() ),
 	                typename impl::unary_traits< meta::decay<Arg> >::minus_type >
 	  operator-(Arg&& arg ) {
 		  return minus< func::range< meta::decay<Arg> > >{} << std::forward<Arg>(arg);
