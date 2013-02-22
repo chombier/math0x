@@ -56,6 +56,26 @@ namespace math0x {
 		decay<F>* addr(F&& f) { return &f; }
 		
 
+		namespace impl {
+
+			template< template<class ...> class temp, 
+			          class Args > 
+			struct unpack_args; 
+		   
+			template< template<class ...> class temp,
+			          class ... Args > 
+			struct unpack_args<temp, std::tuple<Args...> > {
+				typedef unpack_args base;
+				typedef temp<Args...> type;
+			};		
+			
+		}
+
+		// use this to unpack variadic template args from a std::tuple type
+		template< template<class...> class T,
+		          class Args > 
+		using unpack_args = typename impl::unpack_args<T, Args>::type;
+	
 		// type name
 		template<class F>
 		std::string name() {

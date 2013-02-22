@@ -28,7 +28,7 @@ namespace math0x {
 				return std::make_tuple( fun.template operator()<I>()... );
 			}
     
-			// calls fun successively for all values of I
+			// calls fun successively for all values of I, in increasing order
 			template<class F>
 			static void apply(const F& fun) {
 				meta::noop( (fun.template operator()<N - 1 - I>(), 0)... );

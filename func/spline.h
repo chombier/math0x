@@ -58,6 +58,7 @@ namespace math0x {
 				                           subgroup<G>( log( group.prod( group.inv(g2), g3) ), group ) )				              
 				               );
 
+
 		public:
 
 			// hermite spline coefficients, see
@@ -75,7 +76,6 @@ namespace math0x {
 				macro_returns( hermite_to_cardinal( (1.0 - tension) / (2 * width(start, end)) )
 				               << hermite(start, end) );
 			
-			
 			// feed this with coefficients above to get a general lie group
 			// spline patch based on [Kim95] quaternion splines
 			template<class G>
@@ -85,7 +85,6 @@ namespace math0x {
 			                  const G& g3,
 			                  const lie::group<G>& group = {} ) ->
 				macro_returns( subgroups(g0, g1, g2, g3, group, group.log()) << cumulative() );
-			
 		};
 		
 		
