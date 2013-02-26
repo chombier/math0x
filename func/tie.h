@@ -6,6 +6,9 @@
 namespace math0x { 
 	namespace func {
 
+		// TODO provide a tie with dynamic sized arrays ? i.e. using
+		// math0x::array ?
+
 		// given functions f1 : A -> B1, f2 : A -> B2, ..., fn: A -> Bn,
 		// builds the function f: A -> B1 x B2 x ... x Bn such that:
 

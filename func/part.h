@@ -67,11 +67,14 @@ namespace math0x {
 			return {std::move(at)};
 		}
 
-		template<int I, class ... Args>
-		part<std::tuple<meta::decay<Args>...>, I> make_part(Args&&... args) {
-			return { std::make_tuple(std::forward<Args>(args)...) };
-		}
+		// template<int I, class ... Args>
+		// part<std::tuple<meta::decay<Args>...>, I> make_part(Args&&... args) {
+		// 	return { std::make_tuple(std::forward<Args>(args)...) };
+		// }
     
+
+
+		
 
 		// partial function on vectors
 		template<class U, int M>

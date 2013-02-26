@@ -41,9 +41,13 @@ namespace math0x {
     template<class Domain, class Range, class Error> struct error;
 
     template<class ... > struct tuple;
-
+	   
     template<class G> struct apply;  
 
+	  template<class F, class Domain, class Range = Domain, int M = -1> struct array;
+	  
+	  template<class... > struct tie;
+	  
     template<class, int I = -1> struct get;
     template<class, int I = -1> struct part;
   }

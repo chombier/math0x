@@ -106,7 +106,7 @@ namespace math0x {
 
 		// convenience 
 		template<class G>
-		prod<G> make_prod(const lie::group<G>& group) { return {group}; }
+		prod<G, 2> make_prod(const lie::group<G>& group) { return {group}; }
 		
 
 	}

@@ -7,6 +7,19 @@
 namespace math0x { 
 	namespace func {
 
+		namespace impl {
+			
+			template<class A, class B>
+			struct comp_check {
+
+				static_assert( std::is_same< A, B >::value,
+				               "function domain/range must agree" );
+				
+			};
+
+		}
+
+
 		// function composition
 		template<class Outer, class Inner>
 		struct comp {
@@ -15,9 +28,8 @@ namespace math0x {
 			Outer outer;
 			Inner inner;
 			
-			static_assert( std::is_same< domain<Outer>, range<Inner> >::value,
-				               "function domain/range must agree" );
-
+			static constexpr impl::comp_check< domain<Outer>, range<Inner> > trigger = {};
+			
 			auto operator()(const domain<Inner>& x) const -> decltype( outer(inner( x ) ) ) {
 				return outer( inner( x ) );
 			}

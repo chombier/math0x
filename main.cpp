@@ -71,9 +71,9 @@
 #include <math0x/real.h>
 
 
-
 #include <math0x/func/get.h>
 #include <math0x/func/part.h>
+#include <math0x/func/spline.h>
 // #include <math0x/extern.h>
 
 using namespace math0x;
@@ -107,8 +107,6 @@ int main(int, char** ) {
 	test::lie( SE3 );
 	test::func( make_apply( SE3 ));
 	
-	return 0;
-
 	// tuples
 	test::euclid( RR3xRR3e );
 	test::lie( SO3xSE3 );
@@ -120,6 +118,19 @@ int main(int, char** ) {
 	test::func( part< std::tuple<SO<3>, SE<3> >, 0 >{SO3xSE3.id()} );
 	test::func( part< vec3 >{vec3::Zero(), 0} );
 	
+	// splines
+	{
+		SO<3> g = SO3.id();
+
+		typedef func::spline<RR> spline_type;
+		
+		auto cardinal = spline_type::cardinal(0, 1);
+		
+		auto patch = spline_type::patch(g, g, g, g) << cardinal;
+
+		test::func( cardinal );
+		test::func( patch );
+	}
 	
   return 0;
 }

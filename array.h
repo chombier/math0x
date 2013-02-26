@@ -49,7 +49,7 @@ namespace math0x {
 			meta::noop( size );
 		}
 
-		
+		// TODO add convenience ctor without size
 		
 	};
 	
