@@ -195,7 +195,7 @@ namespace math0x {
 		                 
 
 		// without jacobian matrices assembly, but needs both dlog/dlogT on
-		// range space. 
+		// range space.
 		template<class F>
 		iter sparse(func::domain<F>& x,
 		            const F& f,

@@ -45,6 +45,7 @@ namespace math0x {
     template<class G> struct apply;  
 
 	  template<class F, class Domain, class Range = Domain, int M = -1> struct array;
+	  template<class F, class Range, int M = -1> struct array_tie;
 	  
 	  template<class... > struct tie;
 	  

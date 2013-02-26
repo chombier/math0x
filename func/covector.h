@@ -13,8 +13,8 @@ namespace math0x {
 		                       math0x::covector< range<F>, M >,
 		                       M >;
 
-		template<class F, int M>
-		using covector_tie = array<F, math0x::covector< range<F>, M >, M >;
+		template<class F, int M = -1> 
+		using covector_tie = array_tie<F, math0x::covector< range<F>, M >, M >;
 		
 	}
 }

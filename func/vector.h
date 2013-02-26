@@ -13,9 +13,9 @@ namespace math0x {
 		                     math0x::vector< range<F>, M >,
 		                     M >;
 
-	template<class F, int M>
-	using vector_tie = array<F, math0x::vector< range<F>, M >, M >;
-	
+		template<class F, int M = -1>
+		using vector_tie = array_tie<F, math0x::vector< range<F>, M >, M >;
+		
 	}
 }
 

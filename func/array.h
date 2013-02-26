@@ -63,6 +63,7 @@ namespace math0x {
 		};
 
 		
+		// TODO move to array_tie ?
 		template<class F, class Range, int M>
 		struct array_tie {
 			typedef array_tie base;
@@ -92,7 +93,7 @@ namespace math0x {
 				push(const array_tie& of, const domain<F>& at) 
 					: push::base( of.data.size(), 
 					              [&](NN i) {
-						              return func::push<F>(of.data(i), at(i));
+						              return func::push<F>(of.data(i), at);
 					              }) {
 				}
 				
@@ -107,7 +108,7 @@ namespace math0x {
 				pull(const array_tie& of, const domain<F>& at) 
 					: data( of.data.size(), 
 					        [&](NN i) {
-						        return func::pull<F>(of.data(i), at(i));
+						        return func::pull<F>(of.data(i), at);
 					        }),
 					  coalg( *lie::group_of(at).alg() )
 				{
