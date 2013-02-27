@@ -4,7 +4,8 @@
 		 
 * modules ?
   - to include parts of the lib directly
-
+	- maybe add groups.h, funcs.h, algos.h, ... ?
+		
 * Functions
 ** optimize func::any copies ?
 	 
@@ -44,6 +45,9 @@
 ** pga
 
 * actual Lie groups
+
+** add euclid structure for matrix spaces, especially squared, fixed length ones
+
 ** SO3
 	 - ad, adT
 

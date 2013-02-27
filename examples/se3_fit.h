@@ -29,7 +29,7 @@
 #include <math0x/test/func.h>
 
 #include <math0x/debug.h>
-
+#include <math0x/macro.h>
 
 namespace math0x {
 
@@ -115,15 +115,20 @@ namespace math0x {
 			typedef vector< rigid_type> domain;
 			typedef vector< rigid_type> range;
 			
+
+			static auto diff() -> 
+				macro_returns( func::prod< rigid_type >{} << func::make_tuple( func::inv< rigid_type >{}, func::id< rigid_type > {} ) );
+			
 			range operator()(const domain& x) const {
 				range res; res.resize( x.size() );
 				
-				auto fun = func::prod< rigid_type >{} << func::make_tuple( func::inv< rigid_type >{},
-				                                                           func::id< rigid_type > {} );
+				auto fun = diff();
 						
 				omp_each(res, [&](NN i) {
 						if(i) {
 							res(i) = fun( std::make_tuple(x(i-1), x(i))); 
+						} else {
+							res(i) = lie::group<rigid_type>{}.id();
 						}
 					});
 				
@@ -141,14 +146,16 @@ namespace math0x {
 			
 					lie::algebra<range> res; res.resize(v.size());
 					
+					auto fun = diff();
+					
+					auto dfun = d(fun);
+					
 					omp_each(res, [&](NN i) {
 							if( !i ) res(i) = lie::group<rigid_type>{}.alg().zero();
 							else {
-								auto fun = func::prod< rigid_type >{} << func::make_tuple( func::inv< rigid_type >{},
-								                                                           func::id< rigid_type > {} );
 								std::tuple<rigid_type, rigid_type > at(x(i-1), x(i));
 								std::tuple< lie::algebra<rigid_type>, lie::algebra<rigid_type> > vv(v(i-1), v(i));
-								res(i) = d(fun)(at)(vv);
+								res(i) = dfun(at)(vv);
 							}
 						});
 					
@@ -167,20 +174,40 @@ namespace math0x {
 					lie::coalgebra<domain> res; res.resize(p.size());
 					
 					res = euclid::space_of(res).zero();
-					
-					each(res, [&](NN i) {
-							if(i) {
-								auto fun = func::prod< rigid_type >{} << func::make_tuple( func::inv< rigid_type >{},
-								                                                           func::id< rigid_type > {} );
-								std::tuple<rigid_type, rigid_type > at(x(i-1), x(i));
 
-								auto coalg = *lie::group<rigid_type>{}.alg();
-								
-								auto pp = dT(fun)(at)(p(i));
-								res(i - 1) = coalg.sum(res(i - 1), std::get<0>(pp));
+					auto fun = diff();
+							
+					auto dTfun = dT( fun );
+					auto coalg = *lie::group<rigid_type>{}.alg();
+					
+					
+					// each(res, [&](NN i) {
+					// 		if(!i) return;
+							
+					// 		std::tuple<rigid_type, rigid_type > at(x(i-1), x(i));
+							
+					// 		auto pp = dTfun(at)(p(i));
+					// 		res(i - 1) = coalg.sum(res(i - 1), std::get<0>(pp));
+					// 		res(i) = coalg.sum( res(i), std::get<1>(pp));
+
+					// 	});
+
+					omp_each(res, [&](NN i) {
+							if(i) {
+								std::tuple<rigid_type, rigid_type > at(x(i-1), x(i));
+								auto pp = dTfun(at)(p(i));
 								res(i) = coalg.sum( res(i), std::get<1>(pp));
 							}
+
+							if( i < (res.size() - 1) ) {
+								std::tuple<rigid_type, rigid_type > at(x(i), x(i + 1));
+								auto pp = dTfun(at)(p(i + 1));
+								
+								res(i) = coalg.sum(res(i), std::get<0>(pp));
+							}
 						});
+
+
 					
 					return res;
 				}
@@ -269,7 +296,7 @@ namespace math0x {
 		};
 
 
-
+		// main call
 		result_type operator()(const samples_type& ai,
 		                       const samples_type& bi) const {
 			assert( ai.size() == bi.size() );
@@ -320,8 +347,8 @@ namespace math0x {
 			
 			debug("search space dim:", lie::group_of(res).alg().dim() );
 
-			// opt.sparse(res, full, rhs);
-			opt.dense(res, full, rhs);
+			opt.sparse(res, full, rhs);
+			// opt.dense(res, full, rhs);
 						
 			debug("length:", 2 * std::get<0>(res),  "should be approx.", (ai(0) - bi(0)).norm());
 			

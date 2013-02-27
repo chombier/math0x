@@ -22,36 +22,36 @@ namespace math0x {
 	template<class U>
 	class SO<3, U> {
 		typedef math0x::quaternion<U> quaternion_type;
-		quaternion_type quaternion;
+		quaternion_type quat;
 	public:
 		typedef SO base;
 
-		const quaternion_type& quat() const { return quaternion; }
+		const quaternion_type& quaternion() const { return quat; }
 
-		SO( const quaternion_type& quaternion = quaternion_type::Identity() ) 
-			: quaternion( quaternion ) {
+		SO( const quaternion_type& quat = quaternion_type::Identity() ) 
+			: quat( quat ) {
 			
-			// assert( std::abs( quat().norm() -  1 ) < epsilon<U>() );
+			// assert( std::abs( quat.norm() -  1 ) < epsilon<U>() );
 		}
 		
 		SO operator*(const SO& other) const {
 			// TODO normalize ?
-			return {quat() * other.quat()};
+			return {quaternion() * other.quaternion()};
 		}
   
 		SO inv() const { 
-			return { quat().conjugate() };
+			return { quaternion().conjugate() };
 		}
   
 		typedef vector<U, 3> vec_type;
 
 		vec_type operator()(const vec_type& x) const { 
-			return quat() * x;
+			return quaternion() * x;
 		}
 
 		typedef math0x::matrix<U, 3, 3> matrix_type;
-		matrix_type mat() const {
-			return quat().toRotationMatrix();
+		matrix_type matrix() const {
+			return quaternion().toRotationMatrix();
 		}
 		
 		struct push;
@@ -256,7 +256,7 @@ namespace math0x {
 				log(const group<G>& = {} ) { }
       
 				lie::algebra<G> operator()(const G& g) const { 
-					quaternion<U> q = g.quat();
+					quaternion<U> q = g.quaternion();
 					if( q.w() < 0 ) q.coeffs() = - q.coeffs();
 					
 					// sanity clamp
