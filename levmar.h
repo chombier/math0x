@@ -206,11 +206,8 @@ namespace math0x {
 				
 			real llambda = lambda;
 			
-			auto res = x;
-			
 			auto r = data.residual(x);
 			auto delta = data.dmn_alg.zero();
-
 			
 			real best = data.rng_alg.norm( r );
 			real last = best;
@@ -228,19 +225,23 @@ namespace math0x {
 			minres< data_type<F>::domain_dim > normal;
 			normal.iter = inner;
 			
+			typedef decltype( data.residual ) residual_type;
+			typedef func::push< residual_type > residual_push;
+			typedef func::pull< residual_type > residual_pull;
+
 			// TODO lots of allocs !
 			auto JTJ = [&](const func::domain<F>& at) {
 				using namespace func;
 				return  				
-				func::make_coords(dT( ref(data.residual) )(at), *data.rng_alg, *data.dmn_alg) << 
-				func::make_coords(d( ref(data.residual) )(at), data.dmn_alg, data.rng_alg);
+				func::make_coords( residual_pull(data.residual, at), *data.rng_alg, *data.dmn_alg) << 
+				func::make_coords( residual_push(data.residual, at), data.dmn_alg, data.rng_alg);
 				
 			};
 			
 			typename data_type<F>::domain_algebra unit = data.dmn_alg.zero();
 			
 			return outer( [&] ()-> RR  {
-					if(llambda) this->update(diag, d( ref(data.residual) )(x), data);
+					if(llambda) this->update(diag, residual_push(data.residual, x), data);
 					
 					auto A = JTJ(x);
 					
@@ -253,7 +254,7 @@ namespace math0x {
 					};
 					
 					data.get(rng_tmp, r);
-					rhs = -func::make_coords(dT( ref(data.residual) )(x), *data.rng_alg, *data.dmn_alg)(rng_tmp);
+					rhs = -func::make_coords( residual_pull(data.residual, x), *data.rng_alg, *data.dmn_alg)(rng_tmp);
 					
 					dx.setZero();
 					normal.solve(dx, AA, rhs);
