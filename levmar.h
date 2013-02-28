@@ -91,11 +91,11 @@ namespace math0x {
 			static constexpr int domain_dim = euclid::space<domain_algebra>::static_dim;
 			
 			// convenience
-			void set(domain_algebra& delta, const vec& dx) const {
+			void set(domain_algebra& delta, const domain_coords& dx) const {
 				dmn_alg.set(delta, dx);
 			}
 
-			void get(vec& b, const range_algebra& r ) const {
+			void get(range_coords& b, const range_algebra& r ) const {
 				rng_alg.get(b, r);
 			}
 
@@ -109,17 +109,18 @@ namespace math0x {
 		// assembling jacobian matrices, non-homogeneous damping
 		// needs only dlog on range space
 		template<class F>
-		iter dense(func::domain< F >& x,
+		iter dense(func::domain< meta::decay<F> >& x,
 		           const F& f,
-		           const func::range< F >& y) const {
+		           const func::range< meta::decay<F> >& y) const {
 			data_type<F> data(x, f, y);
 
 			real llambda = lambda;
 			
-			auto Jf = func::J(data.residual, data.dmn_alg, data.rng_alg);
-			
 			// vars
 			auto r = data.residual( x );
+
+			auto Jf = func::J(data.residual, data.dmn, lie::group_of(r) );
+			
 			auto delta = data.dmn_alg.zero();
 			
 			real last = data.rng_alg.norm(r);
@@ -231,15 +232,15 @@ namespace math0x {
 			auto JTJ = [&](const func::domain<F>& at) {
 				using namespace func;
 				return  				
-				func::make_coords(dT( data.residual )(at), *data.rng_alg, *data.dmn_alg) << 
-				func::make_coords(d( data.residual )(at), data.dmn_alg, data.rng_alg);
+				func::make_coords(dT( ref(data.residual) )(at), *data.rng_alg, *data.dmn_alg) << 
+				func::make_coords(d( ref(data.residual) )(at), data.dmn_alg, data.rng_alg);
 				
 			};
 			
 			typename data_type<F>::domain_algebra unit = data.dmn_alg.zero();
 			
 			return outer( [&] ()-> RR  {
-					if(llambda) this->update(diag, d(data.residual)(x), data);
+					if(llambda) this->update(diag, d( ref(data.residual) )(x), data);
 					
 					auto A = JTJ(x);
 					
@@ -252,7 +253,7 @@ namespace math0x {
 					};
 					
 					data.get(rng_tmp, r);
-					rhs = -func::make_coords(dT( data.residual )(x), *data.rng_alg, *data.dmn_alg)(rng_tmp);
+					rhs = -func::make_coords(dT( ref(data.residual) )(x), *data.rng_alg, *data.dmn_alg)(rng_tmp);
 					
 					dx.setZero();
 					normal.solve(dx, AA, rhs);
