@@ -174,6 +174,7 @@ namespace math0x {
 						last = norm;
 					}
 
+					return norm;
 					return std::min(norm, dx.norm());
 				});
 			
@@ -274,6 +275,7 @@ namespace math0x {
 						last = norm;
 					}
 					
+					return norm;
 					return std::min(norm, dx.norm());
 				});
 			

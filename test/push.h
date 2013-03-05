@@ -13,6 +13,8 @@
 #include <math0x/func/push.h>
 
 #include <math0x/error.h>
+#include <math0x/func/operators.h>
+
 
 #include <iostream>
 
@@ -39,8 +41,21 @@ namespace math0x {
 
 			auto diff = make_sum(rng.alg()) << 	make_tie( df, make_minus(rng.alg()) <<  num );
 
+			auto norm2 = make_norm2( rng.alg() );
+			
+
+
 			try {
-				return std::sqrt( (make_norm2(rng.alg()) << diff)(v) );
+				RR den = std::sqrt( (norm2 << num)(v) );
+				
+				// return relative error
+				RR num = std::sqrt( (norm2 << diff)(v) );
+
+				if( den < math0x::epsilon() ) {
+					std::cerr << "warning: div by zero lol" << std::endl;
+					return num;
+				}
+				return num / den;				
 			} 
 			catch( const math0x::error& e ){
 				std::cerr << "exception caught: " << e.what() << std::endl;

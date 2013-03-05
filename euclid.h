@@ -132,6 +132,15 @@ namespace math0x {
 			E sum(const E& x, const E& y) const {
 				return sum(E(x), y);
 			}
+
+			// convenience
+			E diff(const E& x, const E& y) const {
+				return sum(x, minus(y) );
+			}
+
+			E diff(const E& x, E&& y) const {
+				return sum(x, minus( std::move(y) ) );
+			}
     
 			// convenience
 			template<class Vector>

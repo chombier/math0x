@@ -36,9 +36,18 @@ namespace math0x {
 			// typedef decltype( dTf ) dTf_type;
 
 			auto diff = make_sum(*dmn.alg()) << make_tie( dTf, (make_minus(*dmn.alg()) << num) );
+			auto norm2 = make_norm2(*dmn.alg());
 			
 			try {
-				return std::sqrt( (make_norm2(*dmn.alg()) << diff)(v) );
+				
+				RR den = std::sqrt( (norm2 << num)(v) );
+				RR num = std::sqrt( (norm2 << diff)(v) );
+				
+				if( den < math0x::epsilon() ) {
+					std::cerr << "warning: div by zero lol" << std::endl;
+					return num;
+				}
+				return num / den;				
 			} 
 			catch( const math0x::error& e ){
 				std::cerr << "exception caught: " << e.what() << std::endl;
