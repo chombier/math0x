@@ -119,8 +119,11 @@ namespace math0x {
 			static auto diff() -> 
 				macro_returns( func::prod< rigid_type >{} << func::make_tuple( func::inv< rigid_type >{}, func::id< rigid_type > {} ) );
 			
-			range operator()(const domain& x) const {
-				range res; res.resize( x.size() );
+			mutable range res;
+			
+			const range& operator()(const domain& x) const {
+				// range res;
+				res.resize( x.size() );
 				
 				auto fun = diff();
 						
@@ -138,13 +141,15 @@ namespace math0x {
 
 			struct push {
 				domain x;
-				push(const delta& , const domain& at) : x(at) {
-					
-				}
-
-				lie::algebra<range> operator()(const lie::algebra<domain>& v) const {
+				
+				push(const delta& , const domain& at) : x(at) { }
+				push(const delta& , domain&& at) : x( std::move(at) ) { }
+				
+				mutable lie::algebra<range> res;
+				const lie::algebra<range>& operator()(const lie::algebra<domain>& v) const {
 			
-					lie::algebra<range> res; res.resize(v.size());
+					// lie::algebra<range> res; 
+					res.resize( v.size() );
 					
 					auto fun = diff();
 					
@@ -166,12 +171,14 @@ namespace math0x {
 
 			struct pull {
 				domain x;
-				pull(const delta&, const domain& at) : x(at) {
-					
-				}
 
-				lie::coalgebra<domain> operator()(const lie::coalgebra<range>& p) const {
-					lie::coalgebra<domain> res; res.resize(p.size());
+				pull(const delta&, const domain& at) : x(at) { }
+				pull(const delta&, domain&& at) : x( std::move(at) ) { }
+
+				mutable lie::coalgebra<domain> res;
+				const lie::coalgebra<domain>& operator()(const lie::coalgebra<range>& p) const {
+					// lie::coalgebra<domain> res;
+					res.resize(p.size());
 					
 					res = euclid::space_of(res).zero();
 
@@ -224,8 +231,9 @@ namespace math0x {
 
 			static RR sign() { return flip ? -1 : 1; }
 			
-			range operator()(const domain& x) const {
-				range res;
+			mutable range res;
+			const range& operator()(const domain& x) const {
+				// range res;
 				res.resize( std::get<1>(x).size() );
 
 				auto fun = func::apply< rigid_type >{} << func::make_tuple( func::id< rigid_type >{},
@@ -241,12 +249,15 @@ namespace math0x {
 				domain x;
 				
 				push(const fit&, const domain& x) : x(x) { }
+				push(const fit&, domain&& x) : x( std::move(x) ) { }
 
-				lie::algebra<range> operator()(const lie::algebra<domain>& v) const {
+				mutable lie::algebra<range> res;
 
-					lie::algebra<range> res;
+				const lie::algebra<range>& operator()(const lie::algebra<domain>& v) const {
+
+					// lie::algebra<range> res;
 					res.resize( std::get<1>(v).size() );
-
+					
 					auto fun = func::apply< rigid_type >{} << func::make_tuple( func::id< rigid_type >{},
 					                                                            func::line<vec3>{ sign() * vec3::UnitY()} );
 					
@@ -266,7 +277,9 @@ namespace math0x {
 			
 			struct pull {
 				domain x;
+				
 				pull(const fit&, const domain& x) : x(x) { }
+				pull(const fit&, domain&& x) : x( std::move(x) ) { }
 				
 				lie::coalgebra<domain> operator()(const lie::coalgebra<range>& p) const {
 					lie::coalgebra<domain> res;
@@ -332,8 +345,8 @@ namespace math0x {
 			                            // func::scal<RR>(small)<< b,  
 			                            // func::get< vector<SE<3> > >{0} << g, 
 			                            delta{} << g,
-			                            func::scal<vector<vec3> >(weight.fit, RR3_n) << fit<0>{}, 
-			                            func::scal<vector<vec3> >(weight.fit, RR3_n) << fit<1>{} );
+			                            fit<0>{}, 
+			                            fit<1>{} );
 			
 			typedef decltype(full) full_type;
 
@@ -341,8 +354,8 @@ namespace math0x {
 			
 			auto rhs = func::range< full_type >( // 0.0, // 0.0,
 			                                     se3_n.id(), 
-			                                     func::scal<vector<vec3> >(weight.fit, RR3_n)(ai), 
-			                                     func::scal<vector<vec3> >(weight.fit, RR3_n)(bi) );
+			                                     ai, 
+			                                     bi );
 			
 			
 			debug("search space dim:", lie::group_of(res).alg().dim() );

@@ -8,7 +8,9 @@ namespace math0x {
 	namespace func {
 
 		namespace impl {
-			
+
+			// we use external check class to get more meaningful error
+			// messages
 			template<class A, class B>
 			struct comp_check {
 
@@ -45,6 +47,12 @@ namespace math0x {
 					: push::base{ func::push<Outer>(of.outer, of.inner(at)),
 						func::push<Inner>(of.inner, at ) } {
 				}
+
+				push(const comp& of, domain<Inner>&& at) 
+					: push::base{ func::push<Outer>(of.outer, of.inner(at)),
+						func::push<Inner>(of.inner, std::move(at) ) } {
+					
+				}
       
 			};
 
@@ -55,6 +63,12 @@ namespace math0x {
 					: pull::base{ func::pull<Inner>(of.inner, at),
 						func::pull<Outer>(of.outer, of.inner(at)) } {
 	
+				}
+
+				pull( const comp& of, domain<Inner>&& at) 
+					: pull::base{ func::pull<Inner>(of.inner, at),
+						func::pull<Outer>(of.outer, of.inner( std::move(at) )) } {
+					
 				}
       
 			};

@@ -10,7 +10,7 @@ namespace math0x {
 		// coordinate type for an euclidean space, based on static_dim
 		template<class E>
 		using coords = vector< field<E>, space<E>::static_dim >;
-
+		
 	}
 }
 

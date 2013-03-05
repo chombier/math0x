@@ -7,6 +7,10 @@
 	- maybe add groups.h, funcs.h, algos.h, ... ?
 		
 * Functions
+** tangent map
+	 - df(q, v) = df(q)(v)
+	 - (and push/pull ?)
+
 ** optimize func::any copies ?
 	 
 ** harmonize make_ ... and friends
