@@ -77,4 +77,6 @@
 
 
 
-  
+* Euclid
+
+** traits should expose some range class for sequential coordinate access

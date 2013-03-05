@@ -142,16 +142,42 @@ namespace math0x {
 			}
     
 			G inv( const G& x ) const { 
+				assert( x.size() == n );
+				
 				G res; res.resize( n );
 				each(res, [&](NN i) { res(i) = sub.inv(x(i)); } );
 				return res;
 			}
 
+			G inv( G&& x ) const { 
+				assert( x.size() == n );
+				
+				each(x, [&](NN i) { x(i) = sub.inv( std::move(x(i))); } );
+				return x;
+			}
+			
 			G prod( const G& x, const G& y) const { 
+				assert( x.size() == n && y.size() == n );
 				G res; res.resize( n );
 				each(res, [&](NN i) { res(i) = sub.prod(x(i), y(i)); } );
 				return res;
 			}
+
+			G prod( G&& x, const G& y) const { 
+				assert( x.size() == n && y.size() == n );
+
+				each(x, [&](NN i) { x(i) = sub.prod( std::move(x(i)), y(i)); } );
+				return x;
+			}
+
+			G prod( const G& x, G&& y) const { 
+				assert( x.size() == n && y.size() == n );
+
+				each(y, [&](NN i) { y(i) = sub.prod( x(i), std::move(y(i))); } );
+				return y;
+			}
+
+
 
 			euclid::space< lie::algebra<G> > alg() const { 
 				return euclid::space<lie::algebra<G> >(n, sub.alg() ); 

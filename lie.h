@@ -52,22 +52,28 @@ namespace math0x {
 				return impl.inv(x); 
 			}
 
-			// G inv(G&& x) const { 
-			// 	return impl.inv(std::move(x)); 
-			// }
+			// move inverse
+			G inv(G&& x) const { 
+				return impl.inv(std::move(x)); 
+			}
     
 			// product
 			G prod(const G& x, const G& y) const { 
 				return impl.prod(x, y); 
 			}
 
-			// G prod(G&& x, const G& y) const { 
-			// 	return impl.prod(std::move(x), y); 
-			// }
+			// move products
+			G prod(G&& x, const G& y) const { 
+				return impl.prod(std::move(x), y); 
+			}
 
-			// G prod(const G& x, G&& y) const { 
-			// 	return impl.prod(x, std::move(y)); 
-			// }
+			G prod(const G& x, G&& y) const { 
+				return impl.prod(x, std::move(y)); 
+			}
+
+			G prod(G&& x, G&& y) const { 
+				return prod( std::move(x), y);
+			}
 
 			// algebra euclidean structure
 			euclid::space< lie::algebra<G> > alg() const {  return impl.alg(); }

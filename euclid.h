@@ -89,7 +89,7 @@ namespace math0x {
 						xi = -xi;
 					});
       
-				return std::move(x);
+				return x;
 			} 
     
 
@@ -101,7 +101,8 @@ namespace math0x {
 				each(x, [&](field<E>& xi) {
 						xi = lambda * xi;
 					});
-				return std::move(x);
+				
+				return x;
 			}
     
 			E scal(field<E> lambda, const E& res) const {
@@ -117,7 +118,7 @@ namespace math0x {
 						++i;
 					});
       
-				return std::move(x);
+				return x;
 			}
 
 			E sum(const E& x, E&& y) const {
