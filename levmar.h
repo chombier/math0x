@@ -174,8 +174,8 @@ namespace math0x {
 						last = norm;
 					}
 
+					if( dx.norm() <= outer.epsilon ) return outer.epsilon;
 					return norm;
-					return std::min(norm, dx.norm());
 				});
 			
 			
@@ -188,11 +188,24 @@ namespace math0x {
 		                   const data_type<F>& data) {
 			typename data_type<F>::domain_algebra unit = data.dmn_alg.zero();
 
-			each(res, [unit, df, &res, &data](NN i) mutable {
-					data.dmn_alg.coord(i, unit) = 1;
-					res(i) = data.rng_alg.norm2( df(unit) );
-					data.dmn_alg.coord(i, unit) = 0;
-				});
+			// omp_each(res, [unit, df, &res, &data](NN i) mutable {
+			// 		data.dmn_alg.coord(i, unit) = 1;
+			// 		res(i) = data.rng_alg.norm2( df(unit) );
+			// 		data.dmn_alg.coord(i, unit) = 0;
+			// 	});
+
+			auto task = [unit, df, &res, &data](NN i) mutable {
+				data.dmn_alg.coord(i, unit) = 1;
+				res(i) = data.rng_alg.norm2( df(unit) );
+				data.dmn_alg.coord(i, unit) = 0;
+			};
+			
+			unsigned n = res.size();
+
+#pragma omp parallel for firstprivate(task)
+			for(unsigned i = 0; i < n; ++i) task(i);
+			
+			
 		};
 		                 
 
@@ -220,7 +233,7 @@ namespace math0x {
 			dx.resize( data.dmn_alg.dim() );
 			rhs.resize( data.dmn_alg.dim() );
 			rng_tmp.resize( data.rng_alg.dim() );
-			diag.resize( data.dmn_alg.dim() );
+			diag.setOnes( data.dmn_alg.dim() );
 			
 			// tangent normal equations
 			minres< data_type<F>::domain_dim > normal;
@@ -236,7 +249,6 @@ namespace math0x {
 				return  				
 				func::make_coords( residual_pull(data.residual, at), *data.rng_alg, *data.dmn_alg) << 
 				func::make_coords( residual_push(data.residual, at), data.dmn_alg, data.rng_alg);
-				
 			};
 			
 			typename data_type<F>::domain_algebra unit = data.dmn_alg.zero();
@@ -275,8 +287,8 @@ namespace math0x {
 						last = norm;
 					}
 					
+					if( dx.norm() <= outer.epsilon ) return outer.epsilon;
 					return norm;
-					return std::min(norm, dx.norm());
 				});
 			
 		}

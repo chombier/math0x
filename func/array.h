@@ -130,10 +130,7 @@ namespace math0x {
 			
 		};
 
-
-
-
-
+		
 	}
 }
 
