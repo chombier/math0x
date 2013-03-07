@@ -7,7 +7,9 @@
 	- maybe add groups.h, funcs.h, algos.h, ... ?
 		
 * Functions
-** tangent map
+** canonical coordinates of the first/second kind
+
+** tangent maps ?
 	 - df(q, v) = df(q)(v)
 	 - (and push/pull ?)
 
@@ -15,10 +17,10 @@
 	 
 ** harmonize make_ ... and friends
 	 - in progress, almost done
-
-
+		 
 ** splines 
 	 - almost there, needs a node storage/selection class
+	 - also, non-uniform node spacing
 
 ** lambdas ?
 	 - clang is doing a good job at the pythy synthax, but has trouble
@@ -45,8 +47,12 @@
 
 ** link Ad to AdT using pullback ?
 		
-** ccsk/ccfk
+
+* Algorithms
+	 
+** intrinsic/geometric mean
 ** pga
+** multiresolution analysis
 
 * actual Lie groups
 
