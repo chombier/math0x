@@ -37,8 +37,8 @@ namespace math0x {
 		}
     
 		// return true when ok
-		bool adaptive(real& llambda, real last, real curr) const {
-			if( last > curr ) {
+		bool adaptive(real& llambda, real prev, real curr) const {
+			if( curr < prev ) {
 				llambda /= nu;
 				return true;
 			}
@@ -162,6 +162,7 @@ namespace math0x {
 					
 					data.set(delta, dx);
 					
+					// TODO wrap this in data as it's the same for sparse/dense
 					auto old = x;
 					data.step(x, delta );
 					r = data.residual(x);
@@ -174,7 +175,7 @@ namespace math0x {
 						last = norm;
 					}
 
-					if( dx.norm() <= outer.epsilon ) return outer.epsilon;
+					if( rhs.norm() <= outer.epsilon ) return outer.epsilon;
 					return norm;
 				});
 			
@@ -287,7 +288,7 @@ namespace math0x {
 						last = norm;
 					}
 					
-					if( dx.norm() <= outer.epsilon ) return outer.epsilon;
+					if( rhs.norm() <= outer.epsilon ) return outer.epsilon;
 					return norm;
 				});
 			

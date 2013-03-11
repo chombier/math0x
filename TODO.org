@@ -73,7 +73,7 @@
 ** GL3
 	 - gl3 ? use mat33 as algebra/coalgebra ? seems logical
 	 - also, quick inverse ?
-
+		 
 ** complex numbers ?
    - CC 
 	 - is this useful ?
