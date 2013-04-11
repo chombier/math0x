@@ -158,6 +158,7 @@ namespace math0x {
 	  
 					// don't forget to clear dx !
 					dx.setZero();
+					normal.iter.epsilon = inner.epsilon * rhs.norm();
 					normal.solve(dx, JTJ, rhs);
 					
 					data.set(delta, dx);

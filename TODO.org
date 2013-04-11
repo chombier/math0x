@@ -35,6 +35,7 @@
 ** DONE function operators
 	 - return types requires, mostly
 
+
 * Lie group structure
 
 ** lie brackets/cobrackets
@@ -57,7 +58,7 @@
 * actual Lie groups
 
 ** add euclid structure for matrix spaces, especially squared, fixed length ones
-
+	 
 ** SO3
 	 - ad, adT
 

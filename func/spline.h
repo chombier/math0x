@@ -34,8 +34,6 @@ namespace math0x {
 			static U alpha( U tension, U width ) {
 				return (1 - tension) / width;
 			}
-
-		
 			
 
 			// rearrange hermite coefficients to obtain cardinal ones,
@@ -81,9 +79,10 @@ namespace math0x {
 
 		public:
 
-			// hermite spline coefficients, see
-			// http://en.wikipedia.org/wiki/Cubic_Hermite_spline
-			// p(t) = s0(t) * p0 + s1(t) * m0 + s2(t) * p1 + s3(t) * m1
+			// hermite spline coefficients for interpolating between
+			// start/end, see
+			// http://en.wikipedia.org/wiki/Cubic_Hermite_spline p(t) =
+			// s0(t) * p0 + s1(t) * m0 + s2(t) * p1 + s3(t) * m1
 			// coefficients for points(pi) and tangents(mi)
 			static auto hermite(U start = 0, U end = 1) -> 
 				macro_returns( make_tie( basis::h00(),
@@ -91,10 +90,16 @@ namespace math0x {
 				                         basis::h01(),
 				                         width(start, end) * basis::h11() ) << scaling(start, end) );
 
-			// cardinal spline with tension TODO (EQUALLY spaced nodes !)
+			// cardinal spline with tension, uniform nodes
 			static auto cardinal(U start = 0, U end = 1, U tension = 0) -> 
 				macro_returns( hermite_to_cardinal( alpha(tension, 2 * width(start, end) ) )
 				               << hermite(start, end) );
+
+			static auto cardinal(U t_m1, U t_0, U t_p1, U t_p2, U tension = 0) -> 
+				macro_returns( hermite_to_cardinal( alpha(tension, width(t_m1, t_p1) ),
+				                                    alpha(tension, width(t_p2, t_0) ) )
+				               << hermite(start, end) );
+
 			
 			// feed this with coefficients functions above to get a general
 			// lie group spline patch based on [Kim95] quaternion splines

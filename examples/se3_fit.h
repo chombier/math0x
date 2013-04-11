@@ -31,6 +31,8 @@
 #include <math0x/debug.h>
 #include <math0x/macro.h>
 
+#include <math0x/nlcg.h>
+
 namespace math0x {
 
 
@@ -109,6 +111,7 @@ namespace math0x {
 		typedef std::tuple< RR, vector< rigid_type > > result_type;
 		
 		levmar opt;
+		// nlcg opt;
 
 		struct delta {
 			
@@ -360,9 +363,18 @@ namespace math0x {
 			
 			debug("search space dim:", lie::group_of(res).alg().dim() );
 
-			opt.sparse(res, full, rhs);
+			nlcg cg;
+			cg.iter = opt.outer;
+			cg.omega = 0.9;
+			
+			cg.iter.cb = [&](NN i, RR eps) {
+				std::cout << eps << std::endl;
+			};
+
+			// opt.sparse(res, full, rhs);
 			// opt.dense(res, full, rhs);
-						
+			cg.solve(res, full, rhs);
+			
 			debug("length:", 2 * std::get<0>(res),  "should be approx.", (ai(0) - bi(0)).norm());
 			
 			return res;

@@ -22,6 +22,5 @@ namespace math0x {
 		template<class F>
 		pushforward< meta::decay<F> > d(F&& f) { return {std::forward<F>(f)}; }
 	}
-
 }
 #endif

@@ -83,7 +83,7 @@ namespace math0x {
 			};
 
 
-			// vector space operations
+			// vector space operations : TODO this is useless with scal
 			E minus(E&& x) const {
 				each(x, [&](field<E>& xi) {
 						xi = -xi;
@@ -164,6 +164,17 @@ namespace math0x {
 			}
 
 
+			// canonical dot-product
+			field<E> dot(const E& x, const E& y) const {
+				field<E> res = 0;
+				
+				for(NN i = 0, n = dim(); i < n; ++i) {
+					res += coord(i, x) * coord(i, y);
+				}
+
+				return res;
+			}
+
 			// canonical squared norm
 			field<E> norm2(const E& x) const {
 				field<E> res = 0;
@@ -178,6 +189,19 @@ namespace math0x {
 				return std::sqrt( norm2(x) );
 			}
 
+
+			// canonical representation
+			dual<E> transpose(const E& x) const {
+				space< dual<E> > d = **this;
+				
+				dual<E> res = d.zero();
+				for(NN i = 0, n = dim(); i < n; ++i) {
+					d.coord(i, res) = coord(i, x);
+				}
+
+				return res;
+			}
+			
 		};
 
 		template<class E>
