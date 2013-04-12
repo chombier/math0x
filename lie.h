@@ -76,8 +76,11 @@ namespace math0x {
 			}
 
 			// algebra euclidean structure
-			euclid::space< lie::algebra<G> > alg() const {  return impl.alg(); }
-
+			euclid::space< lie::algebra<G> > alg() const { return impl.alg(); }
+			
+			// coalgebra euclidean structure (convenience)
+			euclid::space< euclid::dual<lie::algebra<G> > > coalg() const { return *impl.alg(); }
+			
 			// group adjoint
 			lie::Ad<G> Ad(const G& g) const { return {g}; }
 

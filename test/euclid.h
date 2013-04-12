@@ -8,6 +8,9 @@
 #include <math0x/func/minus.h>
 #include <math0x/func/dot.h>
 
+#include <math0x/func/form.h>
+#include <math0x/func/pair.h>
+
 namespace math0x {
 	namespace test {
 
@@ -38,6 +41,10 @@ namespace math0x {
 			test::func< minus<E> > ();
 			test::func< dot<E> > (); 
 			test::func< norm2<E> > (); 
+
+			test::func< dot<E> > (); 
+			
+			// wtf ?
 			
 		}
 

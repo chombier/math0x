@@ -27,7 +27,7 @@ namespace math0x {
 
 			// conjugate gradient
 			vec p = r;
-			vec Ap = s;
+			vec Ap = Ar;
 			
 			iter([&] {
 					
@@ -40,12 +40,12 @@ namespace math0x {
 					
 					real ro_prev = ro;
 					
-					ro = r.dot(s);
+					ro = r.dot(Ar);
 
 					real beta = ro / ro_prev;
 					
 					p = r + beta * p;
-					Ap = s + beta * Ap;
+					Ap = Ar + beta * Ap;
 					
 					return std::sqrt(r.squaredNorm());
 				});
