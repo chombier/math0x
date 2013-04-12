@@ -50,9 +50,11 @@ namespace math0x {
 			func::range<F> fx;
 
 			real old = 1.0;
-			
+
+				
 			fx = f(x);
 			e = log( rng.prod(b_inv, fx) );
+			real theta_prev = rng_alg.norm2( e );
 			
 			iter( [&] {
 					
@@ -70,7 +72,7 @@ namespace math0x {
 					// polak-ribiere
 					beta -= dmn_alg.dot(d, delta) / old;
 					
-					// direction reset
+					// direction reset TODO wtf is this ?
 					beta = std::max(0.0, beta);
 
 					s = dmn_alg.sum(d, dmn_alg.scal(beta, s));
@@ -83,13 +85,19 @@ namespace math0x {
 					delta = dmn_alg.scal(omega * alpha, s);
 					x = dmn.prod(x, exp( delta  ) );
 					
-					old = d_norm2;
-					
 					fx = f(x);
+					
 					e = log( rng.prod(b_inv, fx) );
 					
-					return std::min( dmn_alg.norm(delta),
-					                 rng_alg.norm(e) );
+					real theta = rng_alg.norm2( e );
+					
+					// stop criteria
+					real res = std::abs( theta - theta_prev ) / theta;
+					
+					theta_prev = theta;
+					old = d_norm2;
+					
+					return res;
 				} );
 
 		}

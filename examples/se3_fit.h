@@ -340,25 +340,27 @@ namespace math0x {
 				real smooth;
 			} weight;
 
-			weight.fit = 1;
+			weight.fit = 0.1;
 
 			euclid::space< vector<vec3> > RR3_n(n);
 			
+			func::scal<samples_type> fit_scale(weight.fit, RR3_n);
+
 			auto full = func::make_tie( // func::scal<RR>(small) << a,
 			                            // func::scal<RR>(small)<< b,  
 			                            // func::get< vector<SE<3> > >{0} << g, 
 			                            delta{} << g,
-			                            fit<0>{}, 
-			                            fit<1>{} );
+			                            fit_scale << fit<0>{}, 
+			                            fit_scale << fit<1>{} );
 			
 			typedef decltype(full) full_type;
-
+			
 			// test::func(full, lie::group_of(res), lie::group_of(full(res)));
 			
 			auto rhs = func::range< full_type >( // 0.0, // 0.0,
-			                                     se3_n.id(), 
-			                                     ai, 
-			                                     bi );
+			                                    se3_n.id(), 
+			                                    fit_scale(ai), 
+			                                    fit_scale(bi) );
 			
 			
 			debug("search space dim:", lie::group_of(res).alg().dim() );
