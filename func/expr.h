@@ -2,7 +2,13 @@
 #define MATH0X_EXPR_H
 
 #include <math0x/macro.h>
-#include <math0x/types.h>
+
+#include <math0x/func/sum.h>
+#include <math0x/func/minus.h>
+#include <math0x/func/scal.h>
+#include <math0x/func/tie.h>
+
+#include <math0x/func/comp.h>
 
 // an alternate mechanism for functional expressions using expression
 // templates: this one is much more convenient when the range space
@@ -193,21 +199,23 @@ namespace math0x {
 			};
 	
 			template<class E>
-			scal< meta::decay<E> > make_scal( euclid::field< range< meta::decay<E> > > lambda, E&& e) {
-				return { lambda, std::forward<E>(e) };
+			scal< meta::decay<E> > make_scal(euclid::field< range< meta::decay<E> > > lambda,
+			                                 E&& e) {
+				return {lambda,  std::forward<E>(e) };
 			}
 
-	
-			template<class E>
-			auto operator*(euclid::field< range< meta::decay<E> > > lambda, E&& e) ->
+			
+				
+			template<class Field, class E>
+			auto operator*(Field lambda, E&& e) ->
 				macro_returns( make_scal(lambda, check( std::forward<E>(e) ) ) );
-	
-			template<class E>
-			auto operator*(E&& e, euclid::field< range< meta::decay<E> > > lambda) ->
+			
+			template<class E, class Field>
+			auto operator*(E&& e,  Field lambda) ->
 				macro_returns( make_scal(lambda, check( std::forward<E>(e) ) ) );
 
-			template<class E>
-			auto operator/(E&& e, euclid::field< range< meta::decay<E> > > lambda) ->
+			template<class E, class Field>
+			auto operator/(E&& e, Field lambda) ->
 				macro_returns( make_scal(1.0 / lambda, check( std::forward<E>(e) ) ) );
 	
 
