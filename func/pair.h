@@ -19,7 +19,7 @@ namespace math0x {
 			typedef euclid::field<E> range;
 
 			euclid::space< E> primal;
-			euclid::space< dual<E> > dual;
+			euclid::space< euclid::dual<E> > dual;
 			NN dim;
 			
 		public:
@@ -41,23 +41,7 @@ namespace math0x {
 			}
 
 
-			struct push {
-				
-				form< E > lhs;
-				form< euclid::dual<E> > rhs;
-				
-				push(const pair&, const domain& at) 
-					: lhs(std::get<0>(at)),
-					  rhs(std::get<1>(at)) {
-
-				}
-
-				range operator()(const domain& v) const {
-					return lhs( std::get<1>(v) ) + rhs( std::get<0>(v) );
-				}
-				
-			};
-			
+		
 			
 			// easy-peasy
 			struct push : form< domain >{
