@@ -25,15 +25,16 @@ namespace math0x {
     
       euclid::dual<E> operator()(const E& x) const {
 
+	      // hold a reference 
 				const E& Mx = metric(x);
       
 				euclid::dual<E> res = dual.zero();
       
 				euclid::range< euclid::dual<E> > rres( res );
-				euclid::range< E > rx( x );
-
-				for( ;!rx.empty(); rx.pop(), rres.pop() ) {
-					const_cast< field<E>& >(rres.front()) = rx.front();
+				euclid::range< E > rMx( Mx );
+				
+				for( ;!rMx.empty(); rMx.pop(), rres.pop() ) {
+					const_cast< euclid::field<E>& >(rres.front()) = rMx.front();
 				}
 				
 				return res;
