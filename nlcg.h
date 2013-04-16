@@ -8,6 +8,7 @@
 #include <math0x/iter.h>
 #include <math0x/line_search.h>
 
+
 namespace math0x {
 
 	// non-linear conjugate gradient
@@ -45,7 +46,12 @@ namespace math0x {
 			real theta_prev = f(x);
 			
 			line_search ls;
-			ls.iter = 10;
+			ls.iter.bound = -1;
+			ls.iter.epsilon = 1e-5;
+
+			ls.iter.cb = [&](NN i, RR eps) {
+				std::cout << eps << std::endl;
+			};
 			
 			iter( [&] {
 					

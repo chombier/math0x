@@ -44,7 +44,7 @@ namespace math0x {
 				RR num = std::sqrt( (norm2 << diff)(v) );
 				
 				if( den < math0x::epsilon() ) {
-					std::cerr << "warning: div by zero lol" << std::endl;
+					std::cerr << "warning: div by zero lol " << den << std::endl;
 					return num;
 				}
 				return num / den;				

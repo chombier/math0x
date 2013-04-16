@@ -45,8 +45,6 @@ namespace math0x {
     };
 
 
-    // TODO add transpose function for canonical dual vector ?
-	  
   }
 
 }

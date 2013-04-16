@@ -34,7 +34,7 @@ namespace math0x {
 
 				euclid::field<E> res = 0;
 
-				for( ; rx.empty(); rx.pop(), rvalue.pop() ) {
+				for( ; !rx.empty(); rx.pop(), rvalue.pop() ) {
 					res += rvalue.front() * rx.front();
 				}
 				

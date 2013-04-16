@@ -47,7 +47,7 @@ namespace math0x {
 			//  rearrange hermite coefficients to obtain cardinal ones,
 			// non_uniform. alpha_prev = (1 - tension) / (t1 - t-1)
 			// alpha_next = (1 - tension) / (t2 - t0)
-			static auto hermite_to_cardinal_nonuniform(U alpha_prev, U alpha_next) -> 
+			static auto hermite_to_cardinal(U alpha_prev, U alpha_next) -> 
 				macro_returns( make_tie( -alpha_prev * get1,
 				                         get0 - alpha_next * get3,
 				                         get2 + alpha_prev * get1,
@@ -95,10 +95,11 @@ namespace math0x {
 				macro_returns( hermite_to_cardinal( alpha(tension, 2 * width(start, end) ) )
 				               << hermite(start, end) );
 
+			// cardinal spline with tension, non-uniform nodes
 			static auto cardinal(U t_m1, U t_0, U t_p1, U t_p2, U tension = 0) -> 
 				macro_returns( hermite_to_cardinal( alpha(tension, width(t_m1, t_p1) ),
 				                                    alpha(tension, width(t_p2, t_0) ) )
-				               << hermite(start, end) );
+				               << hermite(t_0, t_p1) ); // TODO check this 
 
 			
 			// feed this with coefficients functions above to get a general

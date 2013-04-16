@@ -13,8 +13,9 @@
 #include <math0x/func/push.h>
 
 #include <math0x/error.h>
-#include <math0x/func/operators.h>
+// #include <math0x/func/operators.h>
 
+#include <math0x/epsilon.h>
 
 #include <iostream>
 
@@ -43,8 +44,6 @@ namespace math0x {
 
 			auto norm2 = make_norm2( rng.alg() );
 			
-
-
 			try {
 				RR den = std::sqrt( (norm2 << num)(v) );
 				
@@ -52,7 +51,7 @@ namespace math0x {
 				RR num = std::sqrt( (norm2 << diff)(v) );
 
 				if( den < math0x::epsilon() ) {
-					std::cerr << "warning: div by zero lol" << std::endl;
+					std::cerr << "warning: div by zero lol " << den << std::endl;
 					return num;
 				}
 				return num / den;				
