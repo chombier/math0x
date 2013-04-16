@@ -137,7 +137,7 @@ namespace math0x {
 				};
       
 			};
-    
+
 			// builds offset tuple and returns total dimension
 			NN make_offset() {
 				NN last = 0;
@@ -193,6 +193,72 @@ namespace math0x {
 				dimension = make_offset();
 			}
     
+
+			// // inspired by
+			// // http://stackoverflow.com/questions/7381805/c-c11-switch-statement-for-variadic-templates
+			// class range {
+
+			// 	typedef std::tuple< euclid::range<Args>... > sub_type;
+			// 	sub_type sub;
+				
+			// 	NN outer{0};
+				
+			// 	template<int ... I>
+			// 	const field& front_impl(tuple::index<I...> ) const {
+			// 		assert( outer < size );
+					
+			// 		typedef const field& (*element_type)(const sub_type& );
+					
+			// 		static constexpr element_type table[] = {
+			// 			[] (const sub_type& sub) { return std::get<I>(sub).front(); } ...
+			// 		};
+					
+			// 		return table[outer]( sub );
+			// 	}
+
+			// 	template<int ... I>
+			// 	void pop_impl(tuple::index<I...> ) {
+			// 		assert( outer < size );
+					
+			// 		typedef bool (*element_type)(sub_type& sub);
+					
+			// 		static constexpr element_type table[] = {
+			// 			[](sub_type& sub) { std::get<I>(sub).pop(); return std::get<I>(sub).empty(); } ...
+			// 		};
+					
+			// 		if( table[outer]( sub ) ) ++outer;
+			// 	}
+				
+			// 	struct make_sub {
+			// 		const E& data;
+					
+			// 		template<int I>
+			// 		euclid::range< type<I> > operator()() const {
+			// 			return { std::get<I>(data) };
+			// 		}
+					
+			// 	};
+
+			// public:
+
+			// 	range(const E& data) : sub( each::map( make_sub{data} ) ) { }
+				
+			// 	bool empty() const {
+			// 		return outer == size;
+			// 	}
+
+			// 	const field& front() const {
+			// 		return front_impl( each{} );
+			// 	}
+
+			// 	void pop() {
+			// 		pop_impl( each{} );
+			// 	}
+				
+			// };
+
+
+
 		};
 
 	}
