@@ -2,10 +2,11 @@
 #define MATH0X_NLCG_H
 
 #include <math0x/euclid.h>
+#include <math0x/coords.h>
 #include <math0x/func.h>
 
 #include <math0x/iter.h>
-
+#include <math0x/line_search.h>
 
 namespace math0x {
 
@@ -43,6 +44,9 @@ namespace math0x {
 			real old = 1.0;
 			real theta_prev = f(x);
 			
+			line_search ls;
+			ls.iter = 10;
+			
 			iter( [&] {
 					
 					// descent direction 
@@ -65,7 +69,7 @@ namespace math0x {
 					// line-search along s
 					dmn_alg.set(delta, s);
 					
-					line_search(x, f, delta);
+					ls.solve(x, f, delta);
 					
 					d_prev.swap( d );
 					old = d_norm2;
