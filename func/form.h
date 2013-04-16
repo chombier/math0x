@@ -15,41 +15,35 @@ namespace math0x {
 			typedef form base;
     
 			euclid::dual<E> value;
-    
-			euclid::space< euclid::dual<E> > dual;
-			euclid::space<E> primal;
-    
+			
 			form(const euclid::dual<E>& value)
-				: value( value ),
-				  dual( value ),
-				  primal( *dual ) {
-      
+				: value( value )
+			{
+				
 			}
 
 			form(euclid::dual<E>&& value)
-				: value( std::move(value) ),
-				  dual( value ),
-				  primal( *dual ) {
+				: value( std::move(value) ) {
       
 			}
     
 			euclid::field<E> operator()(const E& x) const {
+      
+				euclid::range< euclid::dual<E> > rvalue(value);
+				euclid::range< E > rx(x);
+
 				euclid::field<E> res = 0;
-      
-				NN i = 0;
-				dual.each(value, [&](const euclid::field<E>& vi) {
-						res += vi * primal.coord(i, x);
-						++i;
-					});
-      
+
+				for( ; rx.empty(); rx.pop(), rvalue.pop() ) {
+					res += rvalue.front() * rx.front();
+				}
+				
 				return res;      
 			}
-    
-    
+			
 			struct push;
 			struct pull;
-    
-    
+			
 		};
 
 		template<class E>

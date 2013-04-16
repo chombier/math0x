@@ -80,7 +80,7 @@ namespace math0x {
 			template<class F>
 			void each(E& x, const F& f) const {
 				for( range<E> r(x); !r.empty(); r.pop() ) {
-					f( const_cast<field<E>&>(r.front()) );
+					f( const_cast < field <E> & >(r.front()) );
 				}
 			};
 
@@ -118,9 +118,9 @@ namespace math0x {
 
 				for( range<E> rx(x), ry(y); !rx.empty(); rx.pop(), ry.pop() ) {
 					assert( !ry.empty() );
-					const_cast<field<E>&>(rx.front()) += ry.front();
-				}
-				
+					const_cast< field <E> & >(rx.front()) += ry.front();
+				}  
+		
 				return x;
 			}
 
@@ -195,9 +195,24 @@ namespace math0x {
 			field<E> norm(const E& x) const {
 				return std::sqrt( norm2(x) );
 			}
+ 
+			// natural pairing
+			field<E> pair(const dual<E>& f,
+			              const E& x) const {
+				field<E> res = 0;
+				
+				range< dual<E> > rf(f);
+				range< E > rx(x);
+				
+				for(;!rx.empty(); rx.pop(), rf.pop()) {
+					res += rf.front() * rx.front();
+				}
+
+				return res;
+			}
 
 
-			// canonical representation
+			// natural dual representation
 			dual<E> transpose(const E& x) const {
 				space< dual<E> > d = **this;
 				
@@ -212,13 +227,13 @@ namespace math0x {
 	
 				return res;
 			}
-			
+
 		};
 
-		template<class E>
-		space<E> space_of(const E& of) { return {of}; }
+			template<class E>
+			space<E> space_of(const E& of) { return {of}; }
 		
+		}
 	}
-}
 
 #endif

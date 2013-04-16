@@ -29,12 +29,13 @@ namespace math0x {
       
 				euclid::dual<E> res = dual.zero();
       
-				NN i = 0;
-				dual.each(res, [&](euclid::field<E>& res_i) {
-						res_i = primal.coord(i, Mx);
-						++i;
-					});
-      
+				euclid::range< euclid::dual<E> > rres( res );
+				euclid::range< E > rx( x );
+
+				for( ;!rx.empty(); rx.pop(), rres.pop() ) {
+					const_cast< field<E>& >(rres.front()) = rx.front();
+				}
+				
 				return res;
       }
     

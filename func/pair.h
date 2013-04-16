@@ -18,30 +18,16 @@ namespace math0x {
 			typedef std::tuple< euclid::dual<E>, E > domain;
 			typedef euclid::field<E> range;
 
-			euclid::space< E> primal;
-			euclid::space< euclid::dual<E> > dual;
-			NN dim;
+			euclid::space< E> space;
 			
 		public:
 
 			pair(const euclid::space<E>& space = {}) 
-				: primal(space),
-				  dual( *space ),
-				  dim( space.dim() )
-			{ }
+				: space(space) { }
 			
 			range operator()(const domain& x) const {
-				range res = 0;
-				
-				for(NN i = 0; i < dim; ++i) {
-					res += dual.coord(i, std::get<0>(x)) * primal.coord(i, std::get<1>(x));
-				}
-
-				return res;
+				return space.pair( std::get<0>(x), std::get<1>(x) );
 			}
-
-
-		
 			
 			// easy-peasy
 			struct push : form< domain >{

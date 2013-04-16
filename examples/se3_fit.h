@@ -376,7 +376,7 @@ namespace math0x {
 
 			// opt.sparse(res, full, rhs);
 			// opt.dense(res, full, rhs);
-			cg.solve(res, full, rhs, 0.1);
+			cg.solve(res, full, rhs, opt.lambda);
 			
 			std::cout << k << " iterations" << std::endl;
 

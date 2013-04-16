@@ -195,7 +195,7 @@ namespace math0x {
 			// 		res(i) = data.rng_alg.norm2( df(unit) );
 			// 		data.dmn_alg.coord(i, unit) = 0;
 			// 	});
-
+			
 			auto task = [unit, df, &res, &data](NN i) mutable {
 				data.dmn_alg.coord(i, unit) = 1;
 				res(i) = data.rng_alg.norm2( df(unit) );
