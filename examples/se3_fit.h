@@ -319,7 +319,7 @@ namespace math0x {
 			
 			NN n = ai.size();
 
-			func::get<result_type, 0> a;
+			// func::get<result_type, 0> a;
 			func::get<result_type, 1> g;
 			
 			lie::group< vector< rigid_type > > se3_n( n );
@@ -369,14 +369,14 @@ namespace math0x {
 			cg.iter = opt.outer;
 			
 			unsigned k = 0;
-			cg.iter.cb = [&](NN i, RR eps) {
+			cg.iter.cb = [&](NN , RR eps) {
 				std::cout << eps << std::endl;
 				++k;
 			};
 
 			// opt.sparse(res, full, rhs);
 			// opt.dense(res, full, rhs);
-			cg.solve(res, full, rhs);
+			cg.solve(res, full, rhs, 0.1);
 			
 			std::cout << k << " iterations" << std::endl;
 

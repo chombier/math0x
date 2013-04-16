@@ -194,68 +194,78 @@ namespace math0x {
 			}
     
 
-			// // inspired by
-			// // http://stackoverflow.com/questions/7381805/c-c11-switch-statement-for-variadic-templates
-			// class range {
+			// inspired by
+			// http://stackoverflow.com/questions/7381805/c-c11-switch-statement-for-variadic-templates
+			class range {
 
-			// 	typedef std::tuple< euclid::range<Args>... > sub_type;
-			// 	sub_type sub;
+				typedef std::tuple< euclid::range<Args>... > sub_type;
+				sub_type sub;
 				
-			// 	NN outer{0};
+				NN outer;
 				
-			// 	template<int ... I>
-			// 	const field& front_impl(tuple::index<I...> ) const {
-			// 		assert( outer < size );
-					
-			// 		typedef const field& (*element_type)(const sub_type& );
-					
-			// 		static constexpr element_type table[] = {
-			// 			[] (const sub_type& sub) { return std::get<I>(sub).front(); } ...
-			// 		};
-					
-			// 		return table[outer]( sub );
-			// 	}
+				typedef const field& (*front_type)(const sub_type& );
+				template<int I>
+				static inline const field& front_ith(const sub_type& sub) {
+					return std::get<I>(sub).front(); 
+				}; 
 
-			// 	template<int ... I>
-			// 	void pop_impl(tuple::index<I...> ) {
-			// 		assert( outer < size );
-					
-			// 		typedef bool (*element_type)(sub_type& sub);
-					
-			// 		static constexpr element_type table[] = {
-			// 			[](sub_type& sub) { std::get<I>(sub).pop(); return std::get<I>(sub).empty(); } ...
-			// 		};
-					
-			// 		if( table[outer]( sub ) ) ++outer;
-			// 	}
+
+				typedef bool (*pop_type)(sub_type& );
 				
-			// 	struct make_sub {
-			// 		const E& data;
-					
-			// 		template<int I>
-			// 		euclid::range< type<I> > operator()() const {
-			// 			return { std::get<I>(data) };
-			// 		}
-					
-			// 	};
-
-			// public:
-
-			// 	range(const E& data) : sub( each::map( make_sub{data} ) ) { }
+				template<int I>
+				static inline bool pop_ith(sub_type& sub) {
+					std::get<I>(sub).pop(); 
+					return std::get<I>(sub).empty();
+				}
 				
-			// 	bool empty() const {
-			// 		return outer == size;
-			// 	}
+				template<int ... I>
+				const field& front_impl(tuple::index<I...> ) const {
+					assert( int(outer) < size );
+					
+					static constexpr front_type table[] = { front_ith<I>... };
+					
+					return table[outer]( sub );
+				}
 
-			// 	const field& front() const {
-			// 		return front_impl( each{} );
-			// 	}
-
-			// 	void pop() {
-			// 		pop_impl( each{} );
-			// 	}
+				template<int ... I>
+				void pop_impl(tuple::index<I...> ) {
+					assert( int(outer) < size );
+					
+					static constexpr pop_type table[] = { pop_ith<I>...};
+					
+					if( table[outer]( sub ) ) ++outer;
+				}
 				
-			// };
+				struct make_sub {
+					const E& data;
+					
+					template<int I>
+					euclid::range< type<I> > operator()() const {
+						return { std::get<I>(data) };
+					}
+					
+				};
+
+			public:
+
+				range(const E& data) 
+				: sub( each::map( make_sub{data} ) ),
+				  outer(0) { 
+				}
+				
+				bool empty() const {
+					return int(outer) >= size;
+				}
+
+				const field& front() const {
+					return front_impl( each{} );
+				}
+
+				void pop() {
+					pop_impl( each{} );
+				}
+				
+			};
 
 
 

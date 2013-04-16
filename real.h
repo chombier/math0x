@@ -43,6 +43,24 @@ namespace math0x {
     
 			static constexpr int static_dim = 1;
 
+
+			class range {
+				const RR* data;
+			public:
+				
+				range(const RR& data) : data(&data) { }
+
+				bool empty() const { return !data; }
+
+				void pop() { data = 0; }
+
+				const field& front() const { 
+					assert( data );
+					return *data; 
+				}
+				
+			};
+
 		};
 
 	}

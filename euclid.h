@@ -70,15 +70,17 @@ namespace math0x {
 			// coordinate iterators
 			template<class F>
 			void each(const E& x, const F& f) const {
-				for(natural i = 0, n = dim(); i < n; ++i) {
-					f( coord(i, x) );
+				
+				for( range<E> r(x); !r.empty(); r.pop() ) {
+					f( r.front() );
 				}
+
 			};
 
 			template<class F>
 			void each(E& x, const F& f) const {
-				for(natural i = 0, n = dim(); i < n; ++i) {
-					f( coord(i, x) );
+				for( range<E> r(x); !r.empty(); r.pop() ) {
+					f( const_cast<field<E>&>(r.front()) );
 				}
 			};
 
@@ -113,13 +115,12 @@ namespace math0x {
     
 
 			E sum(E&& x, const E& y) const {
-				NN i = 0;
 
-				each(x, [&](field<E>& xi) {
-						xi += this->coord(i, y);
-						++i;
-					});
-      
+				for( range<E> rx(x), ry(y); !rx.empty(); rx.pop(), ry.pop() ) {
+					assert( !ry.empty() );
+					const_cast<field<E>&>(rx.front()) += ry.front();
+				}
+				
 				return x;
 			}
 
@@ -148,21 +149,24 @@ namespace math0x {
 			template<class Vector>
 			void get(Vector&& v, const E& x) const {
 				assert(v.size() == dim());
-      
-				for(NN i = 0, n = dim(); i < n; ++i) {
-					v(i) = coord(i, x);
-				}
-      
+
+				NN i = 0;
+				each(x, [&](const field<E>& xi) {
+						v(i) = xi;
+						++i;
+					});
 			}
 
 			template<class Vector>
 			void set(E& x, Vector&& v) const {
 				assert(v.size() == dim());
       
-				for(NN i = 0, n = dim(); i < n; ++i) {
-					coord(i, x) = v(i);
-				}
-      
+				NN i = 0;
+				each(x, [&](field<E>& xi) {
+						xi = v(i);
+						++i;
+					});
+				
 			}
 
 
@@ -170,10 +174,11 @@ namespace math0x {
 			field<E> dot(const E& x, const E& y) const {
 				field<E> res = 0;
 				
-				for(NN i = 0, n = dim(); i < n; ++i) {
-					res += coord(i, x) * coord(i, y);
+				for( range<E> rx(x), ry(y); !rx.empty(); rx.pop(), ry.pop()) {
+					assert( !ry.empty() );
+					res += rx.front() * ry.front();
 				}
-
+				
 				return res;
 			}
 
@@ -197,10 +202,14 @@ namespace math0x {
 				space< dual<E> > d = **this;
 				
 				dual<E> res = d.zero();
-				for(NN i = 0, n = dim(); i < n; ++i) {
-					d.coord(i, res) = coord(i, x);
-				}
 
+				range< E > rx(x);
+				range< dual<E> > rres(res);
+				
+				for( ; !rx.empty(); rx.pop(), rres.pop()) {
+					const_cast< field<E> & > (rres.front()) = rx.front();
+				}
+	
 				return res;
 			}
 			

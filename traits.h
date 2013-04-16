@@ -13,7 +13,10 @@ namespace math0x {
     // vector dual space
     template<class E>
     using dual = typename traits<E>::dual;
-  
+
+	  template<class E>
+	  using range = typename traits<E>::range;
+	  
   }
 
   namespace lie {

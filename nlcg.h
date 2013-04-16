@@ -83,11 +83,12 @@ namespace math0x {
 
 		
 		// nlls: minimizes || log(inv(v).f(x)) ||^2
+		// lambda is a levenberg-marquart-like damping parameter
 		template<class F>
 		void solve( func::domain<F>& x, 
 		            const F& f,
 		            const func::range<F>& b,
-		            real omega = 1.0) const {
+		            real lambda = 0) const {
 			
 			// domain structure
 			lie::group< func::domain<F> > dmn(x);
@@ -155,7 +156,7 @@ namespace math0x {
 					
 					// line-search based on linearization
 					real alpha = -rng_alg.dot(e, df_s) / rng_alg.norm2( df_s );
-					dmn_alg.set( delta, (omega * alpha) * s );
+					dmn_alg.set( delta, (alpha / (1 + lambda)) * s );
 
 					// step estimate
 					x = dmn.prod(x, exp( delta ) );

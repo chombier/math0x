@@ -96,6 +96,41 @@ namespace math0x {
 				: N == -1 ? -1 
 				: M * N;
     
+			// // prevent nested dynamic vectors
+			// static_assert( static_dim > 0 || euclid::space<U>::static_dim > 0,
+			//                "can't have nested dynamic vectors (yet) for efficiency reasons" );
+
+
+			class range {
+				NN outer;
+				const E* data;
+				
+				euclid::range<U> sub;
+			public:
+				
+				range(const E& data) 
+				: outer(0),
+				  data(&data),
+				  sub(data( outer )) { 
+					
+				}
+				
+				bool empty() const { return outer >= data->size(); }
+				
+				const field& front() const {
+					return sub.front();
+				}
+				
+				void pop() {
+					sub.pop();
+					if( sub.empty() ) {
+						++outer;
+						
+						if( !empty() ) sub = euclid::range<U>((*data)(outer));
+					}
+				}
+				
+			};
 
 		};
 
