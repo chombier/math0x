@@ -367,16 +367,19 @@ namespace math0x {
 
 			nlcg cg;
 			cg.iter = opt.outer;
-			cg.omega = 0.9;
 			
+			unsigned k = 0;
 			cg.iter.cb = [&](NN i, RR eps) {
 				std::cout << eps << std::endl;
+				++k;
 			};
 
 			// opt.sparse(res, full, rhs);
 			// opt.dense(res, full, rhs);
 			cg.solve(res, full, rhs);
 			
+			std::cout << k << " iterations" << std::endl;
+
 			debug("length:", 2 * std::get<0>(res),  "should be approx.", (ai(0) - bi(0)).norm());
 			
 			return res;

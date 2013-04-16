@@ -14,12 +14,80 @@ namespace math0x {
 		
 		math0x::iter iter;
 
-		real omega{1};
+		template<class F>
+		void solve( func::domain<F>& x, const F& f) const {
+			
+			// domain structure
+			lie::group< func::domain<F> > dmn(x);
+			
+			auto dmn_alg = dmn.alg();
+			auto dmn_coalg = dmn.coalg();
+			
+			auto exp = dmn.exp();
+			
+			// dimension
+			NN n = dmn_alg.dim();
 
+			// descent/conjugate direction
+			typedef euclid::coords< lie::algebra< func::domain<F> > > vec;
+			vec d, s, d_prev;
+			
+			d = vec::Zero( n );
+			d_prev = vec::Zero( n );
+			s = vec::Zero( n );
+
+			// position delta
+			lie::algebra< func::domain<F> > delta;
+			delta = dmn_alg.zero();
+
+			real old = 1.0;
+			real theta_prev = f(x);
+			
+			iter( [&] {
+					
+					// descent direction 
+					dmn_coalg.get(d, func::pull<F>(f, x)(1.0) ); 
+					
+					real d_norm2 = d.squaredNorm();
+					
+					// fletcher-reeves
+					real beta = d_norm2 / old;
+					
+					// polak-ribiere
+					beta -= d.dot( d_prev ) / old;
+					
+					// direction reset TODO wtf is this ?
+					beta = std::max(0.0, beta);
+
+					// conjugation
+					s = d + beta * s;
+
+					// line-search along s
+					dmn_alg.set(delta, s);
+					
+					line_search(x, f, delta);
+					
+					d_prev.swap( d );
+					old = d_norm2;
+						
+					// stop criteria
+					real theta = f(x);
+					real res = std::abs( theta - theta_prev ) / theta;
+					theta_prev = theta;
+
+					return res;
+				});
+			
+		}
+
+
+		
+		// nlls: minimizes || log(inv(v).f(x)) ||^2
 		template<class F>
 		void solve( func::domain<F>& x, 
 		            const F& f,
-		            const func::range<F>& b) const {
+		            const func::range<F>& b,
+		            real omega = 1.0) const {
 			
 			// domain structure
 			lie::group< func::domain<F> > dmn(x);
@@ -35,12 +103,20 @@ namespace math0x {
 			lie::exp< func::domain<F> > exp = dmn.exp();
 			lie::log< func::range<F> > log = rng.log();
 			
+			// dimension
+			NN n = dmn_alg.dim();
+			
 			// descent/conjugate direction
-			lie::algebra< func::domain<F> > d, s, delta;
+			typedef euclid::coords< lie::algebra< func::domain<F> > > vec;
+			vec d, s, d_prev;
 
-			d = dmn_alg.zero();
-			s = d;
-
+			d = vec::Zero( n );
+			d_prev = vec::Zero( n );
+			s = vec::Zero( n );
+			
+			lie::algebra< func::domain<F> > delta;
+			delta = dmn_alg.zero();
+			
 			// inv(b)
 			func::range<F> b_inv = rng.inv(b);
 			
@@ -50,53 +126,53 @@ namespace math0x {
 			func::range<F> fx;
 
 			real old = 1.0;
-
-				
+			
 			fx = f(x);
 			e = log( rng.prod(b_inv, fx) );
 			real theta_prev = rng_alg.norm2( e );
 			
 			iter( [&] {
 					
-					// backup
-					delta = d;
+					// descent direction 
+					dmn_coalg.get(d, func::pull<F>(f, x)( rng_alg.transpose(e)) ); // TODO alloc
 					
-					// descent direction
-					d = dmn_alg.minus( dmn_coalg.transpose( func::dT(f)(x)( rng_alg.transpose(e)) ) );
-					
-					real d_norm2 = dmn_alg.norm2(d);
+					real d_norm2 = d.squaredNorm();
 					
 					// fletcher-reeves
 					real beta = d_norm2 / old;
 					
 					// polak-ribiere
-					beta -= dmn_alg.dot(d, delta) / old;
+					beta -= d.dot( d_prev ) / old;
 					
 					// direction reset TODO wtf is this ?
 					beta = std::max(0.0, beta);
 
-					s = dmn_alg.sum(d, dmn_alg.scal(beta, s));
+					// conjugation
+					s = d + beta * s;
 					
-					df_s = func::d(f)(x)(s);
+					dmn_alg.set(delta, s);
+					df_s = func::push<F>(f, x)(delta);
 					
 					// line-search based on linearization
-					real alpha = - rng_alg.dot(e, df_s) / rng_alg.norm2( df_s );
+					real alpha = -rng_alg.dot(e, df_s) / rng_alg.norm2( df_s );
+					dmn_alg.set( delta, (omega * alpha) * s );
 
-					delta = dmn_alg.scal(omega * alpha, s);
-					x = dmn.prod(x, exp( delta  ) );
+					// step estimate
+					x = dmn.prod(x, exp( delta ) );
 					
+					// update stuff
 					fx = f(x);
 					
 					e = log( rng.prod(b_inv, fx) );
 					
-					real theta = rng_alg.norm2( e );
-					
-					// stop criteria
-					real res = std::abs( theta - theta_prev ) / theta;
-					
-					theta_prev = theta;
+					d_prev.swap( d );
 					old = d_norm2;
-					
+						
+					// stop criteria
+					real theta = rng_alg.norm2( e );
+					real res = std::abs( theta - theta_prev ) / theta;
+					theta_prev = theta;
+				
 					return res;
 				} );
 

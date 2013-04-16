@@ -98,6 +98,8 @@ namespace math0x {
 			} 
 
 			E scal(field<E> lambda, E&& x) const {
+				if( lambda == 1.0 ) return x;
+				
 				each(x, [&](field<E>& xi) {
 						xi = lambda * xi;
 					});
