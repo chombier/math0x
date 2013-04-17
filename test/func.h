@@ -7,11 +7,12 @@
 #include <math0x/debug.h>
 #include <math0x/meta.h>
 
+#include <math0x/test/io.h>
+
 namespace math0x {
 
 	namespace test {
 
-		
 		template<class F>
 		bool func(const F& f = {}, 
 		          const lie::group< func::domain<F> >& dmn = {},
@@ -27,10 +28,10 @@ namespace math0x {
 				RR error = push(f, step, dmn, rng);
 				
 				if( error > epsilon ) {
-					debug("push error:", error);
+					debug(fail(), "push error:", error);
 					res = false;
 				} else {
-					debug("push ok");
+					debug(ok(), "push ok");
 				}
 			}
 
@@ -39,10 +40,10 @@ namespace math0x {
 				RR error = pull(f, step, dmn, rng);
 				
 				if( error > epsilon ) {
-					debug("pull error:", error);
+					debug(fail(), "pull error:", error);
 					res = false;
 				} else {
-					debug("pull ok");
+					debug(ok(), "pull ok");
 				}
 			}
 			
